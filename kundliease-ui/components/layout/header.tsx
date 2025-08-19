@@ -2,6 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -12,42 +15,94 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Menu, User, Settings, LogOut, Home, FileText } from "lucide-react"
+import {
+  Menu,
+  User,
+  Settings,
+  LogOut,
+  Home as HomeIcon,
+  HeartHandshake,
+  FileText,
+  Store,
+} from "lucide-react"
 import { useKundliStore } from "@/lib/store"
+import Logo from "@/public/Logo/Logo.svg";
+
+const nav = [
+  { name: "Home", href: "/", icon: HomeIcon },
+  { name: "Match Making", href: "/match-making", icon: HeartHandshake },
+  { name: "Blogs", href: "/blogs", icon: FileText },
+  { name: "Store", href: "/store", icon: Store },
+]
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { currentUser } = useKundliStore()
+  const pathname = usePathname()
+
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(href))
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">K</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">KundliPro</span>
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 border-b border-black/10 bg-gray-200/95 backdrop-blur">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14">
+          {/* Logo (K) */}
+         <Link href="/" className="flex items-center gap-3">
+      <span className="inline-flex items-center justify-center">
+        <Image
+          src={Logo}
+          alt="K logo"
+          width={40}   // ⬆️ Increased size
+          height={40}
+          className="pointer-events-none select-none w-10 h-10 md:w-12 md:h-12" 
+          onError={(e) =>
+            ((e.target as HTMLImageElement).style.display = "none")
+          }
+        />
+      </span>
+    </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-orange-600 font-medium">
-              Home
-            </Link>
-            <Link href="/dashboard" className="text-gray-700 hover:text-orange-600 font-medium">
-              Dashboard
-            </Link>
-            <Link href="/paper-view" className="text-gray-700 hover:text-orange-600 font-medium">
-              Paper View
-            </Link>
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-2 relative">
+            <ul className="flex items-center gap-2">
+              {nav.map(({ name, href, icon: Icon }) => {
+                const active = isActive(href)
+                return (
+                  <li key={name} className="relative">
+                    <Link
+                      href={href}
+                      aria-current={active ? "page" : undefined}
+                      className="group relative flex flex-col items-center justify-center px-4 py-2 h-12 w-[120px]
+                                 text-xs font-medium text-black/70 transition-transform duration-150
+                                 hover:scale-[1.03] focus-visible:outline-none"
+                    >
+                      {/* Animated active pill (Zoom-like) */}
+                      {active && (
+                        <motion.span
+                          layoutId="active-pill"
+                          className="absolute inset-0 rounded-xl bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
+                          transition={{ type: "spring", stiffness: 420, damping: 35, mass: 0.5 }}
+                        />
+                      )}
+
+                      <span className="relative z-10 grid place-items-center gap-1">
+                        <Icon className="h-5 w-5" />
+                        <span className="leading-none">{name}</span>
+                      </span>
+
+                      {/* Hover glow */}
+                      <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.06) inset" }} />
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
           </nav>
 
-          {/* User Menu */}
-          <div className="flex items-center space-x-4">
+          {/* Profile/Menu (kept same) */}
+          <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -85,46 +140,38 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Mobile menu button */}
+            {/* Mobile toggle */}
             <Button
               variant="ghost"
               size="sm"
               className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              aria-label="Toggle navigation"
             >
               <Menu className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Nav */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 py-4">
-            <nav className="flex flex-col space-y-2">
-              <Link
-                href="/"
-                className="flex items-center px-3 py-2 text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Home className="mr-3 h-4 w-4" />
-                Home
-              </Link>
-              <Link
-                href="/dashboard"
-                className="flex items-center px-3 py-2 text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <FileText className="mr-3 h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                href="/paper-view"
-                className="flex items-center px-3 py-2 text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <FileText className="mr-3 h-4 w-4" />
-                Paper View
-              </Link>
+          <div className="md:hidden border-t border-gray-300 py-3">
+            <nav className="grid grid-cols-2 gap-2">
+              {nav.map(({ name, href, icon: Icon }) => {
+                const active = isActive(href)
+                return (
+                  <Link
+                    key={name}
+                    href={href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition
+                      ${active ? "bg-white shadow text-black" : "text-black/70 hover:bg-white/70"}`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {name}
+                  </Link>
+                )
+              })}
             </nav>
           </div>
         )}

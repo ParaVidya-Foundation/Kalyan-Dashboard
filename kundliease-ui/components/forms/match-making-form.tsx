@@ -8,99 +8,85 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, Clock, MapPin, User } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useKundliStore } from "@/lib/store"
-import { kundliAPI } from "@/lib/api"
+import { Calendar, MapPin, User } from "lucide-react"
 
 // ---------------- Schema ----------------
-const kundliSchema = z.object({
-  name: z.string().min(1, "Full Name is required"),
+const partnerSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   day: z.string().min(1, "Day is required"),
   month: z.string().min(1, "Month is required"),
   year: z.string().min(1, "Year is required"),
-  timeOfBirth: z.string().min(1, "Time of Birth is required"),
-  placeOfBirth: z.string().min(1, "Place of Birth is required"),
+  placeOfBirth: z.string().min(1, "Place is required"),
   gender: z.enum(["male", "female"], { required_error: "Gender is required" }),
 })
 
-type KundliFormData = z.infer<typeof kundliSchema>
+export type PartnerFormData = z.infer<typeof partnerSchema>
 
-// ---------------- Component ----------------
-export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false }) {
-  const router = useRouter()
-  const { setCurrentKundli, setLoading, setError, isLoading } = useKundliStore()
-
+// ---------------- Partner Form ----------------
+export default function MatchMaking({
+  title,
+  defaultGender,
+  onSubmit,
+}: {
+  title: string
+  defaultGender: "male" | "female"
+  onSubmit: (data: PartnerFormData) => void
+}) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
-  } = useForm<KundliFormData>({
-    resolver: zodResolver(kundliSchema),
-    defaultValues: {
-      gender: "male",
-    },
+  } = useForm<PartnerFormData>({
+    resolver: zodResolver(partnerSchema),
+    defaultValues: { gender: defaultGender },
   })
 
-  const onSubmit = async (data: KundliFormData) => {
-    setLoading(true)
-    setError(null)
-
-    const fullDOB = `${data.year}-${data.month}-${data.day}`
-
-    try {
-      const kundli = await kundliAPI.generateKundli({
-        ...data,
-        dateOfBirth: fullDOB,
-      })
-      setCurrentKundli(kundli)
-      router.push("/dashboard")
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to generate Kundli")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Google Places Autocomplete (stub for now)
+  // Fake autocomplete
   const [suggestions, setSuggestions] = useState<string[]>([])
-  const handlePlaceChange = async (value: string) => {
+  const handlePlaceChange = (value: string) => {
     setValue("placeOfBirth", value)
-    // TODO: integrate Google Maps Places API
     if (value.length > 2) {
-      setSuggestions([
-        value + " City",
-        value + " State",
-        value + " Country",
-      ])
+      setSuggestions([`${value} City`, `${value} District`, `${value} Country`])
     } else {
       setSuggestions([])
     }
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-sm shadow-lg rounded-2xl border border-gray-200 bg-white">
       <CardHeader className="text-center">
-        <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-        {isFirstTime && <p className="text-sm text-muted-foreground">Welcome! Let's create your first Kundli</p>}
+        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Full Name */}
+          {/* Name */}
           <div className="space-y-2">
-            <Label htmlFor="name" className="flex items-center gap-2">
-              <User className="w-4 h-4" /> Full Name
+            <Label className="flex items-center gap-2">
+              <User className="w-4 h-4" /> Name
             </Label>
-            <Input id="name" placeholder="Enter your full name" {...register("name")} />
+            <Input placeholder="Enter name" {...register("name")} />
             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
           </div>
 
-          {/* Date of Birth (Dropdowns) */}
+          {/* Gender */}
+          <div className="space-y-2">
+            <Label>Gender</Label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2">
+                <input type="radio" value="male" {...register("gender")} /> Male
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="radio" value="female" {...register("gender")} /> Female
+              </label>
+            </div>
+            {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
+          </div>
+
+          {/* DOB */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" /> Date of Birth
+              <Calendar className="w-4 h-4" /> Birth Date
             </Label>
             <div className="flex gap-2">
               <select {...register("day")} className="border rounded p-2 w-1/3">
@@ -128,29 +114,18 @@ export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false
             )}
           </div>
 
-          {/* Time of Birth */}
-          <div className="space-y-2">
-            <Label htmlFor="tob" className="flex items-center gap-2">
-              <Clock className="w-4 h-4" /> Time of Birth
-            </Label>
-            <Input id="tob" type="time" {...register("timeOfBirth")} />
-            {errors.timeOfBirth && <p className="text-red-500 text-sm">{errors.timeOfBirth.message}</p>}
-          </div>
-
-          {/* Place of Birth (with suggestions) */}
+          {/* Place */}
           <div className="space-y-2 relative">
-            <Label htmlFor="pob" className="flex items-center gap-2">
+            <Label className="flex items-center gap-2">
               <MapPin className="w-4 h-4" /> Place of Birth
             </Label>
             <Input
-              id="pob"
-              placeholder="Place of Birth"
+              placeholder="City, State, Country"
               {...register("placeOfBirth")}
               onChange={(e) => handlePlaceChange(e.target.value)}
             />
             {errors.placeOfBirth && <p className="text-red-500 text-sm">{errors.placeOfBirth.message}</p>}
 
-            {/* Suggestions dropdown */}
             {suggestions.length > 0 && (
               <div className="absolute bg-white border rounded shadow-md mt-1 w-full z-10">
                 {suggestions.map((s, i) => (
@@ -169,22 +144,9 @@ export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false
             )}
           </div>
 
-          {/* Gender (Radio Buttons) */}
-          <div className="space-y-2">
-            <Label>Gender</Label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2">
-                <input type="radio" value="male" {...register("gender")} /> Male
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="radio" value="female" {...register("gender")} /> Female
-              </label>
-            </div>
-            {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
-          </div>
-
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Generating..." : "Generate Kundli"}
+          {/* Actions */}
+          <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+            Import Kundli
           </Button>
         </form>
       </CardContent>
