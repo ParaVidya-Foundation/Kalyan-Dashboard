@@ -7,6 +7,9 @@ export interface KundliFormData {
 }
 
 export interface KundliData {
+  placeOfBirth: string
+  name: string
+  dateOfBirth: string
   id: string
   personalInfo: KundliFormData
   charts: {

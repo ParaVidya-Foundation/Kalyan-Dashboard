@@ -1,10 +1,10 @@
 "use client"
 
 import { useKundliStore } from "@/lib/store"
-import { KundliProfile } from "./info"
-import Aisection from "./AI-section"
-import Dashasection from "./Dasha-section"
-import Chartsection from "./chart-section";
+import { KundliProfile } from "@/components/dashboard/info"
+import Aisection from "@/components/dashboard/AI-section"
+import Dashasection from "@/components/dashboard/Dasha-section"
+import { Chartsection } from "@/components/dashboard/chart-section"
 
 
 export function DashboardOverview() {
