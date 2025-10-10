@@ -24,6 +24,7 @@ import {
   HeartHandshake,
   FileText,
   Store,
+  Book,
 } from "lucide-react"
 import { useKundliStore } from "@/lib/store"
 import Logo from "@/public/Logo/Logo.svg";
@@ -33,6 +34,7 @@ const nav = [
   { name: "Match Making", href: "/match-making", icon: HeartHandshake },
   { name: "Blogs", href: "/blogs", icon: FileText },
   { name: "Store", href: "/store", icon: Store },
+  { name: "Education", href: "/education", icon: Book },
 ]
 
 export function Header() {
