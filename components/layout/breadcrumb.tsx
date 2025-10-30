@@ -29,7 +29,7 @@ export function Breadcrumb() {
           ) : (
             <Link href={item.href} className="hover:text-orange-600 transition-colors">
               <div className="flex items-center">
-                {item.icon && <item.icon className="h-4 w-4 mr-1" />}
+                {"icon" in item && (item as any).icon ? (() => { const Icon = (item as any).icon; return <Icon className="h-4 w-4 mr-1" /> })() : null}
                 {item.name}
               </div>
             </Link>

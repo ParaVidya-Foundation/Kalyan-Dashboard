@@ -2,6 +2,9 @@ import type { KundliData } from "./api"
 
 export const sampleKundliData: KundliData = {
   id: "sample_kundli_001",
+  name: "Rajesh Kumar",
+  dateOfBirth: "1990-03-15",
+  placeOfBirth: "New Delhi, India",
   personalInfo: {
     name: "Rajesh Kumar",
     dateOfBirth: "1990-03-15",
@@ -87,6 +90,9 @@ export const sampleKundliData: KundliData = {
 export const additionalSampleKundlis: KundliData[] = [
   {
     id: "sample_kundli_002",
+    name: "Priya Sharma",
+    dateOfBirth: "1995-07-22",
+    placeOfBirth: "Mumbai, India",
     personalInfo: {
       name: "Priya Sharma",
       dateOfBirth: "1995-07-22",

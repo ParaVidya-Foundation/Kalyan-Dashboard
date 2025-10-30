@@ -218,7 +218,7 @@ export default function PaperViewPage() {
                 {/* North Indian Chart Style */}
                 {Array.from({ length: 16 }, (_, i) => {
                   const houseNumber = i + 1
-                  const planets = currentKundli.charts?.lagna?.houses?.[houseNumber]?.planets || []
+                  const planets = ((currentKundli as any)?.charts?.lagna?.houses?.[houseNumber]?.planets || []) as any[]
 
                   return (
                     <div
@@ -342,11 +342,11 @@ export default function PaperViewPage() {
                 <tbody>
                   {(currentKundli.planetaryPositions || []).map((planet, index) => (
                     <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="border border-gray-300 px-3 py-2 font-medium">{planet.name}</td>
+                      <td className="border border-gray-300 px-3 py-2 font-medium">{(planet as any).name ?? planet.planet}</td>
                       <td className="border border-gray-300 px-3 py-2">{planet.sign}</td>
                       <td className="border border-gray-300 px-3 py-2">{planet.degree}</td>
                       <td className="border border-gray-300 px-3 py-2">{planet.house}</td>
-                      <td className="border border-gray-300 px-3 py-2">{planet.nakshatra}</td>
+                      <td className="border border-gray-300 px-3 py-2">{(planet as any).nakshatra ?? '-'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -358,38 +358,46 @@ export default function PaperViewPage() {
           <div className="mb-8">
             <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2 mb-4">Key Predictions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Career & Finance</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {currentKundli.predictions?.career?.slice(0, 200) ||
-                    "Career predictions will be available after analysis."}
-                  ...
-                </p>
-              </div>
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Health & Wellness</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {currentKundli.predictions?.health?.slice(0, 200) ||
-                    "Health predictions will be available after analysis."}
-                  ...
-                </p>
-              </div>
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Relationships</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {currentKundli.predictions?.relationships?.slice(0, 200) ||
-                    "Relationship predictions will be available after analysis."}
-                  ...
-                </p>
-              </div>
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Education</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {currentKundli.predictions?.education?.slice(0, 200) ||
-                    "Education predictions will be available after analysis."}
-                  ...
-                </p>
-              </div>
+              {(() => {
+                const preds = (currentKundli.predictions || []) as any[]
+                const by = (q: string) => preds.find(p => (p.category || "").toLowerCase().includes(q))?.description || ""
+                const career = by("career") || by("finance")
+                const health = by("health")
+                const relationships = by("relationship") || by("love")
+                const education = by("education")
+                return (
+                  <>
+                    <div className="space-y-3">
+                      <h3 className="font-semibold text-gray-900">Career & Finance</h3>
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {career?.slice(0, 200) || "Career predictions will be available after analysis."}
+                        ...
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      <h3 className="font-semibold text-gray-900">Health & Wellness</h3>
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {health?.slice(0, 200) || "Health predictions will be available after analysis."}
+                        ...
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      <h3 className="font-semibold text-gray-900">Relationships</h3>
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {relationships?.slice(0, 200) || "Relationship predictions will be available after analysis."}
+                        ...
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      <h3 className="font-semibold text-gray-900">Education</h3>
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {education?.slice(0, 200) || "Education predictions will be available after analysis."}
+                        ...
+                      </p>
+                    </div>
+                  </>
+                )
+              })()}
             </div>
           </div>
 
