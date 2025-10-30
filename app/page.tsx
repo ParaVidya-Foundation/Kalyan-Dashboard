@@ -1,21 +1,8 @@
 import { KundliForm } from "@/components/forms/kundli-form"
-import { FAQPageJsonLd } from "next-seo"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-100 flex items-center justify-center p-4">
-      <FAQPageJsonLd
-        mainEntity={[
-          {
-            questionName: "What is a Kundli?",
-            acceptedAnswerText: "A Kundli is a Vedic astrology birth chart detailing planetary positions at birth.",
-          },
-          {
-            questionName: "Can I generate a professional Kundli online?",
-            acceptedAnswerText: "Yes. KundliPro generates accurate and detailed charts with insights.",
-          },
-        ]}
-      />
       <div className="w-full max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Professional Kundli Generator</h1>

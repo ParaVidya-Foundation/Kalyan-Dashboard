@@ -3,28 +3,33 @@
 import React from "react"
 import { OrganizationJsonLd, LogoJsonLd, WebPageJsonLd, SiteLinksSearchBoxJsonLd } from "next-seo"
 
-export default function StructuredData() {
-	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kundlipro.example"
+export default function StructuredData({ nonce }: { nonce?: string }) {
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kalyan.example"
 	return (
 		<>
 			<OrganizationJsonLd
-				name="KundliPro"
+				scriptProps={{ nonce }}
+				name="Kalyan"
 				url={siteUrl}
 				logo={`${siteUrl}/Logo/Logo.png`}
-				contactPoint={[{ contactType: "customer service", email: "support@kundlipro.example" }]}
+				contactPoint={[{ contactType: "customer service", email: "support@kalyan.example" }]}
 			/>
-			<LogoJsonLd logo={`${siteUrl}/Logo/Logo.png`} url={siteUrl} />
+			<LogoJsonLd scriptProps={{ nonce }} logo={`${siteUrl}/Logo/Logo.png`} url={siteUrl} />
 			<WebPageJsonLd
+				scriptProps={{ nonce }}
 				id={`${siteUrl}/#webpage`}
 				url={siteUrl}
-				title="KundliPro - Professional Vedic Astrology"
+				title="Kalyan - Professional Vedic Astrology"
 				description="Generate accurate Kundli charts with detailed predictions and astrological analysis."
 				isPartOf={{ id: `${siteUrl}/#website` }}
 			/>
-			<SiteLinksSearchBoxJsonLd
-				url={siteUrl}
-				potentialActionTargets={[`${siteUrl}/?q`]} // Adjust when search is added
-			/>
+			{siteUrl ? (
+				<SiteLinksSearchBoxJsonLd
+					scriptProps={{ nonce }}
+					url={siteUrl}
+					potentialActionTargets={[`${siteUrl}/?q`]}
+				/>
+			) : null}
 		</>
 	)
 }

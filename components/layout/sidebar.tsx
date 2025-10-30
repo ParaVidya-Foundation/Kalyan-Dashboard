@@ -52,7 +52,7 @@ export function Sidebar({ className }: SidebarProps) {
             <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">K</span>
             </div>
-            <span className="text-lg font-bold text-gray-900">KundliPro</span>
+            <span className="text-lg font-bold text-gray-900">Kalyan</span>
           </div>
         )}
         <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} className="h-8 w-8 p-0">

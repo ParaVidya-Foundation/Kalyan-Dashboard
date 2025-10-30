@@ -12,7 +12,7 @@ export function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">K</span>
               </div>
-              <span className="text-xl font-bold">KundliPro</span>
+              <span className="text-xl font-bold">Kalyan</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Professional Vedic astrology platform providing accurate Kundli generation, detailed predictions, and
@@ -64,7 +64,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center text-gray-300">
                 <Mail className="h-4 w-4 mr-2" />
-                support@kundlipro.com
+                support@kalyan.com
               </li>
               <li className="flex items-center text-gray-300">
                 <Phone className="h-4 w-4 mr-2" />
@@ -79,7 +79,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">© 2024 KundliPro. All rights reserved.</p>
+          <p className="text-gray-400 text-sm">© 2024 Kalyan. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="/privacy" className="text-gray-400 hover:text-orange-500 text-sm transition-colors">
               Privacy Policy

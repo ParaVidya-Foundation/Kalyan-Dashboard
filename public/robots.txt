@@ -8,7 +8,7 @@ Disallow: /api/
 Disallow: /_next/
 
 # Host
-Host: https://www.kundlipro.example
+Host: https://www.kalyan.example
 
 # Sitemaps
-Sitemap: https://www.kundlipro.example/sitemap.xml
+Sitemap: https://www.kalyan.example/sitemap.xml
