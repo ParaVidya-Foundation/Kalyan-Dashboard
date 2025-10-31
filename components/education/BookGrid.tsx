@@ -26,7 +26,7 @@ const BookGrid: React.FC<BookGridProps> = ({ books }) => {
             title={book.title}
             author={book.author}
             description={book.description}
-            onAskAI={() => alert(`Asking AI about ${book.title}`)}
+            onAskAI={() => "/chat"}
           />
         ))}
       </div>
