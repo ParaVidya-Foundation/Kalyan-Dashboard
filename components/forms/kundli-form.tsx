@@ -52,8 +52,11 @@ export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false
 
     try {
       const kundli = await kundliAPI.generateKundli({
-        ...data,
+        name: data.name,
         dateOfBirth: fullDOB,
+        timeOfBirth: data.timeOfBirth,
+        placeOfBirth: data.placeOfBirth,
+        gender: data.gender,
       })
       setCurrentKundli(kundli)
       router.push("/dashboard")

@@ -11,10 +11,17 @@ const EduHeroSection: React.FC = () => {
 
   return (
     <section
-      className="relative mx-auto w-[95%] overflow-hidden rounded-b-[25px]
-                 bg-gradient-to-b from-white via-blue-50 to-blue-100 
-                 py-20 sm:py-28 shadow-[0_10px_36px_0_rgba(0,0,0,0.16),_0_0_0_1px_rgba(0,0,0,0.06)]"
-    >
+    className="relative mx-auto w-[95%] overflow-hidden rounded-b-[25px]
+               bg-gradient-to-b from-white via-blue-100 to-blue-200 
+               py-20 sm:py-28 shadow-[0_10px_36px_0_rgba(0,0,0,0.16),_0_0_0_1px_rgba(0,0,0,0.06)]"
+    style={{
+      WebkitMaskImage:
+        "linear-gradient(to bottom, transparent 0%, black 15%, black 100%)",
+      maskImage:
+        "linear-gradient(to bottom, transparent 0%, black 15%, black 100%)",
+    }}
+  >
+  
       {/* Grid lines background */}
       <div
         aria-hidden

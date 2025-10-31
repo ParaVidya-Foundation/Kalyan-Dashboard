@@ -2,6 +2,7 @@
 
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface EduSearchBoxProps {
   placeholder?: string;
@@ -13,10 +14,12 @@ const EduSearchBox: React.FC<EduSearchBoxProps> = ({
   onSearch,
 }) => {
   const [value, setValue] = useState("");
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (onSearch) onSearch(value.trim());
+    router.push("/education/chat");
   };
 
   return (

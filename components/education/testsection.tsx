@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   onSubmitEmail?: (email: string) => void;
@@ -9,6 +10,7 @@ type Props = {
 
 const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
   const [email, setEmail] = useState("");
+  const router = useRouter();
 
   const emailIsValid = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), [email]);
 
@@ -16,6 +18,7 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
     e.preventDefault();
     if (!emailIsValid) return;
     onSubmitEmail?.(email);
+    router.push("/education/test");
   };
 
   const avatars = [

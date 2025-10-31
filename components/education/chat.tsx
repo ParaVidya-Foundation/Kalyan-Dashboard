@@ -59,15 +59,16 @@ Each special Lagna yields a different Bhava chart, and their combined analysis g
   };
 
   return (
-    <section
-      className="relative mx-auto w-full bg-gradient-to-br from-[#ff8dc7] via-[#a48eff] to-[#3fcaff] p-[2px] shadow-[0_10px_40px_rgba(0,0,0,0.12)] overflow-hidden"
-      style={{
-        WebkitMaskImage:
-          "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-        maskImage:
-          "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-      }}
-    >
+<section
+  className="relative mx-auto w-full bg-gradient-to-br from-[#ff8dc7] via-[#a48eff] to-[#3fcaff] p-[2px] shadow-[0_10px_40px_rgba(0,0,0,0.12)] overflow-hidden"
+  style={{
+    WebkitMaskImage:
+      "linear-gradient(to bottom, black 90%, transparent 100%)",
+    maskImage:
+      "linear-gradient(to bottom, black 90%, transparent 100%)",
+  }}
+>
+
       {/* Glassmorphic content */}
       <div className="bg-white/60 backdrop-blur-2xl p-5 sm:p-8 md:p-10 font-[Inter] text-gray-800">
         <div

@@ -52,7 +52,7 @@ const BookCard: React.FC<BookCardProps> = ({
 
         {/* Button */}
         <div className="mt-2">
-          <BookButton onClick={onAskAI} />
+          <BookButton onClick={onAskAI} label="Ask AI" />
         </div>
       </div>
     </div>

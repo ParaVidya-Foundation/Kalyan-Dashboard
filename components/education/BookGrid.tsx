@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import BookCard from "./BookCard";
 
 interface Book {
@@ -16,6 +17,8 @@ interface BookGridProps {
 }
 
 const BookGrid: React.FC<BookGridProps> = ({ books }) => {
+  const router = useRouter();
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -26,7 +29,7 @@ const BookGrid: React.FC<BookGridProps> = ({ books }) => {
             title={book.title}
             author={book.author}
             description={book.description}
-            onAskAI={() => "/chat"}
+            onAskAI={() => router.push("/education/chat")}
           />
         ))}
       </div>
