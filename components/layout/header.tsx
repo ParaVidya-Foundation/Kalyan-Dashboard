@@ -32,7 +32,7 @@ import Logo from "@/public/Logo/Logo.svg";
 const nav = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Match Making", href: "/match-making", icon: HeartHandshake },
-  { name: "Blogs", href: "/blogs", icon: FileText },
+  { name: "Research", href: "/research", icon: FileText },
   { name: "Store", href: "/store", icon: Store },
   { name: "Education", href: "/education", icon: Book },
 ]
