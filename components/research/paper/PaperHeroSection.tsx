@@ -48,9 +48,9 @@ export const PaperHeroSection: React.FC<PaperHeroSectionProps> = ({
           variant="outline"
           className="border-blue-200 bg-blue-50 px-4 py-1 text-[13px] font-medium text-blue-600 hover:bg-blue-100"
         >
-          Announcing{" "}
+          Announcing{""}
           <Link href="#" className="ml-1 font-semibold text-blue-600 hover:underline">
-            ParaVidya AI →
+          ParaVidya AI →
           </Link>
         </Badge>
       </motion.div>
