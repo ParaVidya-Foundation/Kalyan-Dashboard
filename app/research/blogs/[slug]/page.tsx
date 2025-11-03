@@ -1,8 +1,5 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import BlogLayout from "@/components/research/blogs/blogpage/bloglayout";
-import RelatedPosts from "@/components/research/blogs/blogpage/relatedpost";
-import { BlogCardProps } from "@/components/research/blogs/BlogCard";
 
 // Dummy blog data - Replace with API/CMS data
 const blogPosts: Record<string, BlogPostData> = {
@@ -154,7 +151,16 @@ const blogPosts: Record<string, BlogPostData> = {
   },
 };
 
-export interface BlogPostData extends Omit<BlogCardProps, "content"> {
+export interface BlogPostData {
+  id: string;
+  slug: string;
+  title: string;
+  image: string;
+  imageAlt: string;
+  date: Date | string;
+  author?: string;
+  category?: string;
+  excerpt?: string;
   content: {
     featuredGraphic: {
       title: string;
@@ -169,6 +175,8 @@ export interface BlogPostData extends Omit<BlogCardProps, "content"> {
 }
 
 // Generate metadata for SEO
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
@@ -219,19 +227,9 @@ export async function generateMetadata({
   };
 }
 
-// Get all blog posts for recent posts and related posts (internal helper function)
-async function getBlogPosts(): Promise<BlogCardProps[]> {
-  return Object.values(blogPosts).map((post) => ({
-    id: post.id,
-    title: post.title,
-    image: post.image,
-    imageAlt: post.imageAlt,
-    date: post.date,
-    slug: post.slug,
-    excerpt: post.excerpt,
-    author: post.author,
-    category: post.category,
-  }));
+// helper for simple lists
+function getAllPosts() {
+  return Object.values(blogPosts);
 }
 
 export default async function BlogPostPage({
@@ -241,7 +239,7 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
   const post = blogPosts[slug];
-  const allPosts = await getBlogPosts();
+  const allPosts = getAllPosts();
 
   if (!post) {
     notFound();
@@ -259,18 +257,35 @@ export default async function BlogPostPage({
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <BlogLayout post={post} recentPosts={recentPosts} />
-        <RelatedPosts posts={relatedPosts} currentPostSlug={post.slug} />
+      <div className="mx-auto max-w-3xl px-6 py-12">
+        <h1 className="text-3xl font-bold text-gray-900">{post.title}</h1>
+        <p className="mt-3 text-gray-600">{post.excerpt}</p>
+        <div className="mt-8 space-y-6">
+          {post.content.sections.map((s, i) => (
+            <section key={i}>
+              <h2 className="text-xl font-semibold text-gray-900">{s.heading}</h2>
+              {s.paragraphs.map((p, j) => (
+                <p key={j} className="mt-2 text-gray-700">{p}</p>
+              ))}
+            </section>
+          ))}
+        </div>
+        <hr className="my-10" />
+        <h3 className="text-lg font-semibold text-gray-900">Related</h3>
+        <ul className="mt-3 list-disc pl-5 text-gray-700">
+          {relatedPosts.map((r) => (
+            <li key={r.id}>
+              <a href={`/research/blogs/${r.slug}`} className="text-blue-600 hover:underline">
+                {r.title}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </main>
   );
 }
 
 // Generate static paths for better performance
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  return Object.keys(blogPosts).map((slug) => ({
-    slug,
-  }));
-}
+// No static params to avoid prerendering of client-only code paths
 

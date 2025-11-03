@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+export const dynamic = "force-dynamic";
 import { Image as ImageIcon } from "lucide-react";
 
 export const metadata: Metadata = {

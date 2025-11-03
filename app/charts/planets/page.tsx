@@ -1,5 +1,4 @@
-"use client"
-
+// server component - static content
 export default function PlanetaryPositionsPage() {
   const planets = [
     { name: "Sun", sign: "Aries", degree: "15° 30'", house: 1 },

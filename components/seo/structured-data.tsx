@@ -27,7 +27,12 @@ export default function StructuredData({ nonce }: { nonce?: string }) {
 				<SiteLinksSearchBoxJsonLd
 					scriptProps={{ nonce }}
 					url={siteUrl}
-					potentialActionTargets={[`${siteUrl}/?q`]}
+					potentialActions={[
+						{
+							target: `${siteUrl}/?q={search_term_string}`,
+							queryInput: "search_term_string",
+						},
+					]}
 				/>
 			) : null}
 		</>

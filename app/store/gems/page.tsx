@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+export const dynamic = "force-dynamic";
 import { Gem } from "lucide-react";
 
 export const metadata: Metadata = {

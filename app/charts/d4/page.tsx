@@ -1,5 +1,4 @@
-"use client"
-
+// server component - static content
 export default function D4ChartPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">

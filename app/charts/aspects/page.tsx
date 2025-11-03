@@ -1,5 +1,4 @@
-"use client"
-
+// server component - static content
 export default function AspectsConjunctionsPage() {
   const aspects = [
     { from: "Sun", to: "Moon", type: "Conjunction", effect: "Strong personality, leadership qualities" },
