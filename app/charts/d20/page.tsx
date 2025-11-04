@@ -1,5 +1,5 @@
-"use client"
-
+// server component - static content
+export const dynamic = "force-dynamic"
 export default function D20ChartPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">

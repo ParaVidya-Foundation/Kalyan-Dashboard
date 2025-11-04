@@ -1,5 +1,4 @@
-"use client"
-
+// server component - static content
 export default function HouseReportPage() {
   const houses = [
     { number: 1, name: "Lagna (Ascendant)", lord: "Mars", significance: "Self, personality, physical appearance" },

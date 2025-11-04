@@ -31,7 +31,7 @@ export default function Page() {
     <main className="">
       <Chat />
       <BookGrid books={books} />
-      <TestSection />
+  
     </main>
   );
 }

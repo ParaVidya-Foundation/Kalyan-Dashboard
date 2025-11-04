@@ -3,8 +3,9 @@ import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
-import { Header } from "@/components/layout/header"
+import ClientHeader from "@/components/layout/ClientHeader"
 import { Footer } from "@/components/layout/footer"
+// SEO components removed for build stability; can be re-added later
 
 export const viewport: Viewport = {
   themeColor: [
@@ -13,10 +14,43 @@ export const viewport: Viewport = {
   ],
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kalyan.example"
+
 export const metadata: Metadata = {
-  title: "Kalyan - Professional Vedic Astrology",
-  description: "Generate accurate Kundli charts with detailed predictions and astrological analysis.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Kalyan - Professional Vedic Astrology",
+    template: "%s | Kalyan",
+  },
+  description:
+    "Generate accurate Kundli charts with detailed predictions and astrological analysis.",
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "Kalyan",
+    title: "Kalyan - Professional Vedic Astrology",
+    description:
+      "Generate accurate Kundli charts with detailed predictions and astrological analysis.",
+    images: [
+      {
+        url: "/placeholder.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Kalyan preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@kalyan",
+    site: "@kalyan",
+  },
 }
+
+// Force dynamic rendering for the whole app to avoid SSG issues with client-only components
 
 export default function RootLayout({
   children,
@@ -30,7 +64,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen bg-gray-50">
-        <Header />
+        {/* <DefaultSEO /> */}
+        {/* <StructuredData /> */}
+        <ClientHeader />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

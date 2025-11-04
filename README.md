@@ -90,3 +90,10 @@ Secure middleware (CSP, HTTPS, HSTS)
 
 Deliver a clean folder structure, placeholder UI for each route, and modern spiritual design.
 Prioritize reusability, performance, and accessibility.
+
+https://skyebioscience.com/our-company/
+https://frysta.framer.website/feed
+https://www.chaingpt.org/blog
+https://vessi.com/
+https://www.gethyped.nl/
+perfume - https://www.leandra-isler.ch/en

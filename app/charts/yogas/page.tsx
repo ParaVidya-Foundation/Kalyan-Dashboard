@@ -1,5 +1,4 @@
-"use client"
-
+// server component - static content
 export default function YogasDoshasPage() {
   const yogas = [
     { name: "Raj Yoga", type: "Beneficial", description: "Formed by connection of lords of Kendra and Trikona houses" },

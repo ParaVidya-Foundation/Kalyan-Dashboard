@@ -9,13 +9,16 @@ module.exports = {
 	outDir: 'public',
 	changefreq: 'weekly',
 	priority: 0.7,
+	trailingSlash: false,
 	transform: async (config, path) => {
 		return {
 			loc: path,
 			changefreq: config.changefreq,
 			priority: path === '/' ? 1.0 : config.priority,
 			lastmod: new Date().toISOString(),
-			images: [],
+			images: path.startsWith('/images/')
+				? [{ loc: `${siteUrl}${path}`, title: 'Image Asset' }]
+				: [],
 		}
 	},
 	robotsTxtOptions: {

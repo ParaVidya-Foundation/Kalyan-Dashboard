@@ -4,16 +4,22 @@ import React from "react";
 import EduSearchBox from "./edusearchbox";
 import Image from "next/image";
 
-const EduHeroSection: React.FC = () => {
+interface EduHeroSectionProps {
+  onSearchChange?: (query: string) => void;
+}
+
+const EduHeroSection: React.FC<EduHeroSectionProps> = ({ onSearchChange }) => {
   const handleSearchSubmit = (value: string) => {
     console.log("Search value:", value);
+    if (onSearchChange) {
+      onSearchChange(value);
+    }
   };
 
   return (
     <section
-    className="relative mx-auto w-[95%] overflow-hidden rounded-b-[25px]
-               bg-gradient-to-b from-white via-blue-100 to-blue-200 
-               py-20 sm:py-28 shadow-[0_10px_36px_0_rgba(0,0,0,0.16),_0_0_0_1px_rgba(0,0,0,0.06)]"
+    className="relative mx-auto w-[95%] overflow-hidden rounded-b-[25px] bg-gradient-to-b from-white via-blue-100 to-blue-200 py-20 sm:py-28 shadow-[0_10px_36px_0_rgba(0,0,0,0.16),_0_0_0_1px_rgba(0,0,0,0.06)]"
+    // eslint-disable-next-line react/forbid-dom-props
     style={{
       WebkitMaskImage:
         "linear-gradient(to bottom, transparent 0%, black 15%, black 100%)",
@@ -25,10 +31,7 @@ const EduHeroSection: React.FC = () => {
       {/* Grid lines background */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-b-[25px]
-                   bg-[linear-gradient(to_right,rgba(59,130,246,0.12)_1px,transparent_1px),
-                       linear-gradient(to_bottom,rgba(59,130,246,0.12)_1px,transparent_1px)]
-                   bg-[size:24px_24px]"
+        className="pointer-events-none absolute inset-0 rounded-b-[25px] bg-[linear-gradient(to_right,rgba(59,130,246,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.12)_1px,transparent_1px)] bg-[size:24px_24px]"
       />
 
       {/* Inverted fade (downward) gradient overlay */}
@@ -74,7 +77,7 @@ const EduHeroSection: React.FC = () => {
 
         {/* Search box */}
         <div className="mx-auto mt-10 max-w-2xl">
-          <EduSearchBox onSearch={handleSearchSubmit} />
+          <EduSearchBox onSearch={handleSearchSubmit} enableRealtimeSearch={true} redirectTo={undefined} />
         </div>
       </div>
     </section>

@@ -1,20 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React, { useEffect, useState, JSX } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { GeistSans } from "geist/font/sans";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Menu,
   User,
@@ -23,120 +22,228 @@ import {
   Home as HomeIcon,
   HeartHandshake,
   FileText,
-  Store,
-  Book,
-} from "lucide-react"
-import { useKundliStore } from "@/lib/store"
-import Logo from "@/public/Logo/Logo.svg";
+  Store as StoreIcon,
+  GraduationCap,
+  PenLine,
+  FileSpreadsheet,
+  Sparkles,
+  Image as ImageIcon,
+  Gem,
+  Package,
+  CircleDot,
+  BookOpenCheck,
+} from "lucide-react";
+import { useKundliStore } from "@/lib/store";
 
-const nav = [
+type NavItem = {
+  name: string;
+  href: string;
+  icon?: React.ComponentType<any>;
+  dropdown?: { name: string; href: string; icon?: React.ComponentType<any> }[];
+};
+
+const NAV: NavItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Match Making", href: "/match-making", icon: HeartHandshake },
-  { name: "Blogs", href: "/blogs", icon: FileText },
-  { name: "Store", href: "/store", icon: Store },
-  { name: "Education", href: "/education", icon: Book },
-]
+  {
+    name: "Research",
+    href: "/research",
+    icon: FileText,
+    dropdown: [
+      { name: "Blogs", href: "/research/blogs", icon: PenLine },
+      { name: "Research Papers", href: "/research/research-papers", icon: FileSpreadsheet },
+      { name: "AI Blogs", href: "/research/aiblogs", icon: Sparkles },
+    ],
+  },
+  {
+    name: "Store",
+    href: "/store",
+    icon: StoreIcon,
+    dropdown: [
+      { name: "Perfume", href: "/store/perfume", icon: Sparkles },
+      { name: "Poster", href: "/store/poster", icon: ImageIcon },
+      { name: "Gems", href: "/store/gems", icon: Gem },
+      { name: "Accessories", href: "/store/accessories", icon: Package },
+      { name: "Bracelet", href: "/store/bracelet", icon: CircleDot },
+    ],
+  },
+  {
+    name: "Education",
+    href: "/education",
+    icon: GraduationCap,
+    dropdown: [
+      { name: "Books", href: "/education/Books", icon: BookOpenCheck },
+      { name: "Test", href: "/education/test", icon: GraduationCap },
+    ],
+  },
+];
 
-export function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { currentUser } = useKundliStore()
-  const pathname = usePathname()
-
+export function Header(): JSX.Element {
+  const pathname = usePathname() || "/";
+  const store = useKundliStore();
+  const currentUser = store?.currentUser;
   const isActive = (href: string) =>
-    pathname === href || (href !== "/" && pathname.startsWith(href))
+    pathname === href || (href !== "/" && pathname.startsWith(href));
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === "undefined") return;
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleDropdown = (name: string) =>
+    setActiveDropdown((prev) => (prev === name ? null : name));
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-gray-200/95 backdrop-blur">
+    <header
+      className={`sticky top-0 z-50 border-b border-white/10 
+      bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xl 
+      supports-[backdrop-filter]:bg-white/50 transition-all duration-200 shadow-sm ${GeistSans.className}`}
+    >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14">
-          {/* Logo (K) */}
-         <Link href="/" className="flex items-center gap-3">
-      <span className="inline-flex items-center justify-center">
-        <Image
-          src={Logo}
-          alt="K logo"
-          width={40}   // ⬆️ Increased size
-          height={40}
-          className="pointer-events-none select-none w-10 h-10 md:w-12 md:h-12" 
-          onError={(e) =>
-            ((e.target as HTMLImageElement).style.display = "none")
-          }
-        />
-      </span>
-    </Link>
+        <div className="flex items-center justify-between h-14 md:h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3" aria-label="Home">
+            <Image
+              src="/Logo/Logo.svg"
+              alt="Kalyan Logo"
+              width={40}
+              height={40}
+              priority
+              className="drop-shadow-md hover:scale-105 transition-transform duration-150"
+            />
+            <span className="hidden sm:block font-semibold tracking-wide text-gray-900 dark:text-gray-100 text-sm md:text-base">
+              Kalyan
+            </span>
+          </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-2 relative">
             <ul className="flex items-center gap-2">
-              {nav.map(({ name, href, icon: Icon }) => {
-                const active = isActive(href)
+              {NAV.map((item) => {
+                const active = isActive(item.href);
                 return (
-                  <li key={name} className="relative">
-                    <Link
-                      href={href}
-                      aria-current={active ? "page" : undefined}
-                      className="group relative flex flex-col items-center justify-center px-4 py-2 h-12 w-[120px]
-                                 text-xs font-medium text-black/70 transition-transform duration-150
-                                 hover:scale-[1.03] focus-visible:outline-none"
-                    >
-                      {/* Animated active pill (Zoom-like) */}
-                      {active && (
-                        <motion.span
-                          layoutId="active-pill"
-                          className="absolute inset-0 rounded-xl bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
-                          transition={{ type: "spring", stiffness: 420, damping: 35, mass: 0.5 }}
-                        />
-                      )}
+                  <li
+                    key={item.name}
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown(item.name)}
+                    onMouseLeave={() => setActiveDropdown((cur) => (cur === item.name ? null : cur))}
+                  >
+                    {!item.dropdown ? (
+                      <Link
+                        href={item.href}
+                        className={`group relative flex flex-col items-center justify-center 
+                        px-4 py-2 h-12 w-[120px] text-xs font-medium 
+                        text-gray-800 dark:text-gray-100 transition-transform duration-150 hover:scale-[1.03]
+                        rounded-xl overflow-hidden`}
+                      >
+                        {active && (
+                          <motion.span
+                            layoutId="active-pill"
+                            className="absolute inset-0 rounded-xl bg-white/70 dark:bg-neutral-800 shadow-[0_2px_10px_rgba(0,0,0,0.15)]"
+                            transition={{ type: "spring", stiffness: 420, damping: 35 }}
+                          />
+                        )}
+                        <span className="relative z-10 flex flex-col items-center gap-1">
+                          {item.icon && <item.icon className="h-5 w-5 opacity-80" />}
+                          <span className="leading-none">{item.name}</span>
+                        </span>
+                      </Link>
+                    ) : (
+                      <div className="relative">
+                        <div
+                          className={`group relative flex flex-col items-center justify-center 
+                          px-4 py-2 h-12 w-[120px] text-xs font-medium 
+                          text-gray-800 dark:text-gray-100 transition-transform duration-150 hover:scale-[1.03] 
+                          rounded-xl cursor-pointer`}
+                          onClick={() => toggleDropdown(item.name)}
+                        >
+                          {active && (
+                            <motion.span
+                              layoutId="active-pill"
+                              className="absolute inset-0 rounded-xl bg-white/70 dark:bg-neutral-800 shadow-[0_2px_10px_rgba(0,0,0,0.15)]"
+                              transition={{ type: "spring", stiffness: 420, damping: 35 }}
+                            />
+                          )}
+                          <span className="relative z-10 flex flex-col items-center gap-1">
+                            {item.icon && <item.icon className="h-5 w-5 opacity-80" />}
+                            <span>{item.name}</span>
+                          </span>
+                        </div>
 
-                      <span className="relative z-10 grid place-items-center gap-1">
-                        <Icon className="h-5 w-5" />
-                        <span className="leading-none">{name}</span>
-                      </span>
-
-                      {/* Hover glow */}
-                      <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                            style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.06) inset" }} />
-                    </Link>
+                        <AnimatePresence>
+                          {activeDropdown === item.name && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -8 }}
+                              transition={{ duration: 0.15 }}
+                              className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 
+                              bg-white/95 dark:bg-neutral-900 border border-gray-200/40 dark:border-white/10 
+                              rounded-xl shadow-xl backdrop-blur-md z-50"
+                            >
+                              <ul className="py-2">
+                                {item.dropdown.map((d) => (
+                                  <li key={d.name}>
+                                    <Link
+                                      href={d.href}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-white/10 rounded-md transition"
+                                    >
+                                      {d.icon && <d.icon className="h-4 w-4 opacity-70" />}
+                                      {d.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
                   </li>
-                )
+                );
               })}
             </ul>
           </nav>
 
-          {/* Profile/Menu (kept same) */}
+          {/* Profile + Mobile Menu */}
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button variant="ghost" className="h-8 w-8 p-0 rounded-full hover:scale-105 transition-transform">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={currentUser?.avatar || "/placeholder.svg"} alt={currentUser?.name} />
-                    <AvatarFallback>{currentUser?.name?.charAt(0) || "U"}</AvatarFallback>
+                    <AvatarImage src={currentUser?.avatar ?? "/placeholder.svg"} alt={currentUser?.name ?? "User"} />
+                    <AvatarFallback>{(currentUser?.name ?? "U").charAt(0)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{currentUser?.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground">{currentUser?.email}</p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+
+              <DropdownMenuContent align="end" className="w-56 backdrop-blur-lg bg-white/90 dark:bg-neutral-900/80 border border-white/20">
                 <DropdownMenuItem asChild>
-                  <Link href="/profile" className="flex items-center">
-                    <User className="mr-2 h-4 w-4" />
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
+
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center">
-                    <Settings className="mr-2 h-4 w-4" />
+                  <Link href="/settings" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
+
+                <DropdownMenuItem className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -147,7 +254,8 @@ export function Header() {
               variant="ghost"
               size="sm"
               className="md:hidden"
-              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              onClick={() => setIsMobileMenuOpen((s) => !s)}
+              aria-expanded={isMobileMenuOpen}
               aria-label="Toggle navigation"
             >
               <Menu className="h-5 w-5" />
@@ -155,29 +263,36 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Nav */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-300 py-3">
-            <nav className="grid grid-cols-2 gap-2">
-              {nav.map(({ name, href, icon: Icon }) => {
-                const active = isActive(href)
-                return (
-                  <Link
-                    key={name}
-                    href={href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition
-                      ${active ? "bg-white shadow text-black" : "text-black/70 hover:bg-white/70"}`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {name}
-                  </Link>
-                )
-              })}
-            </nav>
-          </div>
-        )}
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="md:hidden border-t border-white/20 py-3 overflow-hidden backdrop-blur-lg"
+            >
+              <ul className="grid grid-cols-2 gap-2">
+                {NAV.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-white/10 transition"
+                    >
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      <span>{item.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </div>
     </header>
-  )
+  );
 }
+
+export default Header;
