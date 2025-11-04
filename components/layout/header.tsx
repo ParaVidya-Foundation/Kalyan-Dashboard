@@ -1,18 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React, { useEffect, useState, JSX } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { GeistSans } from "geist/font/sans";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Menu,
   User,
@@ -22,24 +23,26 @@ import {
   HeartHandshake,
   FileText,
   Store as StoreIcon,
-  Book,
-  FlaskConical,
-  Gem,
-  ScrollText,
-  PenLine,
-  ShoppingBag,
   GraduationCap,
-  BookOpenCheck,
+  PenLine,
   FileSpreadsheet,
   Sparkles,
   Image as ImageIcon,
+  Gem,
   Package,
   CircleDot,
-} from "lucide-react"
-import { useKundliStore } from "@/lib/store"
-import Logo from "@/public/Logo/Logo.svg"
+  BookOpenCheck,
+} from "lucide-react";
+import { useKundliStore } from "@/lib/store";
 
-const nav = [
+type NavItem = {
+  name: string;
+  href: string;
+  icon?: React.ComponentType<any>;
+  dropdown?: { name: string; href: string; icon?: React.ComponentType<any> }[];
+};
+
+const NAV: NavItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Match Making", href: "/match-making", icon: HeartHandshake },
   {
@@ -48,7 +51,7 @@ const nav = [
     icon: FileText,
     dropdown: [
       { name: "Blogs", href: "/research/blogs", icon: PenLine },
-      { name: "Research Papers", href: "/research/ResearchPapers", icon: FileSpreadsheet },
+      { name: "Research Papers", href: "/research/research-papers", icon: FileSpreadsheet },
       { name: "AI Blogs", href: "/research/aiblogs", icon: Sparkles },
     ],
   },
@@ -73,151 +76,223 @@ const nav = [
       { name: "Test", href: "/education/test", icon: GraduationCap },
     ],
   },
-]
+];
 
-export function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { currentUser } = useKundliStore()
-  const pathname = usePathname()
+export function Header(): JSX.Element {
+  const pathname = usePathname() || "/";
+  const store = useKundliStore();
+  const currentUser = store?.currentUser;
   const isActive = (href: string) =>
-    pathname === href || (href !== "/" && pathname.startsWith(href))
+    pathname === href || (href !== "/" && pathname.startsWith(href));
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === "undefined") return;
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleDropdown = (name: string) =>
+    setActiveDropdown((prev) => (prev === name ? null : name));
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-gray-200/95 backdrop-blur">
+    <header
+      className={`sticky top-0 z-50 border-b border-white/10 
+      bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xl 
+      supports-[backdrop-filter]:bg-white/50 transition-all duration-200 shadow-sm ${GeistSans.className}`}
+    >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14">
+        <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <Image src={Logo} alt="Logo" width={40} height={40} />
+          <Link href="/" className="flex items-center gap-3" aria-label="Home">
+            <Image
+              src="/Logo/Logo.svg"
+              alt="Kalyan Logo"
+              width={40}
+              height={40}
+              priority
+              className="drop-shadow-md hover:scale-105 transition-transform duration-150"
+            />
+            <span className="hidden sm:block font-semibold tracking-wide text-gray-900 dark:text-gray-100 text-sm md:text-base">
+              Kalyan
+            </span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-2 relative">
             <ul className="flex items-center gap-2">
-              {nav.map(({ name, href, icon: Icon, dropdown }) => {
-                const active = isActive(href)
+              {NAV.map((item) => {
+                const active = isActive(item.href);
                 return (
-                  <li key={name} className="relative group">
-                    {!dropdown ? (
+                  <li
+                    key={item.name}
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown(item.name)}
+                    onMouseLeave={() => setActiveDropdown((cur) => (cur === item.name ? null : cur))}
+                  >
+                    {!item.dropdown ? (
                       <Link
-                        href={href}
-                        className="group relative flex flex-col items-center justify-center px-4 py-2 h-12 w-[120px]
-                        text-xs font-medium text-black/70 transition-transform duration-150 hover:scale-[1.03]"
+                        href={item.href}
+                        className={`group relative flex flex-col items-center justify-center 
+                        px-4 py-2 h-12 w-[120px] text-xs font-medium 
+                        text-gray-800 dark:text-gray-100 transition-transform duration-150 hover:scale-[1.03]
+                        rounded-xl overflow-hidden`}
                       >
                         {active && (
                           <motion.span
                             layoutId="active-pill"
-                            className="absolute inset-0 rounded-xl bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
+                            className="absolute inset-0 rounded-xl bg-white/70 dark:bg-neutral-800 shadow-[0_2px_10px_rgba(0,0,0,0.15)]"
                             transition={{ type: "spring", stiffness: 420, damping: 35 }}
                           />
                         )}
-                        <span className="relative z-10 grid place-items-center gap-1">
-                          <Icon className="h-5 w-5" />
-                          <span className="leading-none">{name}</span>
+                        <span className="relative z-10 flex flex-col items-center gap-1">
+                          {item.icon && <item.icon className="h-5 w-5 opacity-80" />}
+                          <span className="leading-none">{item.name}</span>
                         </span>
                       </Link>
                     ) : (
                       <div className="relative">
                         <div
-                          className="group relative flex flex-col items-center justify-center px-4 py-2 h-12 w-[120px]
-                          text-xs font-medium text-black/70 transition-transform duration-150 hover:scale-[1.03] cursor-pointer"
+                          className={`group relative flex flex-col items-center justify-center 
+                          px-4 py-2 h-12 w-[120px] text-xs font-medium 
+                          text-gray-800 dark:text-gray-100 transition-transform duration-150 hover:scale-[1.03] 
+                          rounded-xl cursor-pointer`}
+                          onClick={() => toggleDropdown(item.name)}
                         >
                           {active && (
                             <motion.span
                               layoutId="active-pill"
-                              className="absolute inset-0 rounded-xl bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
+                              className="absolute inset-0 rounded-xl bg-white/70 dark:bg-neutral-800 shadow-[0_2px_10px_rgba(0,0,0,0.15)]"
                               transition={{ type: "spring", stiffness: 420, damping: 35 }}
                             />
                           )}
-                          <span className="relative z-10 grid place-items-center gap-1">
-                            <Icon className="h-5 w-5" />
-                            <span>{name}</span>
+                          <span className="relative z-10 flex flex-col items-center gap-1">
+                            {item.icon && <item.icon className="h-5 w-5 opacity-80" />}
+                            <span>{item.name}</span>
                           </span>
                         </div>
 
-                        {/* Dropdown on hover */}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block bg-white border rounded-xl shadow-md w-48 z-50">
-                          <ul className="py-2">
-                            {dropdown.map(({ name, href, icon: DIcon }) => (
-                              <li key={name}>
-                                <Link
-                                  href={href}
-                                  className="flex items-center gap-2 px-4 py-2 text-sm text-black/80 hover:bg-gray-100"
-                                >
-                                  <DIcon className="h-4 w-4 text-black/70" />
-                                  {name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                        <AnimatePresence>
+                          {activeDropdown === item.name && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -8 }}
+                              transition={{ duration: 0.15 }}
+                              className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 
+                              bg-white/95 dark:bg-neutral-900 border border-gray-200/40 dark:border-white/10 
+                              rounded-xl shadow-xl backdrop-blur-md z-50"
+                            >
+                              <ul className="py-2">
+                                {item.dropdown.map((d) => (
+                                  <li key={d.name}>
+                                    <Link
+                                      href={d.href}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-white/10 rounded-md transition"
+                                    >
+                                      {d.icon && <d.icon className="h-4 w-4 opacity-70" />}
+                                      {d.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     )}
                   </li>
-                )
+                );
               })}
             </ul>
           </nav>
 
-          {/* Profile & Mobile */}
+          {/* Profile + Mobile Menu */}
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button variant="ghost" className="h-8 w-8 p-0 rounded-full hover:scale-105 transition-transform">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={currentUser?.avatar || "/placeholder.svg"} />
-                    <AvatarFallback>{currentUser?.name?.charAt(0) || "U"}</AvatarFallback>
+                    <AvatarImage src={currentUser?.avatar ?? "/placeholder.svg"} alt={currentUser?.name ?? "User"} />
+                    <AvatarFallback>{(currentUser?.name ?? "U").charAt(0)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+
+              <DropdownMenuContent align="end" className="w-56 backdrop-blur-lg bg-white/90 dark:bg-neutral-900/80 border border-white/20">
                 <DropdownMenuItem asChild>
-                  <Link href="/profile">
-                    <User className="mr-2 h-4 w-4" /> Profile
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Profile
                   </Link>
                 </DropdownMenuItem>
+
                 <DropdownMenuItem asChild>
-                  <Link href="/settings">
-                    <Settings className="mr-2 h-4 w-4" /> Settings
+                  <Link href="/settings" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Settings
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" /> Log out
+
+                <DropdownMenuItem className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Mobile Toggle */}
+            {/* Mobile toggle */}
             <Button
               variant="ghost"
               size="sm"
               className="md:hidden"
-              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              onClick={() => setIsMobileMenuOpen((s) => !s)}
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Toggle navigation"
             >
               <Menu className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
-        {/* Mobile Nav */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-300 py-3">
-            <nav className="grid grid-cols-2 gap-2">
-              {nav.map(({ name, href, icon: Icon }) => (
-                <Link
-                  key={name}
-                  href={href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-black/80 hover:bg-white"
-                >
-                  <Icon className="h-4 w-4" />
-                  {name}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        )}
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="md:hidden border-t border-white/20 py-3 overflow-hidden backdrop-blur-lg"
+            >
+              <ul className="grid grid-cols-2 gap-2">
+                {NAV.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-white/10 transition"
+                    >
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      <span>{item.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </div>
     </header>
-  )
+  );
 }
+
+export default Header;

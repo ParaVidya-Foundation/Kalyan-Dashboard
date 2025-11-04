@@ -51,7 +51,6 @@ export default function AIBlogCard({
           src={image}
           alt={imageAlt}
           fill
-          quality={95}
           priority={false}
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

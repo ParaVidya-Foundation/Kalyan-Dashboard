@@ -5,12 +5,13 @@ import AIBlogSidebar from "@/components/research/aiblogs/AIBlogSidebar";
 import type { AIBlogCardProps } from "@/components/research/aiblogs/AIBlogCard";
 import React from "react";
 import { motion } from "framer-motion";
-
+import AIBlogHero from "@/components/research/aiblogs/AIBloghero";
+import Image from "next/image";
 const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-1",
     title: "From Idea to Launch",
-    image: "/images/aiblogs/idea-to-launch.jpg",
+    image: "/placeholder.jpg",
     imageAlt: "AI-powered creativity",
     href: "/research/blogs/how-to-use-ai-astrology",
     category: "Educational",
@@ -18,7 +19,7 @@ const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-2",
     title: "AI-Powered Marketing",
-    image: "/images/aiblogs/ai-marketing.jpg",
+    image: "/placeholder.jpg",
     imageAlt: "AI-generated marketing visuals",
     href: "/research/blogs/best-way-to-use-ai-in-palmistry",
     category: "Insights",
@@ -26,7 +27,7 @@ const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-3",
     title: "Studio Experiments",
-    image: "/images/aiblogs/studio-experiments.jpg",
+    image: "/placeholder.jpg",
     imageAlt: "Modern AI studio setup",
     href: "/research/blogs/drawing-vastu-maps",
     category: "Studio",
@@ -34,7 +35,7 @@ const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-4",
     title: "Projects in the Wild",
-    image: "/images/aiblogs/projects-in-the-wild.jpg",
+    image: "/placeholder.jpg",
     imageAlt: "Outdoor creative workspace",
     href: "/research/blogs/ketu-in-12th-house",
     category: "Projects",
@@ -71,6 +72,18 @@ export default function AiBlogs() {
 
   return (
     <main className="min-h-screen bg-white" itemScope itemType="https://schema.org/Blog">
+      <AIBlogHero />
+
+      <Image
+        src="/placeholder.jpg"
+        alt="AI Blogs Hero"
+        fill
+        priority
+        quality={100}
+        sizes="100vw"
+        className="object-cover object-center w-full h-[100vh]"
+      />
+    
       {/* Page Wrapper (no heavy animated backgrounds) */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Sidebar */}
