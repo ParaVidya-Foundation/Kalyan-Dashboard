@@ -1,64 +1,69 @@
-import { Metadata } from "next";
-export const dynamic = "force-dynamic";
-import { Sparkles } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Perfumes | Kalyan Store - Premium Fragrances",
-  description: "Discover our collection of premium perfumes and fragrances, carefully curated for spiritual and aromatic experiences.",
-  keywords: ["perfumes", "fragrances", "spiritual perfumes", "astrology", "Kalyan"],
-};
+import dynamic from "next/dynamic";
+import PerfumePlanet from "@/components/store/Perfume/PerfumePlanet";
+import PerfumeGrid from "@/components/store/Perfume/PerfumeGrid";
+
+// 🚀 Lazy-load Silk background (GPU-optimized)
+const Silk = dynamic(() => import("@/components/ui/bits/Silk").then(mod => mod.default), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-[#fdf6f1] animate-pulse" />,
+});
 
 export default function PerfumePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
-            <Sparkles className="w-8 h-8 text-purple-600" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Premium Perfumes
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our exquisite collection of fragrances designed to enhance your spiritual journey and elevate your daily routine.
-          </p>
-        </div>
-
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div
-              key={item}
-              className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="aspect-square bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center">
-                <Sparkles className="w-16 h-16 text-purple-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Premium Fragrance {item}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Aromatic blend designed for spiritual enhancement and personal well-being.
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-purple-600">₹{999 + item * 100}</span>
-                <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Coming Soon Notice */}
-        <div className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-          <p className="text-blue-800">
-            <strong>Note:</strong> Full product catalog and shopping functionality coming soon!
-          </p>
-        </div>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* 🌸 Smooth gradient silk background */}
+      <div className="absolute inset-0 -z-10">
+        <Silk
+          speed={3.2}           // gentle wave motion
+          scale={1.15}          // fluid texture scale
+          color="#FBE5C8"       // pastel base (soft peach-cream)
+          noiseIntensity={1.35} // subtle silk shimmer
+          rotation={0.2}        // slow swirl
+        />
+        {/* Gradient overlay for depth & warmth */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(255, 240, 210, 0.8) 0%, rgba(255, 230, 215, 0.85) 50%, rgba(255, 250, 240, 0.9) 100%)",
+            mixBlendMode: "soft-light",
+            animation: "bgShift 14s ease-in-out infinite alternate",
+          }}
+        />
       </div>
-    </main>
+
+      {/* 🌍 Content above the silk */}
+      <div className="relative z-10">
+        <PerfumePlanet />
+
+        <section className="container mx-auto px-6 py-24 text-center">
+          <h1 className="text-5xl font-serif font-bold text-[#2f2b25] mb-6">
+            Discover Your Signature Scent
+          </h1>
+          <p className="text-lg text-[#6c6258] max-w-2xl mx-auto leading-relaxed">
+            Experience perfumes that define elegance — crafted with timeless artistry and a touch of luxury.
+          </p>
+        </section>
+
+        <PerfumeGrid />
+      </div>
+
+      {/* 🌈 Gradient animation */}
+      <style jsx>{`
+        @keyframes bgShift {
+          0% {
+            filter: hue-rotate(0deg) brightness(1);
+          }
+          50% {
+            filter: hue-rotate(15deg) brightness(1.05);
+          }
+          100% {
+            filter: hue-rotate(-10deg) brightness(0.98);
+          }
+        }
+      `}</style>
+    </div>
   );
 }
-

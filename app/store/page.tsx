@@ -1,7 +1,5 @@
 "use client"
 
-export const dynamic = "force-dynamic"
-
 export default function store() {
   return (
     <main className="font-sans text-center p-8">
