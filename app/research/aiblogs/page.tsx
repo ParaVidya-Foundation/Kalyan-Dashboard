@@ -1,12 +1,11 @@
 "use client";
 
+import React from "react";
 import AIBlogGrid from "@/components/research/aiblogs/AIBlogGrid";
 import AIBlogSidebar from "@/components/research/aiblogs/AIBlogSidebar";
 import type { AIBlogCardProps } from "@/components/research/aiblogs/AIBlogCard";
-import React from "react";
-import { motion } from "framer-motion";
-import AIBlogHero from "@/components/research/aiblogs/AIBloghero";
-import Image from "next/image";
+import { WavyBackground } from "@/components/ui/bits/wavy-background";
+
 const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-1",
@@ -45,63 +44,60 @@ const demoPosts: AIBlogCardProps[] = [
 export default function AiBlogs() {
   const [active, setActive] = React.useState<string | undefined>();
   const categories = ["Insights", "Educational", "Studio", "Projects"];
+
   const filtered = React.useMemo(
     () =>
       active
         ? demoPosts.filter(
-            (p) =>
-              (p.category || "").toLowerCase() === active.toLowerCase()
+            (p) => (p.category || "").toLowerCase() === active.toLowerCase()
           )
         : demoPosts,
     [active]
   );
 
-  // Animation configs
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.1 },
-    },
-  };
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
-  };
-
   return (
-    <main className="min-h-screen bg-white" itemScope itemType="https://schema.org/Blog">
-      <AIBlogHero />
+    <section className="relative min-h-screen bg-white text-gray-900 overflow-hidden">
+      {/* Animated Hero Section */}
+      <div className="relative isolate w-full overflow-hidden">
+        <WavyBackground
+          className="flex flex-col items-center justify-center text-center py-32"
+          backgroundFill="white"
+          speed="fast"
+          waveOpacity={0.15}
+          blur={5}
+          colors={["#3b82f6", "#6366f1", "#9333ea"]}
+        >
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-black drop-shadow-lg">
+            AI Blogs
+          </h1>
+          <p className="text-base md:text-lg mt-4 text-black/80 max-w-2xl mx-auto">
+            Explore insights, experiments, and ideas blending AI with Vedic Astrology.
+          </p>
+        </WavyBackground>
+      </div>
 
-      <Image
-        src="/placeholder.jpg"
-        alt="AI Blogs Hero"
-        fill
-        priority
-        quality={100}
-        sizes="100vw"
-        className="object-cover object-center w-full h-[100vh]"
-      />
-    
-      {/* Page Wrapper (no heavy animated backgrounds) */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Sidebar */}
-        <div className="lg:col-span-1 order-2 lg:order-1">
-          <AIBlogSidebar
-            categories={categories}
-            activeCategory={active}
-            onCategoryChange={setActive}
-          />
-        </div>
+      {/* Main Content */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Sidebar */}
+          <aside className="lg:col-span-3 lg:pr-4">
+            <div className="lg:sticky lg:top-32">
+              <AIBlogSidebar
+                categories={categories}
+                activeCategory={active}
+                onCategoryChange={setActive}
+              />
+            </div>
+          </aside>
 
-        {/* Blog Grid */}
-        <div className="lg:col-span-2 order-1 lg:order-2">
-          <AIBlogGrid posts={filtered} />
+          {/* Blog Grid */}
+          <section className="lg:col-span-9">
+            <AIBlogGrid posts={filtered} />
+          </section>
         </div>
       </div>
 
-      {/* SEO Structured Data */}
+      {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -115,6 +111,6 @@ export default function AiBlogs() {
           }),
         }}
       />
-    </main>
+    </section>
   );
 }
