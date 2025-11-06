@@ -1,64 +1,200 @@
-import { Metadata } from "next";
-export const dynamic = "force-dynamic";
-import { Image as ImageIcon } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Posters | Kalyan Store - Spiritual & Astrological Posters",
-  description: "Browse our collection of spiritual posters, astrological charts, and decorative items for your sacred space.",
-  keywords: ["posters", "spiritual posters", "astrology posters", "decorative items", "Kalyan"],
-};
+import { useEffect } from "react";
+import TestimonialSlider from "@/components/store/Poster/TestimonialSlider";
+import ImageTrail from "@/components/ui/bits/ImageTrail";
+import Iridescence from "@/components/ui/bits/Iridescence";
+import PosterHero from "@/components/store/Poster/posterhero";
+import PosterGrid from "@/components/store/Poster/postercard";
 
 export default function PosterPage() {
+  useEffect(() => {
+    document.title = "Posters | Kalyan Store - Spiritual & Astrological Posters";
+  }, []);
+
+
+  const Single_Poster = [
+    {
+      id: 1,
+      title: "GTR | Vector Style Cars #01",
+      category: "Car Posters",
+      price: 99,
+      oldPrice: 199,
+      images: [
+        "/Poster/Posters/trail.webp",
+        "/Poster/Posters/trail1.webp",
+        "/Poster/Posters/trail2.webp",
+      ],
+    },
+    {
+      id: 2,
+      title: "Retro Vibes #02",
+      category: "Classic Posters",
+      price: 149,
+      oldPrice: 249,
+      images: [
+        "/Poster/Posters/trail.webp",
+        "/Poster/Posters/trail1.webp",
+      ],
+    },
+    // add more posters...
+  ];
+
+  const Collection_Poster = [
+    {
+      id: 1,
+      title: "GTR | Vector Style Cars #01",
+      category: "Car Posters",
+      price: 99,
+      oldPrice: 199,
+      images: [
+        "/Poster/Posters/trail.webp",
+        "/Poster/Posters/trail1.webp",
+        "/Poster/Posters/trail2.webp",
+      ],
+    },
+    {
+      id: 2,
+      title: "Retro Vibes #02",
+      category: "Classic Posters",
+      price: 149,
+      oldPrice: 249,
+      images: [
+        "/Poster/Posters/trail.webp",
+        "/Poster/Posters/trail1.webp",
+      ],
+    },
+    // add more posters...
+  ];
+
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <ImageIcon className="w-8 h-8 text-blue-600" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Spiritual Posters
+    <>
+    <PosterHero posters={["/Poster/Posters/trail.webp", "/Poster/Posters/trail1.webp", "/Poster/Posters/trail2.webp"]} marqueeText="Posters" />
+<div className="">
+  <h1 className="text-4xl font-bold text-center">Collection Posters</h1>
+    <PosterGrid posters={Collection_Poster} />
+    </div>
+
+
+          <div
+        style={{
+   
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <TestimonialSlider
+          videos={[
+            "/Poster/Testimonials/testimonial1.mp4",
+            "/Poster/Testimonials/testimonial2.mp4",
+            "/Poster/Testimonials/testimonial3.mp4",
+            "/Poster/Testimonials/testimonial4.mp4",
+          ]}
+          speed={60}
+          videoWidth={280}
+          videoHeight={480}
+        />
+      </div>
+
+
+      <div className="">
+        <h1 className="text-4xl font-bold text-center">Single Posters</h1>
+        <PosterGrid posters={Single_Poster} />
+      </div>
+
+      <div
+        className="trail-wrapper"
+        style={{
+          width: "95%",
+          height: "620px",
+          margin: "2rem auto",
+          position: "relative",
+          overflow: "hidden",
+          borderRadius: "3rem",
+          boxShadow: "0 8px 40px rgba(0, 0, 0, 0.08)",
+          background: "linear-gradient(135deg, #fff8f3 0%, #f5ece5 50%, #fdf9f6 100%)",
+        }}
+      >
+        {/* Background Iridescence */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 1,
+            overflow: "hidden",
+          }}
+        >
+          <Iridescence
+            color={[1, 1, 1]}
+            mouseReact={false}
+            amplitude={0.15}
+            speed={0.6}
+          />
+        </div>
+
+        {/* Image Trail */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 2,
+            overflow: "hidden",
+          }}
+        >
+          <ImageTrail
+            items={[
+              "/Poster/Posters/trail.webp",
+              "/Poster/Posters/trail1.webp",
+              "/Poster/Posters/trail2.webp",
+            ]}
+            variant={1}
+          />
+        </div>
+
+        {/* Text Overlay */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            textAlign: "center",
+            top: "45%",
+            transform: "translateY(-50%)",
+            color: "#1a1a1a",
+            textShadow: "0 2px 8px rgba(255, 255, 255, 0.6)",
+            backdropFilter: "blur(8px)",
+            background: "rgba(255, 255, 255, 0.35)",
+            display: "inline-block",
+            padding: "2rem 3rem",
+            borderRadius: "1.5rem",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "2.8rem",
+              fontWeight: 700,
+              fontFamily: "Playfair Display, serif",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Poster Page
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Transform your space with our collection of beautiful spiritual and astrological posters.
-          </p>
-        </div>
-
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div
-              key={item}
-              className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="aspect-square bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg mb-4 flex items-center justify-center">
-                <ImageIcon className="w-16 h-16 text-blue-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Spiritual Poster {item}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Beautifully designed poster featuring spiritual symbols and astrological elements.
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-blue-600">₹{299 + item * 50}</span>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Coming Soon Notice */}
-        <div className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-          <p className="text-blue-800">
-            <strong>Note:</strong> Full product catalog and shopping functionality coming soon!
-          </p>
+          <h2
+            style={{
+              fontSize: "1.4rem",
+              fontWeight: 500,
+              fontFamily: "Inter, sans-serif",
+              color: "#444",
+            }}
+          >
+            Image Trail – Where movement meets calm elegance.
+          </h2>
         </div>
       </div>
-    </main>
+
+      
+
+    </>
   );
 }
-

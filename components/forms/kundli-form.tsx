@@ -29,7 +29,7 @@ type KundliFormData = z.infer<typeof kundliSchema>
 // ---------------- Component ----------------
 export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false }) {
   const router = useRouter()
-  const { setCurrentKundli, setLoading, setError, isLoading } = useKundliStore()
+  const { setCurrentKundli, setLoading, setError, isLoading, error } = useKundliStore()
 
   const {
     register,
@@ -59,9 +59,13 @@ export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false
         gender: data.gender,
       })
       setCurrentKundli(kundli)
+      setError(null)
+      // Navigate to dashboard after successful generation
       router.push("/dashboard")
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to generate Kundli")
+      const errorMessage = error instanceof Error ? error.message : "Failed to generate Kundli"
+      setError(errorMessage)
+      console.error("Error generating kundli:", error)
     } finally {
       setLoading(false)
     }
@@ -185,6 +189,12 @@ export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false
             </div>
             {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
           </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Generating..." : "Generate Kundli"}

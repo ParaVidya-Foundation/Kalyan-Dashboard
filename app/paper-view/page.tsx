@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { useKundliStore } from "@/lib/store"
 import { Printer, Download, Share2, Calendar, MapPin, Clock } from "lucide-react"
+import Link from "next/link"
 
 export default function PaperViewPage() {
   const { currentKundli } = useKundliStore()
@@ -31,7 +32,7 @@ export default function PaperViewPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">No Kundli Available</h1>
           <p className="text-gray-600 mb-6">Please generate a Kundli first to view the paper format.</p>
           <Button asChild>
-            <a href="/">Generate Kundli</a>
+            <Link href="/dashboard">Generate Kundli</Link>
           </Button>
         </div>
       </div>

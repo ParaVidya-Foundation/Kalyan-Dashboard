@@ -5,6 +5,7 @@ import { DashboardOverview } from "@/components/dashboard/dashboard-overview"
 import { DetailedChartView } from "@/components/charts/detailed-chart-view"
 import { useKundliStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default function DashboardPage() {
   const { currentKundli } = useKundliStore()
@@ -19,7 +20,7 @@ export default function DashboardPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">No Kundli Found</h2>
           <p className="text-muted-foreground mb-4">Please generate a Kundli first.</p>
-          <Button onClick={() => (window.location.href = "/")}>Generate Kundli</Button>
+          <Link href="/"><Button>Generate Kundli</Button></Link>
         </div>
       </div>
     )

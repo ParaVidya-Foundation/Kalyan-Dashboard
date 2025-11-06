@@ -3,8 +3,9 @@ import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
-import ClientHeader from "@/components/layout/ClientHeader"
+
 import { Footer } from "@/components/layout/footer"
+import Header from "@/components/layout/header"
 // SEO components removed for build stability; can be re-added later
 
 export const viewport: Viewport = {
@@ -66,7 +67,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-gray-50">
         {/* <DefaultSEO /> */}
         {/* <StructuredData /> */}
-        <ClientHeader />
+        <Header />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

@@ -2,7 +2,12 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import ChatBox from "./chatbox";
+
+// Lazy-load react-markdown for performance
+const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
+import remarkGfm from "remark-gfm";
 
 type Message = {
   id: string;
@@ -16,20 +21,21 @@ const Chat: React.FC = () => {
       id: "intro",
       role: "assistant",
       content:
-        "Hi 👋 I'm your AI teacher for Bṛhat Parāśara Horā Śāstra. Ask any questions about this book. 🤔",
+        "Hi 👋 I'm your AI teacher for **Bṛhat Parāśara Horā Śāstra**. Ask any questions about this book. 🤔",
     },
     {
       id: "question",
       role: "user",
-      content: "🧠 What are special lagnas?",
+      content: "🧠 What are *special lagnas*?",
     },
     {
       id: "answer",
       role: "assistant",
-      content: `Special Lagnas are explained in Chapter 5 of Bṛhat Parāśara Horā Śāstra. They include Bhava Lagna, Hora Lagna, and Ghaṭika Lagna.
+      content: `**Special Lagnas** are explained in Chapter 5 of *Bṛhat Parāśara Horā Śāstra*.  
+They include **Bhava Lagna**, **Hora Lagna**, and **Ghaṭika Lagna**.
 
-- **Bhava Lagna:** Calculated by dividing the time from sunrise to birth into 5-ghaṭi intervals (120 minutes each), then adding the quotient to the Sun's longitude at sunrise.
-- **Hora Lagna:** Calculated by dividing the time from sunrise to birth by 2.5 ghaṭis (60 minutes), then adding it to the Sun's longitude at sunrise.
+- **Bhava Lagna:** Calculated by dividing the time from sunrise to birth into 5-ghaṭi intervals (120 minutes each), then adding the quotient to the Sun's longitude at sunrise.  
+- **Hora Lagna:** Calculated by dividing the time from sunrise to birth by 2.5 ghaṭis (60 minutes), then adding it to the Sun's longitude at sunrise.  
 - **Ghaṭika Lagna:** Changes every 24 minutes from sunrise. The number of ghaṭis past sunrise is counted as signs, and the vighaṭis divided by 2 are treated as degrees. This sum is added to the Sun's longitude at sunrise.
 
 Each special Lagna yields a different Bhava chart, and their combined analysis gives a more accurate picture of planetary effects.`,
@@ -38,7 +44,7 @@ Each special Lagna yields a different Bhava chart, and their combined analysis g
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll
+  // Auto-scroll to bottom on new message
   useEffect(() => {
     const el = containerRef.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
@@ -59,17 +65,15 @@ Each special Lagna yields a different Bhava chart, and their combined analysis g
   };
 
   return (
-<section
-  className="relative mx-auto w-full bg-gradient-to-br from-[#ff8dc7] via-[#a48eff] to-[#3fcaff] p-[2px] shadow-[0_10px_40px_rgba(0,0,0,0.12)] overflow-hidden"
-  style={{
-    WebkitMaskImage:
-      "linear-gradient(to bottom, black 90%, transparent 100%)",
-    maskImage:
-      "linear-gradient(to bottom, black 90%, transparent 100%)",
-  }}
->
-
-      {/* Glassmorphic content */}
+    <section
+      className="relative mx-auto w-full bg-gradient-to-br from-[#ff8dc7] via-[#a48eff] to-[#3fcaff] p-[2px] shadow-[0_10px_40px_rgba(0,0,0,0.12)] overflow-hidden"
+      style={{
+        WebkitMaskImage:
+          "linear-gradient(to bottom, black 90%, transparent 100%)",
+        maskImage: "linear-gradient(to bottom, black 90%, transparent 100%)",
+      }}
+    >
+      {/* Glassmorphic Chat Container */}
       <div className="bg-white/60 backdrop-blur-2xl p-5 sm:p-8 md:p-10 font-[Inter] text-gray-800">
         <div
           ref={containerRef}
@@ -91,12 +95,38 @@ Each special Lagna yields a different Bhava chart, and their combined analysis g
                     ? "bg-white/90 text-gray-800 ring-1 ring-black/5"
                     : "bg-gradient-to-r from-fuchsia-600 via-pink-500 to-orange-400 text-white font-medium shadow-md"
                 }`}
-                dangerouslySetInnerHTML={{ __html: msg.content }}
-              />
+              >
+                {/* Render Markdown safely */}
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-gray-900">
+                        {children}
+                      </strong>
+                    ),
+                    em: ({ children }) => (
+                      <em className="italic text-gray-700">{children}</em>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc ml-5 space-y-1">{children}</ul>
+                    ),
+                    li: ({ children }) => (
+                      <li className="text-gray-800">{children}</li>
+                    ),
+                    p: ({ children }) => (
+                      <p className="mb-2 last:mb-0">{children}</p>
+                    ),
+                  }}
+                >
+                  {msg.content}
+                </ReactMarkdown>
+              </div>
             </motion.div>
           ))}
         </div>
 
+        {/* Input Box */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,7 +137,7 @@ Each special Lagna yields a different Bhava chart, and their combined analysis g
         </motion.div>
       </div>
 
-      {/* Floating gradient animation for vibe */}
+      {/* Floating background gradient animation */}
       <motion.div
         className="absolute -top-20 -left-20 h-72 w-72 bg-gradient-to-tr from-[#ff9ae0] via-[#a38bff] to-[#3ccaff] rounded-full blur-3xl opacity-40"
         animate={{
