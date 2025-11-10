@@ -126,6 +126,9 @@
   .font-playfair {
     font-family: var(--font-playfair), serif;
   }
+  .font-poppins {
+    font-family: var(--font-poppins), sans-serif;
+  }
 }
 
 /* Blog Hero Animations */

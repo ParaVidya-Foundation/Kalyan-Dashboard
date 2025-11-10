@@ -180,10 +180,13 @@ export default function Orb({
     };
 
     container.addEventListener("mousemove", handleMouseMove);
-    container.addEventListener("mouseleave", () => (targetHover = 0));
+    const handleMouseLeave = () => (targetHover = 0);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
     let rafId: number;
+    let isMounted = true;
     const update = (t: number) => {
+      if (!isMounted) return;
       rafId = requestAnimationFrame(update);
       const dt = (t - lastTime) * 0.001;
       lastTime = t;
@@ -202,11 +205,31 @@ export default function Orb({
     update(0);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      isMounted = false;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
       window.removeEventListener("resize", resize);
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      if (container) {
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("mouseleave", handleMouseLeave);
+        // Safely remove canvas if it exists
+        if (gl.canvas && gl.canvas.parentNode === container) {
+          try {
+            container.removeChild(gl.canvas);
+          } catch (e) {
+            // Canvas already removed or container detached
+            console.debug('Canvas cleanup:', e);
+          }
+        }
+      }
+      // Safely lose WebGL context
+      try {
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+      } catch (e) {
+        // Context already lost
+        console.debug('WebGL context cleanup:', e);
+      }
     };
   }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
 

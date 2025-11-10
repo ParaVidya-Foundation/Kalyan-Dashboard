@@ -92,7 +92,6 @@ Deliver a clean folder structure, placeholder UI for each route, and modern spir
 Prioritize reusability, performance, and accessibility.
 
 https://skyebioscience.com/our-company/
-https://frysta.framer.website/feed
 https://www.chaingpt.org/blog
 https://vessi.com/
 https://www.gethyped.nl/
