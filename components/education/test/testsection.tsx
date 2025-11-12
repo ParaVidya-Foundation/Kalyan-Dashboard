@@ -21,12 +21,18 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
     router.push("/education/test");
   };
 
-  const avatars = [
+  // 1x1 transparent PNG as data URI to avoid next/image errors for missing local files
+  const transparentPng =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
+
+  const [avatarSrcs, setAvatarSrcs] = useState<string[]>([
     "/avatars/avatar1.png",
     "/avatars/avatar2.png",
     "/avatars/avatar3.png",
     "/avatars/avatar4.png",
-  ];
+  ]);
+
+  const [heroSrc, setHeroSrc] = useState<string>("/images/testsection.png");
 
   return (
     <section
@@ -105,7 +111,7 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
           {/* --- Avatars Section --- */}
           <div className="mt-6 flex items-center gap-3">
             <div className="flex -ml-1">
-              {avatars.map((src, i) => (
+              {avatarSrcs.map((src, i) => (
                 <div key={i} className="-ml-2 h-9 w-9 rounded-full ring-2 ring-white overflow-hidden">
                   <Image
                     src={src}
@@ -113,6 +119,14 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
                     width={36}
                     height={36}
                     className="object-cover"
+                    unoptimized
+                    onError={() => {
+                      setAvatarSrcs((prev) => {
+                        const copy = [...prev];
+                        copy[i] = transparentPng;
+                        return copy;
+                      });
+                    }}
                   />
                 </div>
               ))}
@@ -127,11 +141,13 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
         {/* --- Right Image --- */}
         <div className="relative w-full h-[300px] sm:h-[400px] md:h-[450px] animate-float">
           <Image
-            src="/images/testsection.png"
+            src={heroSrc}
             alt="Astrology AI Learning"
             fill
             className="object-contain drop-shadow-xl"
             priority
+            unoptimized
+            onError={() => setHeroSrc(transparentPng)}
           />
         </div>
       </div>

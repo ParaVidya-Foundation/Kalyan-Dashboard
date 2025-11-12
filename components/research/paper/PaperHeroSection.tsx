@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import EduSearchBox from "../../education/edusearchbox";
+import EduSearchBox from "../../education/Book/edusearchbox";
 import { ResearchTopics } from "./researchtopics";
 
 interface PaperHeroSectionProps {

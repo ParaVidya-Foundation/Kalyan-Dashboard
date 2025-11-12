@@ -20,7 +20,7 @@ export const papers: ResearchPaper[] = [
     date: "Aug 2024",
     description:
       "A deep study analyzing how planetary positions influence emotional states and behavioral tendencies, referencing classic Jyotish texts with modern psychology.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Jupiter",
   },
   {
@@ -29,7 +29,7 @@ export const papers: ResearchPaper[] = [
     date: "Jan 2025",
     description:
       "This paper explores Nakshatras through empirical data and ancient sources, presenting their impact on personality and destiny.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Moon",
   },
   {
@@ -38,7 +38,7 @@ export const papers: ResearchPaper[] = [
     date: "Oct 2024",
     description:
       "An in-depth exploration of the link between planetary karma and human fate, bridging philosophy, astrology, and spirituality.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Saturn",
   },
   {
@@ -47,7 +47,7 @@ export const papers: ResearchPaper[] = [
     date: "Nov 2024",
     description:
       "Comprehensive analysis of ancestral afflictions in Vedic astrology with effective remedial measures and case studies.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Pitra Dosh",
   },
   {
@@ -56,7 +56,7 @@ export const papers: ResearchPaper[] = [
     date: "Sep 2024",
     description:
       "Modern interpretation of Vastu Shastra principles applied to contemporary architectural design and space planning.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Vastu",
   },
   {
@@ -65,7 +65,7 @@ export const papers: ResearchPaper[] = [
     date: "Dec 2024",
     description:
       "Critical examination of Kalsarp Dosh through statistical analysis and comparative studies of affected individuals.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Kalsarp Dosh",
   },
   {
@@ -74,7 +74,7 @@ export const papers: ResearchPaper[] = [
     date: "Aug 2024",
     description:
       "Research on Sun's role in shaping professional success, leadership qualities, and authority in individual horoscopes.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Sun",
   },
   {
@@ -83,7 +83,7 @@ export const papers: ResearchPaper[] = [
     date: "Oct 2024",
     description:
       "Deep dive into Rahu and Ketu's influence on material desires, spirituality, and karmic patterns in human life.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Rahu",
   },
   {
@@ -92,7 +92,7 @@ export const papers: ResearchPaper[] = [
     date: "Jan 2025",
     description:
       "Study of Mercury's role in cognitive abilities, communication skills, and intellectual pursuits in astrology.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Mercury",
   },
   {
@@ -101,7 +101,7 @@ export const papers: ResearchPaper[] = [
     date: "Sep 2024",
     description:
       "Comprehensive analysis of Venus's influence on relationships, love, and marital harmony through case studies.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Venus",
   },
   {
@@ -110,7 +110,7 @@ export const papers: ResearchPaper[] = [
     date: "Nov 2024",
     description:
       "Critical analysis of Mars dosha in marriage compatibility with empirical evidence and practical solutions.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Mangal Badh",
   },
   {
@@ -119,7 +119,7 @@ export const papers: ResearchPaper[] = [
     date: "Dec 2024",
     description:
       "Modern perspective on traditional concepts of Stree Dosh with emphasis on empowerment and practical solutions.",
-    link: "#",
+    link: "/research/research-papers/Paper",
     topic: "Stree Shrap",
   },
 ];

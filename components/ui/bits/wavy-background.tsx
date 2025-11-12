@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
 
 export const WavyBackground = ({
@@ -26,7 +26,7 @@ export const WavyBackground = ({
   waveOpacity?: number;
   [key: string]: any;
 }) => {
-  const noise = createNoise3D();
+  const noise = useMemo(() => createNoise3D(), []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationIdRef = useRef<number | null>(null);
   
@@ -56,8 +56,11 @@ export const WavyBackground = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     
-    let w = ctx.canvas.width = window.innerWidth;
-    let h = ctx.canvas.height = window.innerHeight;
+    let prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const shouldReduceMotion = prefersReducedMotion.matches;
+
+    let w = (ctx.canvas.width = window.innerWidth);
+    let h = (ctx.canvas.height = window.innerHeight);
     ctx.filter = `blur(${blur}px)`;
     let nt = 0;
 
@@ -83,6 +86,7 @@ export const WavyBackground = ({
     };
 
     let isMounted = true;
+
     const render = () => {
       if (!isMounted) return;
       ctx.fillStyle = backgroundFill || "white";
@@ -93,7 +97,44 @@ export const WavyBackground = ({
     };
 
     window.addEventListener("resize", handleResize);
-    render();
+
+    const start = () => {
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+      nt = 0;
+      render();
+    };
+
+    const stop = () => {
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
+      }
+      ctx.fillStyle = backgroundFill || "white";
+      ctx.globalAlpha = waveOpacity || 0.5;
+      ctx.fillRect(0, 0, w, h);
+    };
+
+    if (shouldReduceMotion) {
+      stop();
+    } else {
+      start();
+    }
+
+    const handlePrefChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        stop();
+      } else {
+        start();
+      }
+    };
+
+    if (typeof prefersReducedMotion.addEventListener === "function") {
+      prefersReducedMotion.addEventListener("change", handlePrefChange);
+    } else if (typeof prefersReducedMotion.addListener === "function") {
+      prefersReducedMotion.addListener(handlePrefChange);
+    }
 
     return () => {
       isMounted = false;
@@ -101,8 +142,13 @@ export const WavyBackground = ({
         cancelAnimationFrame(animationIdRef.current);
       }
       window.removeEventListener("resize", handleResize);
+      if (typeof prefersReducedMotion.removeEventListener === "function") {
+        prefersReducedMotion.removeEventListener("change", handlePrefChange);
+      } else if (typeof prefersReducedMotion.removeListener === "function") {
+        prefersReducedMotion.removeListener(handlePrefChange);
+      }
     };
-  }, [blur, waveWidth, backgroundFill, waveOpacity, speed, colors]);
+  }, [blur, waveWidth, backgroundFill, waveOpacity, speed, colors, noise]);
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {

@@ -35,25 +35,15 @@ export default function AIBlogSidebar({
   };
 
   return (
-    <>
-      {/* Load a clean mono Google font for sidebar labels */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
-
-        .ai-sidebar {
-          font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
-        }
-      `}</style>
-
-      <motion.aside
-        initial="hidden"
-        animate="show"
-        variants={container}
-        className="ai-sidebar w-full"
-        aria-label="Blog sidebar"
-        itemScope
-        itemType="https://schema.org/WPSideBar"
-      >
+    <motion.aside
+      initial="hidden"
+      animate="show"
+      variants={container}
+      className="w-full font-mono"
+      aria-label="Blog sidebar"
+      itemScope
+      itemType="https://schema.org/WPSideBar"
+    >
         {/* Filters / Topics */}
         <motion.section
           variants={fadeUp as any}
@@ -163,6 +153,5 @@ export default function AIBlogSidebar({
           </div>
         </motion.section>
       </motion.aside>
-    </>
   );
 }

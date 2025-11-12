@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import BookGrid from "@/components/education/BookGrid";
-import EduHeroSection from "@/components/education/eduhero";
-import TestSection from "@/components/education/testsection";
-import type { Book } from "@/components/education/BookGrid";
+import BookGrid from "@/components/education/Book/BookGrid";
+import EduHeroSection from "@/components/education/Book/eduhero";
+import TestSection from "@/components/education/test/testsection";
+import type { Book } from "@/components/education/Book/BookGrid";
 
 const books: Book[] = [
   {
