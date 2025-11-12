@@ -147,8 +147,18 @@ export default function ImageTrail({
       window.removeEventListener("pointermove", handleMove);
       window.removeEventListener("resize", updateBounds);
       window.removeEventListener("scroll", updateBounds);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      container.remove();
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      // Safely remove container if it exists and is still in the DOM
+      if (container && container.parentNode) {
+        try {
+          container.remove();
+        } catch (e) {
+          // Container already removed
+          console.debug('ImageTrail container cleanup:', e);
+        }
+      }
     };
   }, [images, maxSprites, spriteSize, lifeMs, inertia, animate, updateBounds]);
 

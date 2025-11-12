@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
 
 export const WavyBackground = ({
@@ -26,15 +26,10 @@ export const WavyBackground = ({
   waveOpacity?: number;
   [key: string]: any;
 }) => {
-  const noise = createNoise3D();
-  let w: number,
-    h: number,
-    nt: number,
-    i: number,
-    x: number,
-    ctx: any,
-    canvas: any;
+  const noise = useMemo(() => createNoise3D(), []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationIdRef = useRef<number | null>(null);
+  
   const getSpeed = () => {
     switch (speed) {
       case "slow":
@@ -46,21 +41,6 @@ export const WavyBackground = ({
     }
   };
 
-  const init = () => {
-    canvas = canvasRef.current;
-    ctx = canvas.getContext("2d");
-    w = ctx.canvas.width = window.innerWidth;
-    h = ctx.canvas.height = window.innerHeight;
-    ctx.filter = `blur(${blur}px)`;
-    nt = 0;
-    window.onresize = function () {
-      w = ctx.canvas.width = window.innerWidth;
-      h = ctx.canvas.height = window.innerHeight;
-      ctx.filter = `blur(${blur}px)`;
-    };
-    render();
-  };
-
   const waveColors = colors ?? [
     "#38bdf8",
     "#818cf8",
@@ -68,36 +48,107 @@ export const WavyBackground = ({
     "#e879f9",
     "#22d3ee",
   ];
-  const drawWave = (n: number) => {
-    nt += getSpeed();
-    for (i = 0; i < n; i++) {
-      ctx.beginPath();
-      ctx.lineWidth = waveWidth || 50;
-      ctx.strokeStyle = waveColors[i % waveColors.length];
-      for (x = 0; x < w; x += 5) {
-        var y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + h * 0.5); // adjust for height, currently at 50% of the container
-      }
-      ctx.stroke();
-      ctx.closePath();
-    }
-  };
-
-  let animationId: number;
-  const render = () => {
-    ctx.fillStyle = backgroundFill || "white";
-    ctx.globalAlpha = waveOpacity || 0.5;
-    ctx.fillRect(0, 0, w, h);
-    drawWave(5);
-    animationId = requestAnimationFrame(render);
-  };
 
   useEffect(() => {
-    init();
-    return () => {
-      cancelAnimationFrame(animationId);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    
+    let prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const shouldReduceMotion = prefersReducedMotion.matches;
+
+    let w = (ctx.canvas.width = window.innerWidth);
+    let h = (ctx.canvas.height = window.innerHeight);
+    ctx.filter = `blur(${blur}px)`;
+    let nt = 0;
+
+    const handleResize = () => {
+      w = ctx.canvas.width = window.innerWidth;
+      h = ctx.canvas.height = window.innerHeight;
+      ctx.filter = `blur(${blur}px)`;
     };
-  }, []);
+
+    const drawWave = (n: number) => {
+      nt += getSpeed();
+      for (let i = 0; i < n; i++) {
+        ctx.beginPath();
+        ctx.lineWidth = waveWidth || 50;
+        ctx.strokeStyle = waveColors[i % waveColors.length];
+        for (let x = 0; x < w; x += 5) {
+          const y = noise(x / 800, 0.3 * i, nt) * 100;
+          ctx.lineTo(x, y + h * 0.5);
+        }
+        ctx.stroke();
+        ctx.closePath();
+      }
+    };
+
+    let isMounted = true;
+
+    const render = () => {
+      if (!isMounted) return;
+      ctx.fillStyle = backgroundFill || "white";
+      ctx.globalAlpha = waveOpacity || 0.5;
+      ctx.fillRect(0, 0, w, h);
+      drawWave(5);
+      animationIdRef.current = requestAnimationFrame(render);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    const start = () => {
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+      nt = 0;
+      render();
+    };
+
+    const stop = () => {
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
+      }
+      ctx.fillStyle = backgroundFill || "white";
+      ctx.globalAlpha = waveOpacity || 0.5;
+      ctx.fillRect(0, 0, w, h);
+    };
+
+    if (shouldReduceMotion) {
+      stop();
+    } else {
+      start();
+    }
+
+    const handlePrefChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        stop();
+      } else {
+        start();
+      }
+    };
+
+    if (typeof prefersReducedMotion.addEventListener === "function") {
+      prefersReducedMotion.addEventListener("change", handlePrefChange);
+    } else if (typeof prefersReducedMotion.addListener === "function") {
+      prefersReducedMotion.addListener(handlePrefChange);
+    }
+
+    return () => {
+      isMounted = false;
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+      window.removeEventListener("resize", handleResize);
+      if (typeof prefersReducedMotion.removeEventListener === "function") {
+        prefersReducedMotion.removeEventListener("change", handlePrefChange);
+      } else if (typeof prefersReducedMotion.removeListener === "function") {
+        prefersReducedMotion.removeListener(handlePrefChange);
+      }
+    };
+  }, [blur, waveWidth, backgroundFill, waveOpacity, speed, colors, noise]);
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {

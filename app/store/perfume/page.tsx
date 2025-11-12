@@ -1,69 +1,87 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import PerfumePlanet from "@/components/store/Perfume/PerfumePlanet";
 import PerfumeGrid from "@/components/store/Perfume/PerfumeGrid";
-
-// 🚀 Lazy-load Silk background (GPU-optimized)
-const Silk = dynamic(() => import("@/components/ui/bits/Silk").then(mod => mod.default), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-[#fdf6f1] animate-pulse" />,
-});
+import MovingGradient from "@/components/store/Perfume/MovingGradient";
+import MakingPerfume from "@/components/store/Perfume/MakingPerfume";
+import Image from "next/image";
 
 export default function PerfumePage() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      {/* 🌸 Smooth gradient silk background */}
+    // Set header/hero heights once here
+    <div
+      className="relative w-full overflow-hidden"
+      style={
+        {
+          // adjust as needed
+          ["--header-h" as any]: "30px",
+          ["--hero-h" as any]: "110vh",
+        } as React.CSSProperties
+      }
+    >
+      {/* Site-wide animated gradient (unchanged, bottom-most layer) */}
       <div className="absolute inset-0 -z-10">
-        <Silk
-          speed={3.2}           // gentle wave motion
-          scale={1.15}          // fluid texture scale
-          color="#FBE5C8"       // pastel base (soft peach-cream)
-          noiseIntensity={1.35} // subtle silk shimmer
-          rotation={0.2}        // slow swirl
-        />
-        {/* Gradient overlay for depth & warmth */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(255, 240, 210, 0.8) 0%, rgba(255, 230, 215, 0.85) 50%, rgba(255, 250, 240, 0.9) 100%)",
-            mixBlendMode: "soft-light",
-            animation: "bgShift 14s ease-in-out infinite alternate",
-          }}
-        />
+        <MovingGradient />
       </div>
 
-      {/* 🌍 Content above the silk */}
-      <div className="relative z-10">
+      {/* HERO — sits directly under header, full viewport height, no overlap */}
+      <section
+        className="relative z-0 w-full pointer-events-none"
+        style={{ marginTop: "var(--header-h)" }}
+      >
+        <div className="relative h-[var(--hero-h)] w-full">
+          <Image
+            src="/Perfume/PERFUME-PLATFORM.png"
+            alt="Perfume Hero"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        </div>
+      </section>
+
+      {/* Cloud-bordered wrapper around MakingPerfume only */}
+      <section className="relative w-full overflow-hidden">
+        {/* Top Cloud Border */}
+        <div className="absolute inset-x-0 top-0 z-[5] h-[180px] w-full pointer-events-none">
+          <div className="relative h-full w-full">
+            <Image
+              src="/Perfume/cloud-border.png"
+              alt="Top Cloud Border"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-top"
+            />
+          </div>
+        </div>
+
+        {/* Main Content (above borders) */}
+        <div className="relative z-[10]">
+          <MakingPerfume />
+        </div>
+
+        {/* Bottom Cloud Border */}
+        <div className="absolute inset-x-0 bottom-0 z-[5] h-[180px] w-full pointer-events-none rotate-180">
+          <div className="relative h-full w-full">
+            <Image
+              src="/Perfume/cloud-border.png"
+              alt="Bottom Cloud Border"
+              fill
+              sizes="100vw"
+              className="object-cover object-bottom"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Rest of the content (already below hero, no extra padding needed) */}
+      <main className="relative z-10 flex flex-col items-center justify-center space-y-20 py-20">
         <PerfumePlanet />
-
-        <section className="container mx-auto px-6 py-24 text-center">
-          <h1 className="text-5xl font-serif font-bold text-[#2f2b25] mb-6">
-            Discover Your Signature Scent
-          </h1>
-          <p className="text-lg text-[#6c6258] max-w-2xl mx-auto leading-relaxed">
-            Experience perfumes that define elegance — crafted with timeless artistry and a touch of luxury.
-          </p>
-        </section>
-
         <PerfumeGrid />
-      </div>
-
-      {/* 🌈 Gradient animation */}
-      <style jsx>{`
-        @keyframes bgShift {
-          0% {
-            filter: hue-rotate(0deg) brightness(1);
-          }
-          50% {
-            filter: hue-rotate(15deg) brightness(1.05);
-          }
-          100% {
-            filter: hue-rotate(-10deg) brightness(0.98);
-          }
-        }
-      `}</style>
+      </main>
     </div>
   );
 }

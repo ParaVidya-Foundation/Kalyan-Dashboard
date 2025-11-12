@@ -1,6 +1,6 @@
-import BookGrid from "@/components/education/BookGrid";
-import Chat from "@/components/education/chat";
-import TestSection from "@/components/education/testsection";
+import BookGrid from "@/components/education/Book/BookGrid";
+import Chat from "@/components/education/Book/chat";
+import TestSection from "@/components/education/test/testsection";
 
 const books = [
     {

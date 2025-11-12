@@ -103,8 +103,10 @@ export default function Iridescence({
 
     const mesh = new Mesh(gl, { geometry, program });
     let animateId: number;
+    let isMounted = true;
 
     function update(t: number) {
+      if (!isMounted) return;
       animateId = requestAnimationFrame(update);
       program.uniforms.uTime.value = t * 0.001;
       renderer.render({ scene: mesh });
@@ -113,6 +115,7 @@ export default function Iridescence({
     ctn.appendChild(gl.canvas);
 
     function handleMouseMove(e: MouseEvent) {
+      if (!isMounted) return;
       const rect = ctn.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
       const y = 1.0 - (e.clientY - rect.top) / rect.height;
@@ -125,13 +128,30 @@ export default function Iridescence({
     }
 
     return () => {
-      cancelAnimationFrame(animateId);
+      isMounted = false;
+      if (animateId) {
+        cancelAnimationFrame(animateId);
+      }
       window.removeEventListener('resize', resize);
-      if (mouseReact) {
+      if (mouseReact && ctn) {
         ctn.removeEventListener('mousemove', handleMouseMove);
       }
-      ctn.removeChild(gl.canvas);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      // Safely remove canvas if it exists
+      if (gl.canvas && gl.canvas.parentNode === ctn) {
+        try {
+          ctn.removeChild(gl.canvas);
+        } catch (e) {
+          // Canvas already removed or container detached
+          console.debug('Canvas cleanup:', e);
+        }
+      }
+      // Safely lose WebGL context
+      try {
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+      } catch (e) {
+        // Context already lost
+        console.debug('WebGL context cleanup:', e);
+      }
     };
   }, [color, speed, amplitude, mouseReact]);
 

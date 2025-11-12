@@ -1,318 +1,276 @@
-import React, { useEffect, useRef, useState } from 'react';
+"use client";
 
+import React, { useEffect, useRef } from "react";
+
+/**
+ * MovingGradient
+ * - Pastel peach -> yellow luxury background
+ * - Smooth cursor-follow inertia (lerp)
+ * - Light GPU-friendly animations (blur, transforms)
+ * - Minimal DOM writes: updates CSS variables on a single container element
+ * - Tunable: particles, orbs, speeds
+ */
 export default function MovingGradient() {
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const targetPos = useRef({ x: 50, y: 50 });
-  const currentPos = useRef({ x: 50, y: 50 });
-  const rafId = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // config
+  const LERP = 0.08; // smoothing (lower = more delay)
+  const ORB_COUNT = 4; // large blurred orbs
+  const PARTICLE_COUNT = 28; // small dust particles (keeps CPU/GPU low)
+  const PARTICLE_SEED = useRef<number[]>([]);
+
+  // safe init seed
+  useEffect(() => {
+    PARTICLE_SEED.current = Array.from({ length: PARTICLE_COUNT }, (_, i) =>
+      Math.sin(i * 12.9898 + 78.233) * 43758.5453
+    ).map((v) => (v - Math.floor(v)) * 1000);
+  }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      targetPos.current = {
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      };
-    };
+    const el = containerRef.current!;
+    if (!el) return;
 
-    const animate = () => {
-      // Smooth lerp for buttery cursor tracking
-      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.05;
-      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.05;
+    // initial CSS vars
+    el.style.setProperty("--mx", "50"); // mouse x in %
+    el.style.setProperty("--my", "50"); // mouse y in %
+    el.style.setProperty("--t-mx", "50"); // target
+    el.style.setProperty("--t-my", "50");
+    el.style.setProperty("--v-scale", "1");
 
-      setMousePos({
-        x: currentPos.current.x,
-        y: currentPos.current.y
-      });
+    // keep target & current in refs to avoid re-renders
+    let targetX = 50;
+    let targetY = 50;
+    let curX = 50;
+    let curY = 50;
+    let last = performance.now();
+    let raf = 0;
 
-      rafId.current = requestAnimationFrame(animate) as unknown as null;
+    function onMouseMove(e: MouseEvent) {
+      targetX = (e.clientX / window.innerWidth) * 100;
+      targetY = (e.clientY / window.innerHeight) * 100;
+      // damp scale slightly when moving fast
+      const dx = Math.abs(targetX - curX);
+      const dy = Math.abs(targetY - curY);
+      const v = Math.min(1.08, 1 + Math.max(dx, dy) * 0.006);
+      el.style.setProperty("--v-scale", String(v));
+    }
+    function onTouchMove(e: TouchEvent) {
+      const t = e.touches[0];
+      if (!t) return;
+      targetX = (t.clientX / window.innerWidth) * 100;
+      targetY = (t.clientY / window.innerHeight) * 100;
+    }
 
-    };
+    function animate(now: number) {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
 
-    window.addEventListener('mousemove', handleMouseMove);
-    rafId.current = requestAnimationFrame(animate) as unknown as null;
+      // lerp current toward target
+      curX += (targetX - curX) * LERP;
+      curY += (targetY - curY) * LERP;
+
+      // update css vars (single DOM write per frame)
+      el.style.setProperty("--mx", String(curX));
+      el.style.setProperty("--my", String(curY));
+
+      // subtle slow drift for orbs
+      el.style.setProperty("--time", String(now * 0.001));
+
+      raf = requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+
+    raf = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
     };
   }, []);
 
+  // helper render: orbs & particles (positions calculated in CSS using --mx/--my and --time)
+  // keep markup minimal; heavy work is inside CSS transforms using variables
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-[#fef6f0] via-[#fff9f5] to-[#fff3eb]">
-      
-      {/* Primary cursor-reactive gradient - warm peach */}
-      <div 
-        className="absolute inset-0 will-change-transform"
-        style={{
-          background: `
-            radial-gradient(
-              circle 750px at ${mousePos.x}% ${mousePos.y}%,
-              rgba(255, 180, 140, 0.5) 0%,
-              rgba(255, 200, 160, 0.38) 30%,
-              rgba(255, 220, 190, 0.25) 55%,
-              transparent 100%
-            )
-          `
-        }}
-      />
-
-      {/* Secondary gradient - coral rose, counter movement */}
-      <div 
-        className="absolute inset-0 will-change-transform"
-        style={{
-          background: `
-            radial-gradient(
-              ellipse 850px 650px at ${95 - mousePos.x * 0.6}% ${95 - mousePos.y * 0.5}%,
-              rgba(255, 160, 150, 0.45) 0%,
-              rgba(255, 190, 170, 0.32) 35%,
-              rgba(255, 210, 195, 0.2) 60%,
-              transparent 100%
-            )
-          `
-        }}
-      />
-
-      {/* Tertiary gradient - soft lavender pink, diagonal */}
-      <div 
-        className="absolute inset-0 will-change-transform"
-        style={{
-          background: `
-            radial-gradient(
-              ellipse 700px 800px at ${25 + mousePos.x * 0.35}% ${65 - mousePos.y * 0.4}%,
-              rgba(255, 200, 180, 0.42) 0%,
-              rgba(255, 220, 200, 0.3) 40%,
-              rgba(255, 235, 220, 0.18) 65%,
-              transparent 100%
-            )
-          `
-        }}
-      />
-
-      {/* Fourth gradient - peachy amber, top area */}
-      <div 
-        className="absolute inset-0 will-change-transform"
-        style={{
-          background: `
-            radial-gradient(
-              ellipse 600px 700px at ${70 + mousePos.x * 0.2}% ${20 + mousePos.y * 0.3}%,
-              rgba(255, 190, 150, 0.4) 0%,
-              rgba(255, 210, 180, 0.28) 45%,
-              transparent 100%
-            )
-          `
-        }}
-      />
-
-      {/* Fifth gradient - blush pink, left side */}
-      <div 
-        className="absolute inset-0 will-change-transform"
-        style={{
-          background: `
-            radial-gradient(
-              ellipse 650px 750px at ${15 + mousePos.x * 0.15}% ${45 + mousePos.y * 0.25}%,
-              rgba(255, 170, 160, 0.38) 0%,
-              rgba(255, 195, 185, 0.25) 50%,
-              transparent 100%
-            )
-          `
-        }}
-      />
-
-      {/* Ambient cosmic orbs - floating in space */}
-      <div className="absolute inset-0 opacity-85">
-        <div 
-          className="absolute rounded-full blur-3xl will-change-transform"
+    <>
+      <div
+        ref={containerRef}
+        className="fixed inset-0 -z-20 pointer-events-none"
+        aria-hidden="true"
+      >
+        {/* base soft gradient */}
+        <div
+          className="absolute inset-0"
           style={{
-            top: '18%',
-            left: '12%',
-            width: '550px',
-            height: '550px',
-            background: 'radial-gradient(circle, rgba(255, 165, 120, 0.4) 0%, rgba(255, 190, 150, 0.25) 45%, transparent 75%)',
-            transform: `translate(calc(-50% + ${mousePos.x * 0.08}px), calc(-50% + ${mousePos.y * 0.1}px))`,
-            animation: 'float-orb-1 20s ease-in-out infinite'
+            background:
+              "linear-gradient(120deg, #fff6f1 0%, #fff3e9 30%, #fff9ee 60%, #fffdf7 100%)",
+            willChange: "transform, opacity",
           }}
         />
-        <div 
-          className="absolute rounded-full blur-3xl will-change-transform"
-          style={{
-            bottom: '15%',
-            right: '18%',
-            width: '650px',
-            height: '650px',
-            background: 'radial-gradient(circle, rgba(255, 180, 140, 0.38) 0%, rgba(255, 205, 175, 0.22) 50%, transparent 75%)',
-            transform: `translate(calc(50% - ${mousePos.x * 0.1}px), calc(50% - ${mousePos.y * 0.08}px))`,
-            animation: 'float-orb-2 25s ease-in-out infinite'
-          }}
-        />
-        <div 
-          className="absolute rounded-full blur-3xl will-change-transform"
-          style={{
-            top: '52%',
-            right: '22%',
-            width: '500px',
-            height: '500px',
-            background: 'radial-gradient(circle, rgba(255, 195, 160, 0.35) 0%, rgba(255, 215, 190, 0.2) 55%, transparent 80%)',
-            transform: `translate(calc(50% + ${mousePos.x * 0.06}px), calc(-50% + ${mousePos.y * 0.12}px))`,
-            animation: 'float-orb-3 22s ease-in-out infinite'
-          }}
-        />
-        <div 
-          className="absolute rounded-full blur-3xl will-change-transform"
-          style={{
-            top: '35%',
-            left: '60%',
-            width: '480px',
-            height: '480px',
-            background: 'radial-gradient(circle, rgba(255, 175, 145, 0.32) 0%, rgba(255, 200, 175, 0.18) 60%, transparent 85%)',
-            transform: `translate(calc(-50% - ${mousePos.x * 0.07}px), calc(-50% - ${mousePos.y * 0.09}px))`,
-            animation: 'float-orb-4 18s ease-in-out infinite'
-          }}
-        />
-      </div>
 
-      {/* Enhanced grain texture - more visible */}
-      <div 
-        className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '250px 250px'
-        }}
-      />
-
-      {/* Floating cosmic dust particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {/* moving large orbs */}
+        <div
+          className="absolute inset-0"
+          style={{
+            // composite layer: uses CSS variables for positioning
+            // we create 4 blurred orbs using pseudo-like divs
+            pointerEvents: "none",
+          }}
+        >
+          {/* Orb 1 */}
           <div
-            key={i}
-            className="absolute rounded-full"
             style={{
-              left: `${(i * 7.3) % 100}%`,
-              top: `${(i * 11.7) % 100}%`,
-              width: `${2 + (i % 3)}px`,
-              height: `${2 + (i % 3)}px`,
-              background: `radial-gradient(circle, 
-                ${i % 5 === 0 ? 'rgba(255, 160, 120, 0.65)' :
-                  i % 5 === 1 ? 'rgba(255, 180, 140, 0.6)' :
-                  i % 5 === 2 ? 'rgba(255, 200, 160, 0.55)' :
-                  i % 5 === 3 ? 'rgba(255, 170, 130, 0.6)' :
-                  'rgba(255, 190, 150, 0.58)'
-                } 0%, transparent 70%)`,
-              animation: `float-particle ${20 + (i % 15)}s linear infinite`,
-              animationDelay: `${-(i % 20)}s`,
-              filter: 'blur(0.5px)',
-              willChange: 'transform, opacity'
+              position: "absolute",
+              width: "640px",
+              height: "640px",
+              left: "calc(var(--mx,50) * 1% - 320px + sin(var(--time,0)/5.0)*20px)",
+              top: "calc(var(--my,50) * 1% - 320px + cos(var(--time,0)/6.5)*18px)",
+              background:
+                "radial-gradient(circle at 30% 30%, rgba(255,183,140,0.45) 0%, rgba(255,210,180,0.22) 40%, rgba(255,240,230,0.02) 70%, transparent 100%)",
+              filter: "blur(32px)",
+              transform: "translate3d(0,0,0)",
+              willChange: "transform, left, top",
             }}
           />
-        ))}
+          {/* Orb 2 */}
+          <div
+            style={{
+              position: "absolute",
+              width: "760px",
+              height: "760px",
+              left:
+                "calc( (95% - var(--mx,50)% * 0.7) - 380px + sin(var(--time,0)/6.7)*12px )",
+              top:
+                "calc( (10% + var(--my,50)% * 0.2) - 380px + cos(var(--time,0)/7.2)*22px )",
+              background:
+                "radial-gradient(circle at 40% 40%, rgba(255,165,140,0.38) 0%, rgba(255,205,175,0.22) 45%, transparent 80%)",
+              filter: "blur(36px)",
+              willChange: "transform, left, top",
+            }}
+          />
+          {/* Orb 3 */}
+          <div
+            style={{
+              position: "absolute",
+              width: "540px",
+              height: "540px",
+              left:
+                "calc( (20% + var(--mx,50)% * 0.3) - 270px + sin(var(--time,0)/8.2)*8px )",
+              top:
+                "calc( (60% - var(--my,50)% * 0.2) - 270px + cos(var(--time,0)/5.1)*15px )",
+              background:
+                "radial-gradient(circle at 50% 50%, rgba(255,190,160,0.34) 0%, rgba(255,220,200,0.18) 60%, transparent 90%)",
+              filter: "blur(28px)",
+              willChange: "transform, left, top",
+            }}
+          />
+          {/* Orb 4 */}
+          <div
+            style={{
+              position: "absolute",
+              width: "480px",
+              height: "480px",
+              left:
+                "calc( (70% - var(--mx,50)% * 0.15) - 240px + cos(var(--time,0)/9.5)*10px )",
+              top:
+                "calc( (30% + var(--my,50)% * 0.12) - 240px + sin(var(--time,0)/6.3)*12px )",
+              background:
+                "radial-gradient(circle at 40% 40%, rgba(255,175,150,0.32) 0%, rgba(255,200,175,0.16) 60%, transparent 94%)",
+              filter: "blur(30px)",
+              willChange: "transform, left, top",
+            }}
+          />
+        </div>
+
+        {/* floating particles (small dust) */}
+        <div className="absolute inset-0 pointer-events-none">
+          {Array.from({ length: PARTICLE_COUNT }).map((_, i) => {
+            const seed = PARTICLE_SEED.current[i] ?? i * 37;
+            // distribute particles in grid-ish positions, but we won't update them per-frame via React
+            const left = ((seed * 31.7) % 100).toFixed(2) + "%";
+            const top = ((seed * 73.1) % 100).toFixed(2) + "%";
+            const size = 1 + ((seed * 13.3) % 3); // 1-3px
+            const hueShift = Math.floor((seed * 17.3) % 20) - 10;
+            const delay = (seed % 20) / 10;
+            return (
+              <div
+                key={i}
+                style={{
+                  position: "absolute",
+                  left,
+                  top,
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  borderRadius: "999px",
+                  background:
+                    `radial-gradient(circle, rgba(255,190,150,${0.55 - (size * 0.12)}) 0%, transparent 70%)`,
+                  filter: "blur(0.6px)",
+                  transform: `translate3d(0,0,0)`,
+                  animation: `mv-p-${(i % 5) + 1} ${20 + (i % 12)}s linear ${-delay}s infinite`,
+                  willChange: "transform, opacity",
+                  opacity: 0.95,
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* subtle grain overlay */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.06,
+            pointerEvents: "none",
+            mixBlendMode: "overlay",
+            backgroundImage:
+              `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' fill='rgba(0,0,0,0.03)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "repeat",
+            backgroundSize: "220px 220px",
+          }}
+        />
       </div>
 
-      {/* Subtle shimmer overlay - luxury touch */}
-      <div 
-        className="absolute inset-0 opacity-25 pointer-events-none will-change-transform"
-        style={{
-          background: `
-            linear-gradient(
-              ${115 + mousePos.x * 0.25}deg,
-              transparent 0%,
-              rgba(255, 255, 255, 0.1) 47%,
-              rgba(255, 255, 255, 0.15) 50%,
-              rgba(255, 255, 255, 0.1) 53%,
-              transparent 100%
-            )
-          `
-        }}
-      />
-
-      {/* Soft edge vignette */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 35%, rgba(254, 240, 230, 0.7) 100%)'
-        }}
-      />
-
       <style jsx>{`
-        @keyframes float-orb-1 {
-          0%, 100% { 
-            transform: translate(-50%, -50%) scale(1);
-          }
-          25% { 
-            transform: translate(-48%, -52%) scale(1.08);
-          }
-          50% { 
-            transform: translate(-52%, -50%) scale(0.96);
-          }
-          75% { 
-            transform: translate(-50%, -48%) scale(1.04);
-          }
+        /* small particle motion keyframes (kept lightweight) */
+        @keyframes mv-p-1 {
+          0% { transform: translate3d(0,0,0) scale(1); opacity: 0; }
+          8% { opacity: 1; }
+          50% { transform: translate3d(8px,-6px,0) scale(1.15); opacity: 0.95; }
+          100% { transform: translate3d(-6px,8px,0) scale(0.95); opacity: 0; }
         }
-        
-        @keyframes float-orb-2 {
-          0%, 100% { 
-            transform: translate(50%, 50%) scale(1);
-          }
-          25% { 
-            transform: translate(52%, 48%) scale(1.06);
-          }
-          50% { 
-            transform: translate(48%, 52%) scale(0.98);
-          }
-          75% { 
-            transform: translate(50%, 49%) scale(1.03);
-          }
+        @keyframes mv-p-2 {
+          0% { transform: translate3d(0,0,0) scale(1); opacity: 0; }
+          10% { opacity: 1; }
+          50% { transform: translate3d(-10px,6px,0) scale(1.1); opacity: 0.95; }
+          100% { transform: translate3d(6px,-10px,0) scale(0.9); opacity: 0; }
         }
-        
-        @keyframes float-orb-3 {
-          0%, 100% { 
-            transform: translate(50%, -50%) scale(1);
-          }
-          25% { 
-            transform: translate(52%, -48%) scale(1.05);
-          }
-          50% { 
-            transform: translate(48%, -52%) scale(0.97);
-          }
-          75% { 
-            transform: translate(51%, -50%) scale(1.02);
-          }
+        @keyframes mv-p-3 {
+          0% { transform: translate3d(0,0,0) scale(1); opacity: 0; }
+          7% { opacity: 1; }
+          50% { transform: translate3d(14px,6px,0) scale(1.2); opacity: 0.95; }
+          100% { transform: translate3d(-10px,-6px,0) scale(0.9); opacity: 0; }
         }
-        
-        @keyframes float-orb-4 {
-          0%, 100% { 
-            transform: translate(-50%, -50%) scale(1);
-          }
-          25% { 
-            transform: translate(-48%, -52%) scale(1.07);
-          }
-          50% { 
-            transform: translate(-52%, -48%) scale(0.95);
-          }
-          75% { 
-            transform: translate(-49%, -51%) scale(1.04);
-          }
+        @keyframes mv-p-4 {
+          0% { transform: translate3d(0,0,0) scale(1); opacity: 0; }
+          9% { opacity: 1; }
+          50% { transform: translate3d(-8px,14px,0) scale(1.05); opacity: 0.95; }
+          100% { transform: translate3d(6px,-12px,0) scale(0.92); opacity: 0; }
         }
-        
-        @keyframes float-particle {
-          0% {
-            transform: translate(0, 0) scale(1);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            transform: translate(
-              ${Math.random() * 200 - 100}px, 
-              ${Math.random() * 200 - 100}px
-            ) scale(${1 + Math.random() * 0.5});
-            opacity: 0;
-          }
+        @keyframes mv-p-5 {
+          0% { transform: translate3d(0,0,0) scale(1); opacity: 0; }
+          6% { opacity: 1; }
+          50% { transform: translate3d(10px,-4px,0) scale(1.08); opacity: 0.95; }
+          100% { transform: translate3d(-8px,10px,0) scale(0.9); opacity: 0; }
+        }
+
+        /* subtle responsive tweaks */
+        @media (max-width: 640px) {
+          div[ref] { /* noop - keep minimal */ }
         }
       `}</style>
-    </div>
+    </>
   );
 }

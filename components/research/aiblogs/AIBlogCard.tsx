@@ -28,30 +28,19 @@ export default function AIBlogCard({
     typeof date === "string" ? date : format(new Date(date), "d MMM yyyy");
 
   return (
-    <>
-      {/* Import clean mono font */}
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
-
-        .ai-font {
-          font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
-            Monaco, Consolas, monospace;
-        }
-      `}</style>
-
-      <motion.article
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{
-          duration: 0.7,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        whileHover={{ y: -8 }}
-        className="group relative flex flex-col gap-5 overflow-hidden bg-transparent transition-all duration-700 max-w-2xl mx-auto ai-font"
-        itemScope
-        itemType="https://schema.org/BlogPosting"
-      >
+    <motion.article
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      whileHover={{ y: -8 }}
+      className="group relative mx-auto flex max-w-2xl flex-col gap-5 overflow-hidden bg-transparent font-mono transition-all duration-700"
+      itemScope
+      itemType="https://schema.org/BlogPosting"
+    >
         {/* Image Section */}
         <Link
           href={href}
@@ -115,27 +104,6 @@ export default function AIBlogCard({
           animate={{ rotate: [0, 360] }}
           transition={{ repeat: Infinity, duration: 24, ease: "linear" }}
         />
-
-        {/* Structured data for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BlogPosting",
-              headline: title,
-              image,
-              author: { "@type": "Person", name: "AI Insights Team" },
-              datePublished:
-                typeof date === "string"
-                  ? date
-                  : format(new Date(date), "yyyy-MM-dd"),
-              url: href,
-              description: `${title} — Exploring modern AI and design thinking.`,
-            }),
-          }}
-        />
       </motion.article>
-    </>
   );
 }
