@@ -48,16 +48,16 @@ export default function PerfumePlanet() {
     img.onerror = () => setIsLoaded(true);
   }, [planet]);
 
-  // Subtle parallax for bottle
-  const cardRef = useRef<HTMLDivElement | null>(null);
+  // Subtle parallax for bottle - use section ref for stable scroll tracking
+  const sectionRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress } = useScroll({
-    target: cardRef,
+    target: sectionRef,
     offset: ["start end", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden font-poppins">
+    <section ref={sectionRef} className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden font-poppins">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-12 px-6 md:px-10 py-16 items-center">
         {/* LEFT: Planet Thumbnails (bigger, aligned) */}
         <div className="lg:col-span-3">
@@ -98,7 +98,6 @@ export default function PerfumePlanet() {
           <AnimatePresence mode="wait">
             <motion.div
               key={planet.id}
-              ref={cardRef}
               initial={{ opacity: 0, y: 40, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -40, scale: 0.96 }}

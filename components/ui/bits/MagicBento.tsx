@@ -1,237 +1,377 @@
+// components/BentoGrid.tsx
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
+import Link from "next/link";
 
-export interface BentoItem {
+export type GridItem = {
+  id: number | string;
   title: string;
-  image?: string;
-  video?: string;
-  type: "image" | "video";
-}
+  link: string;
+  imageUrl: string;
+  alt?: string;
+};
 
-interface MagicBentoProps {
-  items: BentoItem[];
+type BentoGridProps = {
+  items?: GridItem[];
   className?: string;
-  glowColor?: string; // allow easy theming
+  /** control intensity of the cursor-reactive aura (0..1) */
+  auraIntensity?: number;
+};
+
+const DEFAULT_ITEMS: GridItem[] = [
+  { id: 1, title: "Tantra", link: "/workshop/Tantra", imageUrl: "/workshop-bento/Tantra.jpg" },
+  { id: 2, title: "Meditation", link: "/workshop/meditation-sessions", imageUrl: "/workshop-bento/Meditation.jpg" },
+  { id: 3, title: "Bhagavad Gita", link: "/workshop/bhagavad-gita", imageUrl: "/workshop-bento/Gita.jpg" },
+  { id: 4, title: "Yoga", link: "/workshop/yoga-workshops", imageUrl: "/workshop-bento/Yoga.jpg" },
+  { id: 5, title: "Ayurveda", link: "/workshop/ayurveda-workshops", imageUrl: "/workshop-bento/Ayurveda.jpg" },
+  { id: 6, title: "Astrology", link: "/workshop/Astrology-workshops", imageUrl: "/workshop-bento/Astrology.jpg" },
+  { id: 7, title: "Sadhna", link: "/workshop/sadhna", imageUrl: "/workshop-bento/Sadhna.jpg" },
+  { id: 8, title: "Sanskrit", link: "/workshop/Sanskrit-workshops", imageUrl: "/workshop-bento/Sanskrit.jpg" },
+];
+
+function clamp(n: number, a = 0, b = 1) {
+  return Math.max(a, Math.min(b, n));
 }
 
-export default function MagicBento({
-  items,
+/**
+ * BentoGrid
+ * - Keeps your layout exactly the same (col/row spans & sizes).
+ * - Accepts items prop (8 recommended), otherwise uses defaults.
+ * - Cursor-reactive aura + floating shimmer implemented using CSS vars and rAF for smoothness.
+ * - GPU friendly: uses transform/opacity/blur only; minimal DOM updates.
+ */
+export default function BentoGrid({
+  items = DEFAULT_ITEMS,
   className = "",
-  glowColor = "132, 0, 255",
-}: MagicBentoProps) {
-  const gridRef = useRef<HTMLDivElement>(null);
+  auraIntensity = 0.95,
+}: BentoGridProps) {
+  const hostRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (!gridRef.current) return;
+  // Smooth cursor tracking (lerped)
+  const posRef = useRef({ x: 0, y: 0, lx: 0, ly: 0 });
 
-    const cards = gridRef.current.querySelectorAll(".bento-card");
-
-    cards.forEach((card) => {
-      const handleMove = (e: MouseEvent) => {
-        const rect = (card as HTMLElement).getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        gsap.to(card, {
-          "--glow-x": `${x}px`,
-          "--glow-y": `${y}px`,
-          duration: 0.2,
-        });
-
-        gsap.to(card, {
-          rotateX: ((y - rect.height / 2) / rect.height) * -10,
-          rotateY: ((x - rect.width / 2) / rect.width) * 10,
-          transformPerspective: 900,
-          ease: "power2.out",
-          duration: 0.4,
-        });
-      };
-
-      const handleLeave = () => {
-        gsap.to(card, {
-          rotateX: 0,
-          rotateY: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        });
-      };
-
-      card.addEventListener("mousemove", handleMove as EventListener);
-      card.addEventListener("mouseleave", handleLeave);
-
-      return () => {
-        card.removeEventListener("mousemove", handleMove as EventListener);
-        card.removeEventListener("mouseleave", handleLeave);
-      };
-    });
+  const onMove = useCallback((e: React.MouseEvent) => {
+    const el = hostRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    posRef.current.x = x;
+    posRef.current.y = y;
   }, []);
 
+  const onLeave = useCallback(() => {
+    // move aura to center with low intensity when leaving
+    const el = hostRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    posRef.current.x = rect.width / 2;
+    posRef.current.y = rect.height / 2;
+    // fade out
+    el.style.setProperty("--aura-opacity", "0");
+  }, []);
+
+  // rAF loop to lerp and set CSS variables (keeps DOM writes minimal)
+  useEffect(() => {
+    let raf = 0;
+    const el = hostRef.current;
+    if (!el) return;
+
+    // seed center
+    const rect = el.getBoundingClientRect();
+    posRef.current.lx = rect.width / 2;
+    posRef.current.ly = rect.height / 2;
+    posRef.current.x = rect.width / 2;
+    posRef.current.y = rect.height / 2;
+
+    // initial css vars
+    el.style.setProperty("--aura-opacity", "0.9");
+    el.style.setProperty("--aura-intensity", String(clamp(auraIntensity, 0, 1)));
+
+    const tick = () => {
+      const p = posRef.current;
+      // lerp
+      p.lx += (p.x - p.lx) * 0.12;
+      p.ly += (p.y - p.ly) * 0.12;
+
+      // normalize relative to host size to keep effect consistent on resize
+      const r = el.getBoundingClientRect();
+      const nx = r.width ? p.lx / r.width : 0.5;
+      const ny = r.height ? p.ly / r.height : 0.5;
+
+      // set CSS variables used inside styles (GPU friendly)
+      el.style.setProperty("--cursor-x", `${(nx * 100).toFixed(4)}%`);
+      el.style.setProperty("--cursor-y", `${(ny * 100).toFixed(4)}%`);
+
+      // small moving shimmer offset (cosmic drift)
+      const t = performance.now() / 1000;
+      el.style.setProperty("--shimmer-x", `${(Math.cos(t * 0.6) * 6).toFixed(2)}px`);
+      el.style.setProperty("--shimmer-y", `${(Math.sin(t * 0.7) * 6).toFixed(2)}px`);
+
+      // aura pulsation (very subtle)
+      el.style.setProperty("--aura-pulse", `${(0.95 + Math.sin(t * 1.9) * 0.04).toFixed(3)}`);
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [auraIntensity]);
+
+  const first = items[0];
+  const second = items[1];
+  const third = items[2];
+  const fourth = items[3];
+  const fifth = items[4];
+  const sixth = items[5];
+  const seventh = items[6];
+  const eighth = items[7];
+
+  // memoize image elements for better reuse
+  const imgProps = useMemo(
+    () => ({
+      className: "object-cover w-full h-full will-change-transform",
+      quality: 80,
+      placeholder: undefined,
+    }),
+    []
+  );
+
   return (
-    <section
-      className={`relative flex justify-center py-16 ${className}`}
-      style={{ perspective: "1200px" }}
+    <main
+      ref={hostRef}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className={`min-h-screen py-4 px-3 sm:py-8 sm:px-6 lg:py-16 lg:px-8 ${className}`}
+      aria-label="Bento grid"
+      // CSS variables default (can be overridden)
+      style={
+        {
+          // --cursor-x / --cursor-y set in loop
+          "--aura-color-1": "rgba(163, 102, 255, 0.85)", // violet
+          "--aura-color-2": "rgba(138, 75, 255, 0.65)", // deep violet
+          "--aura-color-3": "rgba(162, 94, 255, 0.18)", // soft glow
+          "--glow-size": "420px",
+          "--aura-opacity": "0.9",
+        } as React.CSSProperties
+      }
     >
-      <style jsx>{`
-        .bento-grid {
-          display: grid;
-          gap: 0.6rem;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          width: min(95%, 58rem);
-          margin: 0 auto;
-        }
+      {/* Floating cosmic shimmer & aura layers — pointer-events-none so they never block clicks */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[0] mix-blend-screen"
+        style={{
+          // use CSS vars for position
+          boxShadow: "none",
+        }}
+      >
+        {/* Aura layer (cursor reactive) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(closest-side, var(--aura-color-1) 0%, transparent 35%), radial-gradient(closest-side, var(--aura-color-2) 0%, transparent 30%)",
+            transform: `translate3d(calc(var(--shimmer-x, 0px) * 1.0), calc(var(--shimmer-y,0px) * 1.0), 0)`,
+            opacity: "var(--aura-opacity, 0.9)",
+            maskImage:
+              "radial-gradient(circle at var(--cursor-x, 50%) var(--cursor-y, 50%), rgba(0,0,0,1) 0%, rgba(0,0,0,0.45) 18%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0) 70%)",
+            WebkitMaskImage:
+              "radial-gradient(circle at var(--cursor-x, 50%) var(--cursor-y, 50%), rgba(0,0,0,1) 0%, rgba(0,0,0,0.45) 18%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0) 70%)",
+            filter: "blur(30px) saturate(1.08)",
+            transition: "opacity 220ms linear",
+            // keep on separate layer for GPU
+            willChange: "transform, opacity, mask-image",
+          }}
+        />
 
-        @media (min-width: 1024px) {
-          .bento-grid {
-            grid-template-columns: repeat(4, 1fr);
-          }
-          .bento-grid .bento-card:nth-child(3) {
-            grid-column: span 2;
-            grid-row: span 2;
-          }
-        }
+        {/* Ambient neon gradient (subtle) */}
+        <div
+          style={{
+            position: "absolute",
+            left: "10%",
+            top: "6%",
+            width: "30%",
+            height: "40%",
+            transform: "translate3d(0,0,0)",
+            background:
+              "radial-gradient(60% 60% at 30% 30%, rgba(220,180,255,0.12), rgba(255,215,245,0.02) 40%, transparent 70%)",
+            filter: "blur(28px)",
+            mixBlendMode: "screen",
+            willChange: "transform, opacity",
+          }}
+        />
 
-        .bento-card {
-          position: relative;
-          overflow: hidden;
-          border-radius: 1.25rem;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          background: #060010;
-          aspect-ratio: 4/3;
-          cursor: pointer;
-          transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-          will-change: transform, box-shadow;
-          transform-style: preserve-3d;
-        }
-
-        .bento-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-            0 0 25px rgba(${glowColor}, 0.15);
-        }
-
-        /* Glow Overlay */
-        .bento-card::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(
-            300px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-            rgba(${glowColor}, 0.25),
-            rgba(${glowColor}, 0.05) 40%,
-            transparent 80%
-          );
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          pointer-events: none;
-          z-index: 1;
-        }
-
-        .bento-card:hover::after {
-          opacity: 1;
-        }
-
-        .bento-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.65) 0%,
-            rgba(0, 0, 0, 0.1) 80%,
-            transparent 100%
-          );
-          z-index: 2;
-          opacity: 1;
-          transition: opacity 0.3s ease;
-        }
-
-        .bento-title {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          padding: 1rem;
-          font-family: "Playfair Display", serif;
-          font-size: clamp(1rem, 0.8rem + 0.5vw, 1.6rem);
-          color: white;
-          z-index: 3;
-          text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-          transition: transform 0.3s ease;
-        }
-
-        .bento-card:hover .bento-title {
-          transform: translateY(-4px);
-        }
-
-        .bento-img,
-        .bento-video {
-          position: absolute;
-          inset: 0;
-          object-fit: cover;
-          z-index: 0;
-          width: 100%;
-          height: 100%;
-          border-radius: 1.25rem;
-          transition: transform 0.8s ease;
-        }
-
-        .bento-card:hover .bento-img,
-        .bento-card:hover .bento-video {
-          transform: scale(1.05);
-        }
-
-        .video-container {
-          grid-column: span 2;
-          grid-row: span 2;
-          position: relative;
-          overflow: hidden;
-          border-radius: 1.25rem;
-        }
-
-        @media (max-width: 768px) {
-          .video-container {
-            grid-column: span 1;
-            grid-row: auto;
-          }
-        }
-      `}</style>
-
-      <div ref={gridRef} className="bento-grid">
-        {items.map((item, i) => (
+        {/* Small floating particles (pure CSS) */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            overflow: "hidden",
+          }}
+        >
           <div
-            key={i}
-            className={`bento-card group ${
-              item.type === "video" ? "video-container" : ""
-            }`}
-          >
-            {item.type === "image" && item.image ? (
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                quality={85}
-                priority={i < 2}
-                className="bento-img"
-              />
-            ) : (
-              <video
-                src={item.video!}
-                className="bento-video"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-              />
-            )}
-            <div className="bento-overlay" />
-            <h3 className="bento-title">{item.title}</h3>
-          </div>
-        ))}
+            style={{
+              position: "absolute",
+              left: "calc(var(--cursor-x,50%) - 60px)",
+              top: "calc(var(--cursor-y,50%) - 60px)",
+              width: "120px",
+              height: "120px",
+              transform: "translate3d(var(--shimmer-x,0px), var(--shimmer-y,0px), 0)",
+              filter: "blur(8px)",
+              opacity: 0.65,
+              background:
+                "conic-gradient(from 120deg at 50% 50%, rgba(178,120,255,0.35), rgba(138,75,255,0.25), rgba(202,150,255,0.08))",
+              borderRadius: "50%",
+              willChange: "transform, opacity",
+            }}
+          />
+        </div>
       </div>
-    </section>
+
+      {/* grid (keeps your class names and spans identical) */}
+      <div className="max-w-[1600px] mx-auto relative z-[1]">
+        <section className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-12 gap-3 md:gap-4 lg:gap-6 auto-rows-[180px] md:auto-rows-[200px] lg:auto-rows-[220px]">
+          {/* 1 */}
+          {first && (
+            <Link
+              href={first.link}
+              aria-label={first.title}
+              className="relative col-span-2 md:col-span-4 lg:col-span-6 row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={first.imageUrl}
+                alt={first.alt ?? first.title}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 50vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 2 */}
+          {second && (
+            <Link
+              href={second.link}
+              aria-label={second.title}
+              className="relative col-span-2 md:col-span-2 lg:col-span-3 row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={second.imageUrl}
+                alt={second.alt ?? second.title}
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 3 */}
+          {third && (
+            <Link
+              href={third.link}
+              aria-label={third.title}
+              className="relative col-span-2 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={third.imageUrl}
+                alt={third.alt ?? third.title}
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 4 */}
+          {fourth && (
+            <Link
+              href={fourth.link}
+              aria-label={fourth.title}
+              className="relative col-span-2 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={fourth.imageUrl}
+                alt={fourth.alt ?? fourth.title}
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 5 */}
+          {fifth && (
+            <Link
+              href={fifth.link}
+              aria-label={fifth.title}
+              className="relative col-span-2 md:col-span-6 lg:col-span-6 row-span-1 lg:row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={fifth.imageUrl}
+                alt={fifth.alt ?? fifth.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 6 */}
+          {sixth && (
+            <Link
+              href={sixth.link}
+              aria-label={sixth.title}
+              className="relative col-span-1 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={sixth.imageUrl}
+                alt={sixth.alt ?? sixth.title}
+                fill
+                sizes="(max-width: 768px) 25vw, (max-width: 1024px) 50vw, 25vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 7 */}
+          {seventh && (
+            <Link
+              href={seventh.link}
+              aria-label={seventh.title}
+              className="relative col-span-1 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={seventh.imageUrl}
+                alt={seventh.alt ?? seventh.title}
+                fill
+                sizes="(max-width: 768px) 25vw, (max-width: 1024px) 50vw, 25vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+
+          {/* 8 */}
+          {eighth && (
+            <Link
+              href={eighth.link}
+              aria-label={eighth.title}
+              className="relative col-span-2 md:col-span-6 lg:col-span-6 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
+            >
+              <Image
+                src={eighth.imageUrl}
+                alt={eighth.alt ?? eighth.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                className={imgProps.className}
+              />
+            </Link>
+          )}
+        </section>
+      </div>
+    </main>
   );
 }

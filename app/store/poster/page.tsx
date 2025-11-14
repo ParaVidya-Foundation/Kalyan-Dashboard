@@ -4,14 +4,24 @@ import { useEffect } from "react";
 import TestimonialSlider from "@/components/store/Poster/TestimonialSlider";
 import PosterHero from "@/components/store/Poster/posterhero";
 import PosterGrid from "@/components/store/Poster/postercard";
-import MagicBento from "@/components/ui/bits/MagicBento";
 import Trailback from "@/components/store/Poster/Trailback";
+import BentoGrid from "@/components/ui/bits/MagicBento";
 
 export default function PosterPage() {
   useEffect(() => {
     document.title = "Posters | Kalyan Store - Spiritual & Astrological Posters";
   }, []);
 
+  const myItems = [
+    { id: "a", title: "Poster 1", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos1.webp" },
+    { id: "b", title: "Poster 2", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos2.webp" },
+    { id: "c", title: "Poster 3", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos3.webp" },
+    { id: "d", title: "Poster 4", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos4.webp" },
+    { id: "e", title: "Poster 5", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos5.webp" },
+    { id: "f", title: "Poster 6", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos6.webp" },
+    { id: "g", title: "Poster 7", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos7.webp" },
+    { id: "h", title: "Poster 8", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos8.webp" },
+  ];
 
   const Single_Poster = [
     {
@@ -104,20 +114,9 @@ export default function PosterPage() {
         <PosterGrid posters={Single_Poster} />
       </div>
 
-      
+<BentoGrid items={myItems} /> 
 
-      <MagicBento
-        items={[
-          // { title: "Astrology", image: "/Poster/Posters/pos1.jpg", type: "image" },
-          // { title: "Vastu", image: "/Poster/Posters/pos2.jpg", type: "image" },
-          // { title: "Horoscope", video: "/Poster/Posters/pos2.jpg", type: "video" },
-          // { title: "Astrology", image: "/Poster/Posters/pos1.jpg", type: "image" },
-          // { title: "Vastu", image: "/Poster/Posters/pos2.jpg", type: "image" },
-          // { title: "Horoscope", video: "/Poster/Posters/pos2.jpg", type: "video" },
-        ]}
-      />
-      <Trailback />
-
+<Trailback />
     </>
   );
 }

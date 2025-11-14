@@ -179,12 +179,12 @@ export default function GemsDetail({
                 DESCRIPTION
               </h3>
 
-              <p
+              <div
                 className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed"
                 style={{ fontFamily: inter.className }}
               >
                 {description}
-              </p>
+              </div>
             </header>
 
             {/* divider */}
@@ -198,12 +198,12 @@ export default function GemsDetail({
               >
                 BENEFITS
               </h4>
-              <p
+              <div
                 className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed"
                 style={{ fontFamily: inter.className }}
               >
                 {benefits}
-              </p>
+              </div>
 
               {/* small CTA row for actions */}
               <div className="mt-6 flex flex-wrap gap-3 items-center">

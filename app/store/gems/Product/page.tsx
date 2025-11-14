@@ -7,6 +7,7 @@ import Confused from "@/components/store/confused";
 import GemsDetail from "@/components/store/Gems/GemsDetail";
 import Features, { FeatureItem } from "@/components/store/Gems/FeatureItem";
 import { Badge, ShieldCheck, Truck, Sparkles, MapPin, Smile } from "lucide-react";
+import RelatedProducts from "@/components/store/RelatedProduct";
 
 export default function ProductPage() {
   type CarouselProps = ComponentProps<typeof ProductCarousel>;
@@ -49,6 +50,18 @@ export default function ProductPage() {
     { id: 6, title: "Happy & Satisfied", subtitle: "100,000+ Customers", icon: <Smile /> },
   ];    
 
+  const relatedProducts = [
+    { id: "1", title: "Yellow Sapphire", image: "/Gems/Yellow-Sapphire.webp", price: 106434 },
+    { id: "2", title: "Red Coral", image: "/Gems/Red-Coral.webp", price: 106434 },
+    { id: "3", title: "Pearl", image: "/Gems/Pearl.webp", price: 106434 },
+    { id: "4", title: "Hessonite", image: "/Gems/Hessonite.webp", price: 106434 },
+    { id: "5", title: "Cats Eye", image: "/Gems/Cats-Eye.webp", price: 106434 },
+    { id: "6", title: "Blue Sapphire", image: "/Gems/Blue-Sapphire.webp", price: 106434 },
+    { id: "7", title: "Ruby", image: "/Gems/Ruby.webp", price: 106434 },
+    { id: "8", title: "White Sapphire", image: "/Gems/White-Sapphire.webp", price: 106434 },
+    { id: "9", title: "Green Emerald", image: "/Gems/Green-Emerald.webp", price: 106434 },
+  ];
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
       <div className="grid gap-8 md:grid-cols-2">
@@ -90,7 +103,12 @@ export default function ProductPage() {
         imageSrc="/rings/nomi-1.webp"
         ctaText="Buy Now"
       />
-<Features items={base} columns={6} accentColor="#B77634" />    
+<Features items={base} columns={6} accentColor="#B77634" /> 
+
+<RelatedProducts 
+        title="Related Products"
+        products={relatedProducts}
+      />
       {/* Basic product schema for SEO */}
       <script
         type="application/ld+json"
