@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import Image from 'next/image';
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface GemData {
   name: string;
@@ -23,6 +24,8 @@ const PreciousStone: GemData[] = [
 ];
 
 export default function PreciousGems() {
+  const router = useRouter();
+
   const calculateDiscountedPrice = (price: number, discount: number) =>
     Math.round(price - (price * discount) / 100);
 
@@ -265,7 +268,15 @@ export default function PreciousGems() {
                     />
                   </div>
                   <div className="icon">
-                    <a href="#" className="iconBox" aria-label={`View ${gem.name}`}>
+                    <a
+                      href="#"
+                      className="iconBox"
+                      aria-label={`View ${gem.name}`}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        router.push("/store/gems/Product");
+                      }}
+                    >
                       <span className="material-symbols-outlined">arrow_forward</span>
                     </a>
                   </div>
@@ -282,7 +293,12 @@ export default function PreciousGems() {
                   </span>
                   <span className="discount-badge">{gem.discount}% OFF</span>
                 </div>
-                <button className="buy-button">Buy Now</button>
+                <button
+                  className="buy-button"
+                  onClick={() => router.push("/store/gems/Product")}
+                >
+                  Buy Now
+                </button>
               </div>
             </div>
           ))}

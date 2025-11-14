@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 import EduSearchBox from "../../education/Book/edusearchbox";
 import { ResearchTopics } from "./researchtopics";
 
@@ -35,25 +34,26 @@ export const PaperHeroSection: React.FC<PaperHeroSectionProps> = ({
   };
 
   return (
-    <section className="relative flex flex-col items-center justify-center px-4 pt-28 pb-20 text-center sm:pt-36 overflow-hidden">
+    <section className="relative flex flex-col items-center justify-center px-4 pt-18 pb-20 text-center sm:pt-36 overflow-hidden">
       
       {/* Announcement Badge */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-4"
-      >
-        <Badge
-          variant="outline"
-          className="border-blue-200 bg-blue-50 px-4 py-1 text-[13px] font-medium text-blue-600 hover:bg-blue-100"
-        >
-          Announcing{""}
-          <Link href="#" className="ml-1 font-semibold text-blue-600 hover:underline">
-          ParaVidya AI →
-          </Link>
-        </Badge>
-      </motion.div>
+      <motion.div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/80 px-3 py-1 text-xs font-medium text-gray-700 backdrop-blur-sm shadow-sm">
+          <a
+            href="https://paravidyafoundation.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:text-blue-600 transition-colors"
+          >
+            <Image
+              src="/Logo/ParavidyaFoundation.png"
+              alt="ParaVidya Foundation"
+              width={20}
+              height={20}
+              className="object-contain"
+            />
+            <span>Backed by ParaVidya Foundation</span>
+          </a>
+        </motion.div>
 
       {/* Hero Heading */}
       <motion.h1
