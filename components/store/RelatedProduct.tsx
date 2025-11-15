@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 type Product = {
@@ -79,9 +80,21 @@ export default function RelatedProducts({
           WebkitOverflowScrolling: "touch",
         }}
       >
-        {products.map((p, i) => (
-          <motion.div
+        {products.map((p, i) => {
+          // Determine product page based on image path or product type
+          const getProductPath = () => {
+            if (p.image?.includes('/Gems/')) return `/store/gems/Product?id=${p.id}`;
+            if (p.image?.includes('/Poster/')) return `/store/poster/Product?id=${p.id}`;
+            if (p.image?.includes('/Accessories/')) return `/store/accessories/Product?id=${p.id}`;
+            return `/store/gems/Product?id=${p.id}`; // default
+          };
+
+          return (
+          <Link
+            href={getProductPath()}
             key={p.id}
+          >
+          <motion.div
             className="snap-start min-w-[250px] max-w-[250px] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer group transition-all duration-300"
             initial={{ opacity: 0.3, scale: 0.96 }}
             animate={{
@@ -130,7 +143,9 @@ export default function RelatedProducts({
               </div>
             </div>
           </motion.div>
-        ))}
+          </Link>
+        );
+        })}
       </div>
 
       <style jsx>{`

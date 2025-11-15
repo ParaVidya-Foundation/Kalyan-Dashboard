@@ -269,12 +269,12 @@ export default function PreciousGems() {
                   </div>
                   <div className="icon">
                     <a
-                      href="#"
+                      href={`/store/gems/Product?id=${i + 1}`}
                       className="iconBox"
                       aria-label={`View ${gem.name}`}
                       onClick={(event) => {
                         event.preventDefault();
-                        router.push("/store/gems/Product");
+                        router.push(`/store/gems/Product?id=${i + 1}`);
                       }}
                     >
                       <span className="material-symbols-outlined">arrow_forward</span>
@@ -295,7 +295,7 @@ export default function PreciousGems() {
                 </div>
                 <button
                   className="buy-button"
-                  onClick={() => router.push("/store/gems/Product")}
+                  onClick={() => router.push(`/store/gems/Product?id=${i + 1}`)}
                 >
                   Buy Now
                 </button>

@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Maximize2, Volume2, VolumeX } from "lucide-react";
 
 type Media =
@@ -9,46 +15,56 @@ type Media =
   | { kind: "video"; src: string; poster?: string; alt?: string; muted?: boolean };
 
 type Props = {
-  items: Media[];
-  aspect?: number;               // e.g. 1 for square, 4/5 for tall images
+  items: Media[];          // pass images/videos here
+  aspect?: number;         // e.g. 1 (square), 4/5, 3/4, etc.
   className?: string;
 };
 
-export default function ProductCarousel({ items, aspect = 1, className }: Props) {
+export default function ProductCarousel({
+  items,
+  aspect = 1,
+  className,
+}: Props) {
   const [index, setIndex] = useState(0);
-  const [isFs, setIsFs] = useState(false);
   const [muted, setMuted] = useState(true);
   const fsRef = useRef<HTMLDivElement>(null);
 
+  // safety: no items
+  if (!items || items.length === 0) {
+    return null;
+  }
+
   const current = items[index];
 
-  // Fullscreen helpers
+  // Fullscreen open
   const openFs = async () => {
     if (!fsRef.current) return;
     if (!document.fullscreenElement) {
       await fsRef.current.requestFullscreen?.();
-      setIsFs(true);
     }
   };
-  const onFsChange = () => setIsFs(Boolean(document.fullscreenElement));
-  useEffect(() => {
-    document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
-  }, []);
 
-  // Keyboard nav in FS
+  // Keyboard navigation in fullscreen
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!document.fullscreenElement) return;
-      if (e.key === "ArrowRight") setIndex((i) => Math.min(items.length - 1, i + 1));
-      if (e.key === "ArrowLeft") setIndex((i) => Math.max(0, i - 1));
-      if (e.key === "Escape") document.exitFullscreen?.();
+
+      if (e.key === "ArrowRight") {
+        setIndex((i) => Math.min(items.length - 1, i + 1));
+      }
+      if (e.key === "ArrowLeft") {
+        setIndex((i) => Math.max(0, i - 1));
+      }
+      if (e.key === "Escape") {
+        document.exitFullscreen?.();
+      }
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [items.length]);
 
-  // Preload neighbors
+  // Preload previous/next images for instant switch
   const neighbors = useMemo(() => {
     const prev = Math.max(0, index - 1);
     const next = Math.min(items.length - 1, index + 1);
@@ -56,6 +72,7 @@ export default function ProductCarousel({ items, aspect = 1, className }: Props)
   }, [index, items.length]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     neighbors.forEach((i) => {
       const m = items[i];
       if (m?.kind === "image") {
@@ -69,15 +86,17 @@ export default function ProductCarousel({ items, aspect = 1, className }: Props)
     (m: Media, priority = false) =>
       m.kind === "image" ? (
         <Image
+          key={m.src}
           src={m.src}
           alt={m.alt || "Product image"}
           fill
           priority={priority}
-          sizes="(max-width: 1024px) 100vw, 640px"
-          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 800px"
+          className="h-full w-full object-contain md:object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
         />
       ) : (
         <video
+          key={m.src}
           src={m.src}
           poster={m.poster}
           muted={muted}
@@ -92,81 +111,72 @@ export default function ProductCarousel({ items, aspect = 1, className }: Props)
 
   return (
     <div className={["w-full", className || ""].join(" ")}>
-      {/* Main viewer */}
+      {/* MAIN VIEWER */}
       <div
-        className="relative w-full overflow-hidden bg-neutral-50"
-        style={{ aspectRatio: String(aspect) }}
         ref={fsRef}
+        className="
+          group relative w-full overflow-hidden
+          rounded-xl border border-gray-100 bg-white
+          shadow-sm flex items-center justify-center
+        "
+        style={{ aspectRatio: String(aspect) }}
       >
         {renderMedia(current, true)}
 
-        {/* Controls (fullscreen + mute for videos) */}
-        <div className="absolute right-3 top-3 flex gap-2">
+        {/* Controls (fullscreen + mute) */}
+        <div className="absolute right-3 top-3 z-10 flex gap-2">
           {current.kind === "video" && (
             <button
               onClick={() => setMuted((m) => !m)}
-              className="rounded-md bg-white/90 p-2 shadow hover:bg-white"
-              aria-label={muted ? "Unmute" : "Mute"}
+              className="rounded-md bg-white/90 p-2 shadow hover:bg-white transition-colors"
+              aria-label={muted ? "Unmute video" : "Mute video"}
             >
-              {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              {muted ? (
+                <VolumeX className="h-4 w-4 text-gray-700" />
+              ) : (
+                <Volume2 className="h-4 w-4 text-gray-700" />
+              )}
             </button>
           )}
           <button
             onClick={openFs}
-            className="rounded-md bg-white/90 p-2 shadow hover:bg-white"
+            className="rounded-md bg-white/90 p-2 shadow hover:bg-white transition-colors"
             aria-label="Fullscreen"
           >
-            <Maximize2 className="h-4 w-4" />
+            <Maximize2 className="h-4 w-4 text-gray-700" />
           </button>
         </div>
-
-        {/* Zoom on hover for images */}
-        {current.kind === "image" && (
-          <div
-            className="pointer-events-none absolute inset-0 hidden bg-[length:200%_200%] sm:block"
-            style={{
-              backgroundImage: `url(${current.src})`,
-              backgroundRepeat: "no-repeat",
-            }}
-            onMouseMove={(e) => {
-              const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
-              const x = ((e.clientX - r.left) / r.width) * 100;
-              const y = ((e.clientY - r.top) / r.height) * 100;
-              (e.currentTarget as HTMLDivElement).style.backgroundPosition = `${x}% ${y}%`;
-            }}
-          />
-        )}
       </div>
 
-      {/* Thumbnails */}
-      <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-6">
+      {/* THUMBNAILS */}
+      <div className="mt-4 flex flex-wrap justify-center gap-3 sm:gap-4">
         {items.map((m, i) => (
           <button
             key={i}
             onClick={() => setIndex(i)}
             className={[
-              "relative aspect-square overflow-hidden rounded-md border",
+              "relative h-16 w-16 sm:h-20 sm:w-20 overflow-hidden rounded-lg border transition-all duration-300",
               i === index
-                ? "border-neutral-900"
-                : "border-neutral-200 hover:border-neutral-300",
+                ? "border-yellow-500 shadow-md"
+                : "border-gray-200 hover:border-yellow-300",
             ].join(" ")}
             aria-label={`media ${i + 1}`}
           >
             {m.kind === "image" ? (
               <Image
                 src={m.src}
-                alt={m.alt || "thumb"}
+                alt={m.alt || "thumbnail"}
                 fill
-                className="object-cover"
-                sizes="120px"
+                sizes="80px"
+                className="object-cover transition-transform duration-300 hover:scale-105"
               />
             ) : (
               <>
                 <video
                   src={m.src}
                   muted
-                  className="h-full w-full object-cover"
                   playsInline
+                  className="h-full w-full object-cover"
                 />
                 <span className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-white">
                   VIDEO

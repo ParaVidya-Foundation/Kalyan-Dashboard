@@ -13,88 +13,177 @@ export default function PosterPage() {
   }, []);
 
   const myItems = [
-    { id: "a", title: "Poster 1", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos1.webp" },
-    { id: "b", title: "Poster 2", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos2.webp" },
-    { id: "c", title: "Poster 3", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos3.webp" },
-    { id: "d", title: "Poster 4", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos4.webp" },
-    { id: "e", title: "Poster 5", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos5.webp" },
-    { id: "f", title: "Poster 6", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos6.webp" },
-    { id: "g", title: "Poster 7", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos7.webp" },
-    { id: "h", title: "Poster 8", link: "/store/poster/product", imageUrl: "/Poster/Posters/pos8.webp" },
-  ];
-
-  const Single_Poster = [
-    {
-      id: 1,
-      title: "GTR | Vector Style Cars #01",
-      category: "Car Posters",
-      price: 99,
-      oldPrice: 199,
-      images: [
-        "/Poster/Posters/trail.webp",
-        "/Poster/Posters/trail1.webp",
-        "/Poster/Posters/trail2.webp",
-      ],
-    },
-    {
-      id: 2,
-      title: "Retro Vibes #02",
-      category: "Classic Posters",
-      price: 149,
-      oldPrice: 249,
-      images: [
-        "/Poster/Posters/trail.webp",
-        "/Poster/Posters/trail1.webp",
-      ],
-    },
-    // add more posters...
+    { id: "a", title: "Cosmic Mandala Collection", link: "/store/poster/Product?id=1", imageUrl: "/Poster/Posters/pos1.webp" },
+    { id: "b", title: "Vedic Astrology Charts", link: "/store/poster/Product?id=2", imageUrl: "/Poster/Posters/pos2.webp" },
+    { id: "c", title: "Planetary Alignment", link: "/store/poster/Product?id=3", imageUrl: "/Poster/Posters/pos3.webp" },
+    { id: "d", title: "Sacred Geometry", link: "/store/poster/Product?id=4", imageUrl: "/Poster/Posters/pos4.webp" },
+    { id: "e", title: "Zodiac Constellations", link: "/store/poster/Product?id=5", imageUrl: "/Poster/Posters/pos5.webp" },
+    { id: "f", title: "Spiritual Symbols", link: "/store/poster/Product?id=6", imageUrl: "/Poster/Posters/pos6.webp" },
+    { id: "g", title: "Mantra Art Collection", link: "/store/poster/Product?id=7", imageUrl: "/Poster/Posters/pos7.webp" },
+    { id: "h", title: "Chakra Energy Maps", link: "/store/poster/Product?id=8", imageUrl: "/Poster/Posters/pos8.webp" },
   ];
 
   const Collection_Poster = [
     {
       id: 1,
-      title: "GTR | Vector Style Cars #01",
-      category: "Car Posters",
-      price: 99,
-      oldPrice: 199,
+      title: "Cosmic Mandala - Golden Edition",
+      category: "Spiritual Art",
+      price: 299,
+      oldPrice: 499,
       images: [
-        "/Poster/Posters/trail.webp",
-        "/Poster/Posters/trail1.webp",
-        "/Poster/Posters/trail2.webp",
+        "/Poster/Posters/pos1.webp",
+        "/Poster/Posters/pos2.webp",
+        "/Poster/Posters/pos3.webp",
       ],
     },
     {
       id: 2,
-      title: "Retro Vibes #02",
-      category: "Classic Posters",
-      price: 149,
-      oldPrice: 249,
+      title: "Vedic Astrology Birth Chart",
+      category: "Astrological Charts",
+      price: 349,
+      oldPrice: 599,
       images: [
-        "/Poster/Posters/trail.webp",
-        "/Poster/Posters/trail1.webp",
+        "/Poster/Posters/pos2.webp",
+        "/Poster/Posters/pos3.webp",
+        "/Poster/Posters/pos4.webp",
       ],
     },
-    // add more posters...
+    {
+      id: 3,
+      title: "Planetary Alignment Map",
+      category: "Astronomy Art",
+      price: 279,
+      oldPrice: 449,
+      images: [
+        "/Poster/Posters/pos3.webp",
+        "/Poster/Posters/pos4.webp",
+        "/Poster/Posters/pos5.webp",
+      ],
+    },
+    {
+      id: 4,
+      title: "Sacred Geometry Patterns",
+      category: "Geometric Art",
+      price: 249,
+      oldPrice: 399,
+      images: [
+        "/Poster/Posters/pos4.webp",
+        "/Poster/Posters/pos5.webp",
+        "/Poster/Posters/pos6.webp",
+      ],
+    },
+    {
+      id: 5,
+      title: "Zodiac Constellation Series",
+      category: "Zodiac Art",
+      price: 329,
+      oldPrice: 549,
+      images: [
+        "/Poster/Posters/pos5.webp",
+        "/Poster/Posters/pos6.webp",
+        "/Poster/Posters/pos7.webp",
+      ],
+    },
+    {
+      id: 6,
+      title: "Spiritual Symbols Collection",
+      category: "Sacred Symbols",
+      price: 269,
+      oldPrice: 429,
+      images: [
+        "/Poster/Posters/pos6.webp",
+        "/Poster/Posters/pos7.webp",
+        "/Poster/Posters/pos8.webp",
+      ],
+    },
+    {
+      id: 7,
+      title: "Mantra Art - Om Collection",
+      category: "Mantra Art",
+      price: 289,
+      oldPrice: 479,
+      images: [
+        "/Poster/Posters/pos7.webp",
+        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos1.webp",
+      ],
+    },
+    {
+      id: 8,
+      title: "Chakra Energy Flow Map",
+      category: "Chakra Art",
+      price: 319,
+      oldPrice: 529,
+      images: [
+        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos1.webp",
+        "/Poster/Posters/pos2.webp",
+      ],
+    },
   ];
 
+  const Single_Poster = [
+    {
+      id: 9,
+      title: "Minimalist Astrology Chart",
+      category: "Modern Astrology",
+      price: 199,
+      oldPrice: 349,
+      images: [
+        "/Poster/Posters/pos1.webp",
+        "/Poster/Posters/pos2.webp",
+      ],
+    },
+    {
+      id: 10,
+      title: "Classic Vedic Calendar",
+      category: "Traditional Art",
+      price: 229,
+      oldPrice: 379,
+      images: [
+        "/Poster/Posters/pos2.webp",
+        "/Poster/Posters/pos3.webp",
+      ],
+    },
+    {
+      id: 11,
+      title: "Nakshatra Star Map",
+      category: "Star Maps",
+      price: 259,
+      oldPrice: 419,
+      images: [
+        "/Poster/Posters/pos3.webp",
+        "/Poster/Posters/pos4.webp",
+      ],
+    },
+    {
+      id: 12,
+      title: "Yantra Geometric Design",
+      category: "Yantra Art",
+      price: 239,
+      oldPrice: 389,
+      images: [
+        "/Poster/Posters/pos4.webp",
+        "/Poster/Posters/pos5.webp",
+      ],
+    },
+  ];
 
   return (
     <>
-    <PosterHero posters={["/Poster/Posters/pos1.webp", "/Poster/Posters/pos2.webp", "/Poster/Posters/pos3.webp", "/Poster/Posters/pos4.webp", "/Poster/Posters/pos5.webp","/Poster/Posters/pos6.webp"]} marqueeText="Posters" />
-<div className="">
-  <h1 className="text-4xl font-bold text-center">Collection Posters</h1>
-    <PosterGrid posters={Collection_Poster} />
-    </div>
+      <PosterHero posters={["/Poster/Posters/pos1.webp", "/Poster/Posters/pos2.webp", "/Poster/Posters/pos3.webp", "/Poster/Posters/pos4.webp", "/Poster/Posters/pos5.webp","/Poster/Posters/pos6.webp"]} marqueeText="Posters" />
+      
+      <div className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-900">Collection Posters</h1>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            Premium spiritual and astrological posters perfect for meditation spaces, study rooms, and spiritual altars.
+          </p>
+          <PosterGrid posters={Collection_Poster} />
+        </div>
+      </div>
 
-
-          <div
-        style={{
-   
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <div className="w-full flex justify-center">
         <TestimonialSlider
           videos={[
             "/Poster/Testimonials/testimonial1.mp4",
@@ -108,15 +197,19 @@ export default function PosterPage() {
         />
       </div>
 
-
-      <div className="">
-        <h1 className="text-4xl font-bold text-center">Single Posters</h1>
-        <PosterGrid posters={Single_Poster} />
+      <div className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-900">Single Posters</h1>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            Individual posters featuring detailed astrological charts and spiritual artwork.
+          </p>
+          <PosterGrid posters={Single_Poster} />
+        </div>
       </div>
 
-<BentoGrid items={myItems} /> 
+      <BentoGrid items={myItems} /> 
 
-<Trailback />
+      <Trailback />
     </>
   );
 }

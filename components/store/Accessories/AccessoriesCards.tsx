@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export type Accessories = {
@@ -29,13 +30,15 @@ export default function AccessoriesCards({ accessories, className = "" }: Props)
       ? Math.round(((accessories.oldPrice - accessories.price) / accessories.oldPrice) * 100)
       : null;
 
+  const productHref = accessories.href ?? `/store/accessories/Product?id=${accessories.id}`;
+
   return (
-    <article
-      className={`bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group ${className}`}
+    <Link
+      href={productHref}
+      className={`bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group block ${className}`}
     >
       {/* Image Block */}
-      <a 
-        href={accessories.href ?? "#"} 
+      <div 
         className="block relative w-full aspect-square bg-gray-50" 
         aria-label={accessories.title}
       >
@@ -46,7 +49,7 @@ export default function AccessoriesCards({ accessories, className = "" }: Props)
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
         />
-      </a>
+      </div>
 
       {/* Content Block */}
       <div className="p-4">
@@ -79,6 +82,6 @@ export default function AccessoriesCards({ accessories, className = "" }: Props)
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

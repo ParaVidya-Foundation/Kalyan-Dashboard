@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 export const dynamic = "force-dynamic";
 import { CircleDot } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Bracelets | Kalyan Store - Spiritual & Astrological Bracelets",
@@ -28,33 +30,40 @@ export default function BraceletPage() {
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {[
-            "Rudraksha Bracelet",
-            "Gemstone Bracelet",
-            "Lava Stone Bracelet",
-            "Prayer Bead Bracelet",
-            "Sacred Symbol Bracelet",
-            "Astrological Bracelet",
+            { name: "Rudraksha Bracelet", image: "/Gems/Ruby.webp", price: 799, description: "Authentic Rudraksha beads for spiritual protection and meditation." },
+            { name: "Gemstone Bracelet", image: "/Gems/Blue-Sapphire.webp", price: 949, description: "Natural gemstone bracelet for astrological benefits and positive energy." },
+            { name: "Lava Stone Bracelet", image: "/Gems/Green-Emerald.webp", price: 649, description: "Lava stone bracelet for grounding and emotional balance." },
+            { name: "Prayer Bead Bracelet", image: "/Gems/Pearl.webp", price: 899, description: "Traditional prayer bead bracelet for meditation and mindfulness." },
+            { name: "Sacred Symbol Bracelet", image: "/Gems/Yellow-Sapphire.webp", price: 1099, description: "Bracelet featuring sacred symbols for spiritual connection." },
+            { name: "Astrological Bracelet", image: "/Gems/Red-Coral.webp", price: 1249, description: "Personalized astrological bracelet based on your birth chart." },
           ].map((item, index) => (
-            <div
-              key={item}
-              className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
+            <Link
+              key={item.name}
+              href={`/store/bracelet/Product?id=${index + 1}`}
+              className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 block group"
             >
-              <div className="aspect-square bg-gradient-to-br from-rose-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center">
-                <CircleDot className="w-16 h-16 text-rose-400" />
+              <div className="aspect-square bg-gradient-to-br from-rose-100 to-pink-100 rounded-lg mb-4 overflow-hidden relative">
+                <Image 
+                  src={item.image} 
+                  alt={item.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{item}</h3>
-              <p className="text-gray-600 mb-4">
-                Handcrafted bracelet designed for spiritual protection and positive energy.
+              <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-rose-600 transition-colors">{item.name}</h3>
+              <p className="text-gray-600 mb-4 text-sm">
+                {item.description}
               </p>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-bold text-rose-600">
-                  ₹{799 + index * 150}
+                  ₹{item.price}
                 </span>
-                <button className="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors">
-                  Add to Cart
-                </button>
+                <span className="px-4 py-2 bg-rose-600 text-white rounded-lg group-hover:bg-rose-700 transition-colors text-sm font-medium">
+                  View Details
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

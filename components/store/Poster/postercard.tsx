@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Poster {
   id: number;
@@ -49,9 +50,10 @@ function PosterCard({ poster }: { poster: Poster }) {
   }, [hover, poster.images.length]);
 
   return (
-    <div
+    <Link
+      href={`/store/poster/Product?id=${poster.id}`}
       className="
-        group relative bg-white rounded-xl cursor-pointer
+        group relative bg-white rounded-xl cursor-pointer block
         overflow-hidden
         shadow-[0_4px_18px_rgba(0,0,0,0.06)]
         hover:shadow-[0_10px_32px_rgba(0,0,0,0.12)]
@@ -133,6 +135,6 @@ function PosterCard({ poster }: { poster: Poster }) {
           group-hover:-translate-y-[4px] 
         "
       />
-    </div>
+    </Link>
   );
 }

@@ -12,7 +12,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
  * - Optimized Next/Image usage
  */
 export default function MakingPerfume() {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   // Parallax is bound to this section for predictable motion
   const { scrollYProgress } = useScroll({
