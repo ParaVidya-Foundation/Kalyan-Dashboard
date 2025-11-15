@@ -30,35 +30,6 @@ type PaperFrameProps = {
 const isPdf = (url: string) => /\.pdf(\?|#|$)/i.test(url);
 const isDocx = (url: string) => /\.(doc|docx)(\?|#|$)/i.test(url);
 
-function buildPdfViewerUrl(fileUrl: string, opts: { allowPrint: boolean }) {
-  const u = new URL(
-    "/pdfjs/web/viewer.html",
-    typeof window !== "undefined" ? window.location.origin : "http://localhost"
-  );
-  const fileParam = new URL(fileUrl, u.origin).toString();
-  u.searchParams.set("file", fileParam);
-  u.searchParams.set("download", "false");
-  u.searchParams.set("print", opts.allowPrint ? "true" : "false");
-  // Reduce text selection. (Viewer still has find, thumbnails, etc.)
-  u.searchParams.set("disableTextLayer", "true");
-  // Start at fit-width; user can change from toolbar
-  u.hash = "zoom=page-width";
-  return u.toString();
-}
-
-function buildOfficeViewerUrl(fileUrl: string) {
-  const base = "https://view.officeapps.live.com/op/embed.aspx";
-  const u = new URL(base);
-  u.searchParams.set(
-    "src",
-    new URL(
-      fileUrl,
-      typeof window !== "undefined" ? window.location.origin : "http://localhost"
-    ).toString()
-  );
-  return u.toString();
-}
-
 export default function PaperFrame({
   src,
   type,
@@ -76,13 +47,29 @@ export default function PaperFrame({
     return "pdf";
   }, [src, type]);
 
-  const frameUrl = useMemo(
-    () =>
-      resolvedType === "pdf"
-        ? buildPdfViewerUrl(src, { allowPrint })
-        : buildOfficeViewerUrl(src),
-    [resolvedType, src, allowPrint]
-  );
+  /**
+   * IMPORTANT: Build the iframe URL *only on the client* to avoid SSR/CSR
+   * mismatches and to ensure the correct origin/port is used in dev/prod.
+   */
+  const [frameUrl, setFrameUrl] = useState<string>("about:blank");
+  useEffect(() => {
+    const origin = window.location.origin; // correct (includes :3000 in dev)
+    if (resolvedType === "pdf") {
+      const u = new URL("/pdfjs/web/viewer.html", origin);
+      const fileParam = new URL(src, origin).toString();
+      u.searchParams.set("file", fileParam);
+      u.searchParams.set("download", "false");
+      u.searchParams.set("print", allowPrint ? "true" : "false");
+      // Reduce text selection; (viewer still has find/thumbnails/etc.)
+      u.searchParams.set("disableTextLayer", "true");
+      u.hash = "zoom=page-width";
+      setFrameUrl(u.toString());
+    } else {
+      const u = new URL("https://view.officeapps.live.com/op/embed.aspx");
+      u.searchParams.set("src", new URL(src, origin).toString());
+      setFrameUrl(u.toString());
+    }
+  }, [resolvedType, src, allowPrint]);
 
   /** Anti-copy friction */
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -128,7 +115,6 @@ export default function PaperFrame({
       const win = iframeRef.current?.contentWindow as any;
       const app = win?.PDFViewerApplication;
       if (app) {
-        // wait until initialized
         const ready = () => {
           try {
             const total = app.pdfDocument?.numPages ?? app.pdfViewer?.pagesCount;
@@ -136,7 +122,6 @@ export default function PaperFrame({
               setPages(total);
               setPage(app.pdfViewer.currentPageNumber || 1);
               setPdfReady(true);
-              // listen for page changes
               app.eventBus?.on?.("pageNumberChanged", (n: number) => setPage(n));
               app.eventBus?.on?.("pagesloaded", (e: any) => {
                 setPages(e?.pagesCount || app.pdfViewer?.pagesCount || null);
@@ -164,10 +149,8 @@ export default function PaperFrame({
     if (fallback) fallback();
   };
 
-  const zoomIn = () =>
-    call((app) => app.zoomIn?.(), () => bumpHash("zoom", "+"));
-  const zoomOut = () =>
-    call((app) => app.zoomOut?.(), () => bumpHash("zoom", "-"));
+  const zoomIn = () => call((app) => app.zoomIn?.(), () => bumpHash("zoom", "+"));
+  const zoomOut = () => call((app) => app.zoomOut?.(), () => bumpHash("zoom", "-"));
   const fitWidth = () =>
     call((app) => (app.pdfViewer.currentScaleValue = "page-width"), () =>
       setHashKV("zoom", "page-width")
@@ -176,8 +159,7 @@ export default function PaperFrame({
     call((app) => (app.pdfViewer.currentScaleValue = "page-fit"), () =>
       setHashKV("zoom", "page-fit")
     );
-  const rotate = () =>
-    call((app) => app.rotatePages?.(90), () => bumpHash("rotation", "+90"));
+  const rotate = () => call((app) => app.rotatePages?.(90), () => bumpHash("rotation", "+90"));
   const prevPage = () =>
     call(
       (app) => {
@@ -195,8 +177,8 @@ export default function PaperFrame({
         app.pdfViewer.currentPageNumber = n;
         setPage(n);
       },
-      () => setHashKV("page", String(page + 1))
-    );
+      () => setHashKV("page", String(page + 1)))
+  ;
   const gotoPage = (n: number) =>
     call(
       (app) => {
@@ -230,7 +212,7 @@ export default function PaperFrame({
       if (key === "zoom") {
         const numeric = Number(current.replace("%", ""));
         const next = isNaN(numeric)
-          ? "125" // default
+          ? "125"
           : Math.max(25, Math.min(400, numeric + (delta === "+" ? 10 : -10)));
         h.set("zoom", `${next}`);
       } else {
@@ -284,9 +266,7 @@ export default function PaperFrame({
             {title ?? (src.split("/").pop() || "Document")}
           </h2>
           {subtitle ? (
-            <p className="truncate text-xs text-neutral-600 dark:text-neutral-400">
-              {subtitle}
-            </p>
+            <p className="truncate text-xs text-neutral-600 dark:text-neutral-400">{subtitle}</p>
           ) : null}
         </div>
         <div className="flex items-center gap-2">
@@ -387,7 +367,7 @@ export default function PaperFrame({
           src={frameUrl}
           title={title ?? "Paper"}
           referrerPolicy="no-referrer"
-          style={{ height: typeof height === "number" ? `${height}px` : height }}
+          style={{ height: frameHeight }}
         />
       </div>
 

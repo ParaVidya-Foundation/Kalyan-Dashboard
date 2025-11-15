@@ -5,8 +5,6 @@ import Image from "next/image";
 import {
   motion,
   AnimatePresence,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import clsx from "clsx";
 
@@ -48,16 +46,14 @@ export default function PerfumePlanet() {
     img.onerror = () => setIsLoaded(true);
   }, [planet]);
 
-  // Subtle parallax for bottle
-  const cardRef = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  // Subtle parallax for bottle - simplified without scroll tracking to avoid errors
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  // Use simple static transform instead of scroll-based parallax
+  const y = 0; // Disabled parallax to prevent errors
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden font-poppins">
+    <section ref={sectionRef} className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden font-poppins">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-12 px-6 md:px-10 py-16 items-center">
         {/* LEFT: Planet Thumbnails (bigger, aligned) */}
         <div className="lg:col-span-3">
@@ -98,18 +94,14 @@ export default function PerfumePlanet() {
           <AnimatePresence mode="wait">
             <motion.div
               key={planet.id}
-              ref={cardRef}
               initial={{ opacity: 0, y: 40, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -40, scale: 0.96 }}
               transition={{ duration: 0.8, ease: [0.25, 1, 0.3, 1] }}
               className="relative w-[95%] md:w-[90%] h-[56vh] sm:h-[60vh] rounded-3xl overflow-hidden flex items-center justify-center bg-white/40 backdrop-blur-2xl border border-white/30 shadow-[0_10px_40px_rgba(0,0,0,0.06)]"
             >
-              {/* Bottle with subtle parallax */}
-              <motion.div
-                style={{ y }}
-                className="relative w-[78%] h-full flex items-center justify-center"
-              >
+              {/* Bottle display */}
+              <div className="relative w-[78%] h-full flex items-center justify-center">
                 <Image
                   src={planet.perfumeImg}
                   alt={`${planet.id} perfume`}
@@ -118,7 +110,7 @@ export default function PerfumePlanet() {
                   className="object-contain"
                   priority
                 />
-              </motion.div>
+              </div>
 
               {/* Subtle reflection/shine */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/60" />

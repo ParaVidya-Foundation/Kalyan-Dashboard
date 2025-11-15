@@ -1,71 +1,78 @@
-import { Metadata } from "next";
-export const dynamic = "force-dynamic";
-import { Package } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Accessories | Kalyan Store - Spiritual Accessories & Items",
-  description: "Browse our collection of spiritual accessories including Rudraksha, malas, yantras, and other sacred items.",
-  keywords: ["accessories", "rudraksha", "mala", "yantra", "spiritual accessories", "Kalyan"],
-};
+import AccessoriesBestSeller from "@/components/store/Accessories/BestSeller";
+import AccessoriesIdols from "@/components/store/Accessories/Idols";
+import AccessoriesPoojaKit from "@/components/store/Accessories/PoojaKit";
+import AccessoriesRashi from "@/components/store/Accessories/Rashi";
+
+// Gems images as placeholders
+const gemsImages = [
+  "/Gems/Blue-Sapphire.webp",
+  "/Gems/Yellow-Sapphire.webp",
+  "/Gems/Ruby.webp",
+  "/Gems/Green-Emerald.webp",
+  "/Gems/Pearl.webp",
+  "/Gems/Red-Coral.webp",
+  "/Gems/Hessonite.webp",
+  "/Gems/Cats-Eye.webp",
+  "/Gems/White-Sapphire.webp",
+  "/Gems/Amethyst.webp",
+  "/Gems/Moonstone.webp",
+  "/Gems/Peridot.webp",
+];
 
 export default function AccessoriesPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white via-green-50/30 to-emerald-50/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <Package className="w-8 h-8 text-green-600" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Spiritual Accessories
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Enhance your spiritual practice with our curated collection of accessories and sacred items.
-          </p>
-        </div>
-
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {[
-            "Rudraksha Mala",
-            "Sandalwood Mala",
-            "Yantra Plate",
-            "Prayer Beads",
-            "Incense Holder",
-            "Puja Accessories",
-          ].map((item, index) => (
-            <div
-              key={item}
-              className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="aspect-square bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg mb-4 flex items-center justify-center">
-                <Package className="w-16 h-16 text-green-500" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{item}</h3>
-              <p className="text-gray-600 mb-4">
-                Authentic spiritual accessory crafted with traditional methods and materials.
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-green-600">
-                  ₹{499 + index * 100}
-                </span>
-                <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Coming Soon Notice */}
-        <div className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-          <p className="text-blue-800">
-            <strong>Note:</strong> Full product catalog and shopping functionality coming soon!
-          </p>
-        </div>
-      </div>
-    </main>
+    <div className="space-y-12 py-8">
+      <AccessoriesBestSeller 
+        items={[
+          { id: 1, title: "Original Karungali Malai 108-Beads Ebony Wood with Govt. Certified", image: gemsImages[0], price: 791, oldPrice: 2090, showFrom: true, href: "/store/accessories/Product?id=1" },
+          { id: 2, title: "Karungali Malai Silver Cap Plated Necklace with Certification", image: gemsImages[1], price: 891, oldPrice: 1999, href: "/store/accessories/Product?id=2" },
+          { id: 3, title: "Karungali Malai Bracelet with Govt. Certification", image: gemsImages[2], price: 591, oldPrice: 1650, href: "/store/accessories/Product?id=3" },
+          { id: 4, title: "Nine Gems Navratna Stones Mala", image: gemsImages[3], price: 2451, oldPrice: 3499, href: "/store/accessories/Product?id=4" },
+          { id: 5, title: "7 Mukhi Premium Rudraksha", image: gemsImages[4], price: 991, oldPrice: 1999, href: "/store/accessories/Product?id=5" },
+          { id: 6, title: "Divine Rudraksha Pendant Necklace", image: gemsImages[5], price: 891, oldPrice: 2590, href: "/store/accessories/Product?id=6" },
+          { id: 7, title: "Black Tourmaline Bracelet (Kumbh Rashi) Aquarius", image: gemsImages[6], price: 1111, oldPrice: 1999, href: "/store/accessories/Product?id=7" },
+          { id: 8, title: "Raw Pyrite Bracelet | For Wealth, Confidence & Protection", image: gemsImages[7], price: 690, oldPrice: 1499, href: "/store/accessories/Product?id=8" },
+        ]} 
+      />
+      <AccessoriesIdols 
+        items={[
+          { id: 9, title: "Premium Ganesh Idol with Silver Finish", image: gemsImages[8], price: 1500, oldPrice: 2500, href: "/store/accessories/Product?id=9" },
+          { id: 10, title: "Lakshmi Idol Brass Handcrafted", image: gemsImages[9], price: 2200, oldPrice: 3500, href: "/store/accessories/Product?id=10" },
+          { id: 11, title: "Shiva Lingam Stone Idol", image: gemsImages[10], price: 1800, oldPrice: 2800, href: "/store/accessories/Product?id=11" },
+          { id: 12, title: "Krishna Idol with Flute", image: gemsImages[11], price: 1200, oldPrice: 2000, href: "/store/accessories/Product?id=12" },
+          { id: 13, title: "Durga Maa Idol Premium", image: gemsImages[0], price: 2500, oldPrice: 4000, href: "/store/accessories/Product?id=13" },
+          { id: 14, title: "Hanuman Idol Brass Finish", image: gemsImages[1], price: 1600, oldPrice: 2600, href: "/store/accessories/Product?id=14" },
+          { id: 15, title: "Buddha Idol Meditation Statue", image: gemsImages[2], price: 1900, oldPrice: 3000, href: "/store/accessories/Product?id=15" },
+          { id: 16, title: "Saraswati Idol with Veena", image: gemsImages[3], price: 2100, oldPrice: 3200, href: "/store/accessories/Product?id=16" },
+        ]} 
+      />
+      <AccessoriesPoojaKit 
+        items={[
+          { id: 17, title: "Complete Pooja Kit with Brass Items", image: gemsImages[4], price: 899, oldPrice: 1500, href: "/store/accessories/Product?id=17" },
+          { id: 18, title: "Premium Pooja Thali Set", image: gemsImages[5], price: 1200, oldPrice: 2000, href: "/store/accessories/Product?id=18" },
+          { id: 19, title: "Copper Pooja Items Set", image: gemsImages[6], price: 1500, oldPrice: 2500, href: "/store/accessories/Product?id=19" },
+          { id: 20, title: "Silver Plated Pooja Kit", image: gemsImages[7], price: 1800, oldPrice: 3000, href: "/store/accessories/Product?id=20" },
+          { id: 21, title: "Traditional Pooja Samagri Kit", image: gemsImages[8], price: 1100, oldPrice: 1800, href: "/store/accessories/Product?id=21" },
+          { id: 22, title: "Luxury Pooja Set with Box", image: gemsImages[9], price: 2200, oldPrice: 3500, href: "/store/accessories/Product?id=22" },
+          { id: 23, title: "Eco-Friendly Pooja Kit", image: gemsImages[10], price: 999, oldPrice: 1600, href: "/store/accessories/Product?id=23" },
+          { id: 24, title: "Premium Brass Pooja Items", image: gemsImages[11], price: 1600, oldPrice: 2600, href: "/store/accessories/Product?id=24" },
+        ]} 
+      />
+      <AccessoriesRashi 
+        items={[
+          { id: 25, title: "Aries Rashi Accessories Set", image: gemsImages[0], price: 2500, oldPrice: 4000, href: "/store/accessories/Product?id=25" },
+          { id: 26, title: "Taurus Rashi Pendant Set", image: gemsImages[1], price: 2200, oldPrice: 3500, href: "/store/accessories/Product?id=26" },
+          { id: 27, title: "Gemini Rashi Bracelet Collection", image: gemsImages[2], price: 1800, oldPrice: 2800, href: "/store/accessories/Product?id=27" },
+          { id: 28, title: "Cancer Rashi Necklace Set", image: gemsImages[3], price: 2100, oldPrice: 3200, href: "/store/accessories/Product?id=28" },
+          { id: 29, title: "Leo Rashi Premium Accessories", image: gemsImages[4], price: 2800, oldPrice: 4500, href: "/store/accessories/Product?id=29" },
+          { id: 30, title: "Virgo Rashi Gemstone Set", image: gemsImages[5], price: 2400, oldPrice: 3800, href: "/store/accessories/Product?id=30" },
+          { id: 31, title: "Libra Rashi Collection", image: gemsImages[6], price: 2000, oldPrice: 3200, href: "/store/accessories/Product?id=31" },
+          { id: 32, title: "Scorpio Rashi Accessories", image: gemsImages[7], price: 2300, oldPrice: 3700, href: "/store/accessories/Product?id=32" },
+        ]} 
+      />
+    </div>
   );
 }
 

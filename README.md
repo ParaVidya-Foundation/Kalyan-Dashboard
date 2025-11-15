@@ -97,3 +97,7 @@ https://vessi.com/
 https://www.gethyped.nl/
 perfume - https://www.leandra-isler.ch/en
 https://www.pacdora.com/mockups
+
+accessories - 
+https://www.divinehindu.in/
+https://japam.in/

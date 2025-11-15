@@ -1,238 +1,192 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import * as React from "react";
 
-interface HeroProps {
-  posters: string[]; // poster image urls
-  slideIntervalMs?: number; // poster swap interval
-  bgColors?: string[]; // background palette
-  bgChangeIntervalMs?: number; // bg swap interval
+type HeroProps = {
+  posters?: string[];
+  slideIntervalMs?: number;
+  bgColors?: string[];
+  bgChangeIntervalMs?: number;
   marqueeText?: string;
-}
+  className?: string;
+};
 
 export default function PosterHero({
   posters = [
-    "/Poster/Posters/poster1.jpg",
-    "/Poster/Posters/poster2.jpg",
-    "/Poster/Posters/poster3.jpg",
+    "/Poster/Posters/pos1.webp",
+    "/Poster/Posters/pos2.webp",
+    "/Poster/Posters/pos3.webp",
+    "/Poster/Posters/pos4.webp",
+    "/Poster/Posters/pos5.webp",
+    "/Poster/Posters/pos6.webp",
   ],
   slideIntervalMs = 6000,
-  bgColors = ["#f3efe9", "#f6f1ea", "#fbf6f2", "#f9f4ee"],
+  bgColors = [
+    "#F5C6EC", // pink pastel
+    "#B8E3FF", // blue pastel
+    "#FFE3A3", // yellow pastel
+    "#D7F9E9", // mint
+    "#FDD8C6", // coral
+    "#E2D5FF", // lavender
+  ],
   bgChangeIntervalMs = 7000,
-  marqueeText = "NEXT • NEW RELEASES • FEATURED • LIMITED EDITION",
+  marqueeText = "NEW • FEATURED • NEXT • LIMITED • COLLECTORS EDITION",
+  className,
 }: HeroProps) {
-  const [posterIndex, setPosterIndex] = useState(0);
-  const [bgIndex, setBgIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const fadeDuration = 700; // ms - must match CSS transition
-  const posterRef = useRef<HTMLImageElement | null>(null);
+  const [posterIndex, setPosterIndex] = React.useState(0);
+  const [bgIndex, setBgIndex] = React.useState(0);
+  const [fade, setFade] = React.useState(true);
 
-  // poster crossfade cycle
-  useEffect(() => {
-    const id = setInterval(() => {
-      // fade out -> switch -> fade in
-      setVisible(false);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useTransform(my, [-0.5, 0.5], [3, -3]);
+  const ry = useTransform(mx, [-0.5, 0.5], [-3, 3]);
+  const rotateX = useSpring(rx, { stiffness: 100, damping: 18 });
+  const rotateY = useSpring(ry, { stiffness: 100, damping: 18 });
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
+  React.useEffect(() => {
+    const slide = setInterval(() => {
+      setFade(false);
       setTimeout(() => {
         setPosterIndex((p) => (p + 1) % posters.length);
-        setVisible(true);
-      }, fadeDuration);
+        setFade(true);
+      }, 400);
     }, slideIntervalMs);
-    return () => clearInterval(id);
-  }, [posters.length, slideDurationMsWrapper(slideIntervalMs)]);
+    return () => clearInterval(slide);
+  }, [posters.length, slideIntervalMs]);
 
-  // background color cycle
-  useEffect(() => {
-    const id = setInterval(() => {
+  React.useEffect(() => {
+    const bg = setInterval(() => {
       setBgIndex((b) => (b + 1) % bgColors.length);
     }, bgChangeIntervalMs);
-    return () => clearInterval(id);
+    return () => clearInterval(bg);
   }, [bgColors.length, bgChangeIntervalMs]);
 
-  // Helper so eslint won't complain about deps
-  function slideDurationMsWrapper(v: number) {
-    return v;
-  }
-
-  // build repeated marquee content to ensure seamless infinite effect
-  const repeats = 6; // number of copies (large screens)
-  const marqueeItems = new Array(repeats).fill(marqueeText + " • ");
+  const marqueeCopies = Array.from({ length: 2 }, () => marqueeText + " • ");
 
   return (
-    <section
-      className="poster-hero"
+    <motion.section
       aria-label="Poster hero"
-      style={{ background: bgColors[bgIndex] }}
+      className={[
+        "relative h-[100svh] w-full overflow-hidden select-none",
+        "text-black font-[Playfair_Display]",
+        className || "",
+      ].join(" ")}
+      style={{ backgroundColor: bgColors[0] }}
+      animate={{ backgroundColor: bgColors[bgIndex] }}
+      transition={{ duration: 1.8, ease: "easeInOut" }}
     >
-      {/* Infinite marquee text (behind the poster) */}
-      <div className="marquee">
-        <div className="marquee-track" aria-hidden>
-          {marqueeItems.map((txt, i) => (
-            <div className="marquee-item" key={i}>
+      {/* Grain Texture */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-[0.05]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.8'/%3E%3C/svg%3E\")",
+          backgroundSize: "200px 200px",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Fixed Marquee */}
+      <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 overflow-hidden whitespace-nowrap">
+        <div className="flex animate-marquee text-black/20 opacity-40">
+          {marqueeCopies.map((txt, i) => (
+            <span
+              key={i}
+              className="text-[clamp(52px,8vw,160px)] font-extrabold tracking-[-0.03em] uppercase px-[3vw]"
+            >
               {txt}
-            </div>
+            </span>
           ))}
         </div>
       </div>
 
-      {/* Poster card (center) */}
-      <div className="poster-card" role="img" aria-label="Poster">
-        <img
-          ref={posterRef}
-          src={posters[posterIndex]}
-          alt={`Poster ${posterIndex + 1}`}
-          className={`poster-image ${visible ? "visible" : "hidden"}`}
-          loading="eager"
-        />
-        {/* soft reflected shadow element for richer depth */}
-        <div className="poster-shadow" aria-hidden />
+      {/* Poster */}
+      <div
+        className="relative z-[3] flex h-full w-full items-center justify-center"
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+      >
+        <motion.div
+          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+          transition={{ type: "spring", stiffness: 120, damping: 18 }}
+        >
+          <motion.div
+            className="relative w-[min(42vw,400px)] aspect-[17/22]"
+            initial={{ rotate: 5 }}
+            animate={{ rotate: 5 }}
+            whileHover={{
+              scale: 1.05,
+              rotate: 5.5,
+              filter:
+                "drop-shadow(0 60px 80px rgba(0,0,0,0.35)) drop-shadow(0 12px 20px rgba(0,0,0,0.25))",
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 180,
+              damping: 16,
+            }}
+          >
+            <motion.div
+              key={posterIndex}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{
+                opacity: fade ? 1 : 0,
+                scale: fade ? 1 : 1.02,
+              }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={posters[posterIndex]}
+                alt={`Poster ${posterIndex + 1}`}
+                fill
+                priority
+                sizes="(max-width: 1024px) 80vw, 420px"
+                className="object-cover"
+                style={{
+                  filter:
+                    "drop-shadow(0 40px 60px rgba(0,0,0,0.25)) drop-shadow(0 8px 14px rgba(0,0,0,0.18))",
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
 
       <style jsx>{`
-        /* Container */
-        .poster-hero {
-          position: relative;
-          width: 100%;
-          height: 100vh;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 1s linear;
-          isolation: isolate; /* keep layers GPU-friendly */
-        }
-
-        /* MARQUEE (behind poster) */
-        .marquee {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          pointer-events: none;
-          z-index: 1; /* behind poster (poster-card has z-index 5) */
-          overflow: hidden;
-        }
-        .marquee-track {
-          display: flex;
-          align-items: center;
-          gap: 4rem;
-          /* large font, heavy weight, sits across whole width */
-          font-family: "Playfair Display", serif;
-          font-size: clamp(4rem, 8vw, 10rem);
-          font-weight: 900;
-          color: rgba(16, 16, 16, 0.08);
-          white-space: nowrap;
-          transform: translate3d(0, 0, 0);
-          will-change: transform;
-          animation: marquee-left 28s linear infinite;
-        }
-        .marquee-item {
-          display: inline-block;
-          padding-right: 2rem;
-        }
-        @keyframes marquee-left {
+        @keyframes marquee {
           0% {
-            transform: translateX(0%);
+            transform: translateX(0);
           }
           100% {
             transform: translateX(-50%);
           }
         }
-
-        /* Poster card in the center */
-        .poster-card {
-          position: relative;
-          z-index: 5;
-          width: min(80vw, 760px);
-          max-height: 82vh;
-          aspect-ratio: 9 / 14; /* portrait poster */
-          border-radius: 24px;
-          overflow: visible; /* allow shadow & tilt overflow */
-          transform: rotate(-6deg) translateY(-2%);
-          transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-          will-change: transform;
-          display: block;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: auto;
-        }
-
-        /* Slight hover lift & straighten */
-        .poster-card:hover {
-          transform: rotate(-2deg) translateY(-4%);
-        }
-
-        .poster-image {
-          display: block;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 20px;
-          box-shadow: 0 30px 80px rgba(18, 18, 18, 0.16);
-          transition: opacity ${fadeDuration}ms ease, transform 900ms ease;
-          transform-origin: center center;
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-          will-change: opacity, transform;
-        }
-
-        .poster-image.hidden {
-          opacity: 0;
-          transform: scale(0.98) translateY(10px) rotate(-6deg);
-        }
-        .poster-image.visible {
-          opacity: 1;
-          transform: scale(1) translateY(0) rotate(-6deg);
-        }
-
-        /* decorative bottom-right rounded shadow as in screenshot */
-        .poster-shadow {
-          position: absolute;
-          right: -6%;
-          bottom: -4%;
-          z-index: 4;
-          width: 18%;
-          height: 18%;
-          border-radius: 50%;
-          filter: blur(24px);
-          background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.06));
-          transform: translate(10%, 10%) rotate(-20deg);
-          pointer-events: none;
-        }
-
-        /* Responsive tuning */
-        @media (max-width: 980px) {
-          .marquee-track {
-            font-size: clamp(3rem, 7vw, 6.5rem);
-            gap: 2.5rem;
-            animation-duration: 20s;
-          }
-          .poster-card {
-            width: min(86vw, 420px);
-            transform: rotate(-5deg) translateY(-1%);
-          }
-          .poster-shadow {
-            display: none;
-          }
-          .hero-title h1 {
-            font-size: clamp(2.2rem, 6vw, 3.6rem);
-          }
-        }
-        @media (max-width: 520px) {
-          .marquee-track {
-            font-size: clamp(2.2rem, 8vw, 3.6rem);
-            animation-duration: 14s;
-          }
-          .poster-card {
-            width: 72vw;
-            aspect-ratio: 2 / 3;
-            transform: rotate(-3deg) translateY(-1%);
-          }
-          .hero-title h1 {
-            font-size: clamp(1.6rem, 6vw, 2rem);
-          }
+        .animate-marquee {
+          animation: marquee 25s linear infinite;
+          display: inline-flex;
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 }

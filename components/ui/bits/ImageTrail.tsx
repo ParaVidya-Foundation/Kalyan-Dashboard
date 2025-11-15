@@ -1201,18 +1201,29 @@ export default function ImageTrail({ items = [], variant = 1 }: ImageTrailProps)
   }, [variant, items]);
 
   return (
-    <div className="w-full h-full relative z-[100] rounded-lg bg-transparent overflow-visible" ref={containerRef}>
-      {items.map((url, i) => (
-        <div
-          className="content__img w-[190px] aspect-[1.1] rounded-[15px] absolute top-0 left-0 opacity-0 overflow-hidden [will-change:transform,filter]"
-          key={i}
-        >
-          <div
-            className="content__img-inner bg-center bg-cover w-[calc(100%+20px)] h-[calc(100%+20px)] absolute top-[-10px] left-[-10px]"
-            style={{ backgroundImage: `url(${url})` }}
-          />
-        </div>
-      ))}
+<div
+  ref={containerRef}
+  className="w-full h-full relative z-[20] bg-transparent overflow-visible pointer-events-auto"
+  style={{ transform: "translateZ(0)" }}
+>
+  {items.map((url, i) => (
+    <div
+      key={i}
+      className="content__img absolute top-0 left-0 opacity-0 pointer-events-none
+                 w-[160px] sm:w-[190px] md:w-[220px] lg:w-[240px] overflow-hidden"
+      style={{
+        aspectRatio: "17 / 22",
+        willChange: "transform, filter",
+      }}
+    >
+      <div
+        className="content__img-inner absolute inset-0 bg-center bg-cover"
+        style={{ backgroundImage: `url(${url})` }}
+      />
     </div>
+  ))}
+</div>
+
+  
   );
 }
