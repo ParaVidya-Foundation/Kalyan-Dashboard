@@ -106,11 +106,21 @@ export default function RelatedProducts({
           >
             <div className="relative h-48 w-full overflow-hidden">
               <Image
-                src={p.image}
+                src={p.image || "/placeholder.png"}
                 alt={p.title}
                 fill
+                quality={90}
+                loading="lazy"
+                sizes="(max-width: 640px) 250px, 250px"
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="250px"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/placeholder.png") {
+                    target.src = "/placeholder.png";
+                  }
+                }}
               />
             </div>
 

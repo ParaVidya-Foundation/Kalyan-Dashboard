@@ -242,12 +242,22 @@ export default function BentoGrid({
               className="relative col-span-2 md:col-span-4 lg:col-span-6 row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={first.imageUrl}
+                src={first.imageUrl || "/Poster/Bento/1.webp"}
                 alt={first.alt ?? first.title}
                 fill
+                quality={90}
                 priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 50vw"
+                loading="eager"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 50vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/1.webp") {
+                    target.src = "/Poster/Bento/1.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -260,11 +270,22 @@ export default function BentoGrid({
               className="relative col-span-2 md:col-span-2 lg:col-span-3 row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={second.imageUrl}
+                src={second.imageUrl || "/Poster/Bento/2.webp"}
                 alt={second.alt ?? second.title}
                 fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/2.webp") {
+                    target.src = "/Poster/Bento/2.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -277,11 +298,22 @@ export default function BentoGrid({
               className="relative col-span-2 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={third.imageUrl}
+                src={third.imageUrl || "/Poster/Bento/3.webp"}
                 alt={third.alt ?? third.title}
                 fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/3.webp") {
+                    target.src = "/Poster/Bento/3.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -294,11 +326,22 @@ export default function BentoGrid({
               className="relative col-span-2 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={fourth.imageUrl}
+                src={fourth.imageUrl || "/Poster/Bento/4.webp"}
                 alt={fourth.alt ?? fourth.title}
                 fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/4.webp") {
+                    target.src = "/Poster/Bento/4.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -311,11 +354,22 @@ export default function BentoGrid({
               className="relative col-span-2 md:col-span-6 lg:col-span-6 row-span-1 lg:row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={fifth.imageUrl}
+                src={fifth.imageUrl || "/Poster/Bento/5.webp"}
                 alt={fifth.alt ?? fifth.title}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 50vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/5.webp") {
+                    target.src = "/Poster/Bento/5.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -328,11 +382,22 @@ export default function BentoGrid({
               className="relative col-span-1 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={sixth.imageUrl}
+                src={sixth.imageUrl || "/Poster/Bento/6.webp"}
                 alt={sixth.alt ?? sixth.title}
                 fill
-                sizes="(max-width: 768px) 25vw, (max-width: 1024px) 50vw, 25vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 25vw, (max-width: 1024px) 50vw, 25vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/6.webp") {
+                    target.src = "/Poster/Bento/6.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -345,11 +410,22 @@ export default function BentoGrid({
               className="relative col-span-1 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={seventh.imageUrl}
+                src={seventh.imageUrl || "/Poster/Bento/7.webp"}
                 alt={seventh.alt ?? seventh.title}
                 fill
-                sizes="(max-width: 768px) 25vw, (max-width: 1024px) 50vw, 25vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 25vw, (max-width: 1024px) 50vw, 25vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/7.webp") {
+                    target.src = "/Poster/Bento/7.webp";
+                  }
+                }}
               />
             </Link>
           )}
@@ -362,11 +438,22 @@ export default function BentoGrid({
               className="relative col-span-2 md:col-span-6 lg:col-span-6 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
               <Image
-                src={eighth.imageUrl}
+                src={eighth.imageUrl || "/Poster/Bento/8.webp"}
                 alt={eighth.alt ?? eighth.title}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                quality={90}
+                priority={false}
+                loading="lazy"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 50vw"
                 className={imgProps.className}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/Poster/Bento/8.webp") {
+                    target.src = "/Poster/Bento/8.webp";
+                  }
+                }}
               />
             </Link>
           )}

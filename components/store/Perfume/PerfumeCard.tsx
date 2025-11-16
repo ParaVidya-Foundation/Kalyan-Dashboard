@@ -73,21 +73,44 @@ export const PerfumeCard = React.memo(function PerfumeCard({
       {/* image area */}
       <div className="relative w-full max-w-[280px] aspect-[4/3]">
         <Image
-          src={item.images[0]}
+          src={item.images[0] || item.images[1] || "/Perfume/1.png"}
           alt={`${item.name} bottle`}
           fill
-          sizes="(max-width:640px) 90vw, (max-width:1024px) 40vw, 20vw"
+          quality={90}
+          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 40vw, 280px"
           className="object-contain transition-opacity duration-300 ease-out group-hover:opacity-0"
           priority={priority}
-        />
-        <Image
-          src={item.images[1]}
-          alt={`${item.name} alternate view`}
-          fill
-          sizes="(max-width:640px) 90vw, (max-width:1024px) 40vw, 20vw"
-          className="object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
           loading={priority ? "eager" : "lazy"}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (item.images[1] && target.src !== item.images[1]) {
+              target.src = item.images[1];
+            } else if (target.src !== "/Perfume/1.png") {
+              target.src = "/Perfume/1.png";
+            }
+          }}
         />
+        {item.images[1] && (
+          <Image
+            src={item.images[1]}
+            alt={`${item.name} alternate view`}
+            fill
+            quality={90}
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 40vw, 280px"
+            className="object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              if (item.images[0] && target.src !== item.images[0]) {
+                target.src = item.images[0];
+              }
+            }}
+          />
+        )}
       </div>
 
       {/* name */}

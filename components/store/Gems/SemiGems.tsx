@@ -261,13 +261,22 @@ export default function SemiGems() {
                 <div className="box">
                   <div className="imgBox">
                     <Image
-                      src={gem.imgSrc}
+                      src={gem.imgSrc || "/Gems/center.webp"}
                       alt={gem.name}
                       fill
                       style={{ objectFit: 'cover' }}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      quality={100}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      quality={90}
                       priority={i < 3}
+                      loading={i < 3 ? "eager" : "lazy"}
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (target.src !== "/Gems/center.webp") {
+                          target.src = "/Gems/center.webp";
+                        }
+                      }}
                     />
                   </div>
                   <div className="icon">

@@ -49,9 +49,17 @@ export default function MakingPerfume() {
               alt="Perfumer at work"
               width={960}
               height={1200}
-              sizes="(max-width: 768px) 90vw, 40vw"
+              quality={90}
+              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 80vw, 40vw"
               className="h-auto w-full object-contain"
               priority
+              loading="eager"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = "none";
+              }}
             />
           </motion.div>
 
@@ -100,9 +108,17 @@ export default function MakingPerfume() {
               alt="Choose your perfume"
               width={960}
               height={1200}
-              sizes="(max-width: 768px) 90vw, 40vw"
+              quality={90}
+              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 80vw, 40vw"
               className="h-auto w-full object-contain"
               loading="lazy"
+              priority={false}
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = "none";
+              }}
             />
           </motion.div>
         </div>
@@ -120,9 +136,17 @@ export default function MakingPerfume() {
           alt=""
           width={1200}
           height={1500}
+          quality={85}
           sizes="(max-width: 640px) 80vw, (max-width: 1024px) 60vw, 44vw"
           className="w-[56vw] max-w-[880px] h-auto"
-          priority
+          priority={false}
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+          }}
         />
       </motion.div>
 
@@ -137,9 +161,17 @@ export default function MakingPerfume() {
           alt=""
           width={1200}
           height={1500}
+          quality={85}
           sizes="(max-width: 640px) 80vw, (max-width: 1024px) 60vw, 44vw"
           className="w-[52vw] max-w-[820px] h-auto"
           loading="lazy"
+          priority={false}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+          }}
         />
       </motion.div>
 
@@ -153,9 +185,17 @@ export default function MakingPerfume() {
           alt=""
           width={1050}
           height={1350}
-          sizes="(max-width: 1024px) 58vw, 40vw"
+          quality={85}
+          sizes="(max-width: 640px) 58vw, (max-width: 1024px) 58vw, 40vw"
           className="w-[40vw] max-w-[680px] h-auto"
           loading="lazy"
+          priority={false}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+          }}
         />
       </motion.div>
 
@@ -169,9 +209,17 @@ export default function MakingPerfume() {
           alt=""
           width={900}
           height={1200}
-          sizes="(max-width: 1280px) 42vw, 32vw"
+          quality={85}
+          sizes="(max-width: 640px) 42vw, (max-width: 1280px) 42vw, 32vw"
           className="w-[32vw] max-w-[520px] h-auto"
           loading="lazy"
+          priority={false}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+          }}
         />
       </motion.div>
     </section>

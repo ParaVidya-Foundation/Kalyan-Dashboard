@@ -2,7 +2,6 @@
 
 import React, { memo } from "react";
 import Image from "next/image";
-import Head from "next/head";
 
 const CustomRing: React.FC = () => {
   const webps = [
@@ -19,33 +18,26 @@ const CustomRing: React.FC = () => {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Custom Rings | AstroPathshala - Exquisite Gems</title>
-        <meta
-          name="description"
-          content="Craft your own exquisite gemstone ring with AstroPathshala. Explore our custom ring designs featuring elegant gems for astrology and beauty."
-        />
-        <meta
-          name="keywords"
-          content="AstroPathshala custom rings, exquisite gems, gemstone rings, astrology jewelry, elegant designs"
-        />
-        <link rel="canonical" href="https://astropathshala.com/gemstones" />
-      </Head>
-
-      <div className="container">
+    <div className="container">
         {webps.map((webp, index) => (
           <div key={index} className={`gemImage ${webp.className}`}>
             <Image
-              src={webp.src}
+              src={webp.src || "/Gems/center.webp"}
               alt={webp.alt}
               fill
               className="gifImg"
-              loading="eager"
-              decoding="sync"
-              quality={100}
-              priority={true}
-              sizes="100vw"
+              loading="lazy"
+              quality={85}
+              priority={false}
+              sizes="180px"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (target.src !== "/Gems/center.webp") {
+                  target.src = "/Gems/center.webp";
+                }
+              }}
             />
           </div>
         ))}
@@ -64,7 +56,7 @@ const CustomRing: React.FC = () => {
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            background: radial-gradient(circle at center, #fff8e1 0%, #fefef0 100%);
+            background: #FFFAE6;
             will-change: transform, opacity;
             transform: translateZ(0);
             backface-visibility: hidden;
@@ -230,8 +222,7 @@ const CustomRing: React.FC = () => {
             }
           }
         `}</style>
-      </div>
-    </>
+    </div>
   );
 };
 

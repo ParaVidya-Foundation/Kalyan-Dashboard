@@ -4,7 +4,7 @@ import AccessoriesBestSeller from "@/components/store/Accessories/BestSeller";
 import AccessoriesIdols from "@/components/store/Accessories/Idols";
 import AccessoriesPoojaKit from "@/components/store/Accessories/PoojaKit";
 import AccessoriesRashi from "@/components/store/Accessories/Rashi";
-
+import BentoGrid from "@/components/ui/bits/MagicBento";
 // Gems images as placeholders
 const gemsImages = [
   "/Gems/Blue-Sapphire.webp",
@@ -22,6 +22,16 @@ const gemsImages = [
 ];
 
 export default function AccessoriesPage() {
+  const myItems = [
+    { id: "a", title: "Cosmic Mandala Collection", link: "/store/poster/Product?id=1", imageUrl: "/Poster/Bento/1.webp" },
+    { id: "b", title: "Vedic Astrology Charts", link: "/store/poster/Product?id=2", imageUrl: "/Poster/Bento/2.webp" },
+    { id: "c", title: "Planetary Alignment", link: "/store/poster/Product?id=3", imageUrl: "/Poster/Bento/3.webp" },
+    { id: "d", title: "Sacred Geometry", link: "/store/poster/Product?id=4", imageUrl: "/Poster/Bento/4.webp" },
+    { id: "e", title: "Zodiac Constellations", link: "/store/poster/Product?id=5", imageUrl: "/Poster/Bento/5.webp" },
+    { id: "f", title: "Spiritual Symbols", link: "/store/poster/Product?id=6", imageUrl: "/Poster/Bento/6.webp" },
+    { id: "g", title: "Mantra Art Collection", link: "/store/poster/Product?id=7", imageUrl: "/Poster/Bento/7.webp" },
+    { id: "h", title: "Chakra Energy Maps", link: "/store/poster/Product?id=8", imageUrl: "/Poster/Bento/8.webp" },
+  ];
   return (
     <div className="space-y-12 py-8">
       <AccessoriesBestSeller 
@@ -48,6 +58,7 @@ export default function AccessoriesPage() {
           { id: 16, title: "Saraswati Idol with Veena", image: gemsImages[3], price: 2100, oldPrice: 3200, href: "/store/accessories/Product?id=16" },
         ]} 
       />
+      <BentoGrid items={myItems} /> 
       <AccessoriesPoojaKit 
         items={[
           { id: 17, title: "Complete Pooja Kit with Brass Items", image: gemsImages[4], price: 899, oldPrice: 1500, href: "/store/accessories/Product?id=17" },

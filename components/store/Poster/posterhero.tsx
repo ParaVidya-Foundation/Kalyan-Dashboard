@@ -43,6 +43,11 @@ export default function PosterHero({
   const [posterIndex, setPosterIndex] = React.useState(0);
   const [bgIndex, setBgIndex] = React.useState(0);
   const [fade, setFade] = React.useState(true);
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -51,18 +56,19 @@ export default function PosterHero({
   const rotateX = useSpring(rx, { stiffness: 100, damping: 18 });
   const rotateY = useSpring(ry, { stiffness: 100, damping: 18 });
 
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     mx.set((e.clientX - rect.left) / rect.width - 0.5);
     my.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
+  }, [mx, my]);
 
-  const onLeave = () => {
+  const onLeave = React.useCallback(() => {
     mx.set(0);
     my.set(0);
-  };
+  }, [mx, my]);
 
   React.useEffect(() => {
+    if (!posters || posters.length === 0) return;
     const slide = setInterval(() => {
       setFade(false);
       setTimeout(() => {
@@ -71,27 +77,55 @@ export default function PosterHero({
       }, 400);
     }, slideIntervalMs);
     return () => clearInterval(slide);
-  }, [posters.length, slideIntervalMs]);
+  }, [posters, slideIntervalMs]);
 
   React.useEffect(() => {
+    if (!bgColors || bgColors.length === 0) return;
     const bg = setInterval(() => {
       setBgIndex((b) => (b + 1) % bgColors.length);
     }, bgChangeIntervalMs);
     return () => clearInterval(bg);
-  }, [bgColors.length, bgChangeIntervalMs]);
+  }, [bgColors, bgChangeIntervalMs]);
 
   const marqueeCopies = Array.from({ length: 2 }, () => marqueeText + " • ");
+
+  const combinedClassName = [
+    "relative h-[100svh] w-full overflow-hidden select-none",
+    "text-black font-[Playfair_Display]",
+    className || "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  // Fallback for SSR
+  if (!isMounted) {
+    return (
+      <section
+        className={combinedClassName}
+        style={{ backgroundColor: bgColors[bgIndex] || bgColors[0] || "#F5C6EC" }}
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative w-[min(42vw,400px)] aspect-[17/22]">
+            <Image
+              src={posters[posterIndex] || posters[0] || "/Poster/Posters/pos1.webp"}
+              alt={`Poster ${posterIndex + 1}`}
+              fill
+              priority
+              sizes="(max-width: 1024px) 80vw, 420px"
+              className="object-cover"
+            />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <motion.section
       aria-label="Poster hero"
-      className={[
-        "relative h-[100svh] w-full overflow-hidden select-none",
-        "text-black font-[Playfair_Display]",
-        className || "",
-      ].join(" ")}
-      style={{ backgroundColor: bgColors[0] }}
-      animate={{ backgroundColor: bgColors[bgIndex] }}
+      className={combinedClassName}
+      style={{ backgroundColor: bgColors[bgIndex] || bgColors[0] || "#F5C6EC" }}
+      animate={{ backgroundColor: bgColors[bgIndex] || bgColors[0] || "#F5C6EC" }}
       transition={{ duration: 1.8, ease: "easeInOut" }}
     >
       {/* Grain Texture */}
@@ -157,12 +191,22 @@ export default function PosterHero({
               className="absolute inset-0"
             >
               <Image
-                src={posters[posterIndex]}
+                src={posters[posterIndex] || posters[0] || "/Poster/Posters/pos1.webp"}
                 alt={`Poster ${posterIndex + 1}`}
                 fill
                 priority
-                sizes="(max-width: 1024px) 80vw, 420px"
+                quality={90}
+                sizes="(max-width: 640px) 80vw, (max-width: 1024px) 60vw, 420px"
                 className="object-cover"
+                loading="eager"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (posters[0] && target.src !== posters[0]) {
+                    target.src = posters[0];
+                  }
+                }}
                 style={{
                   filter:
                     "drop-shadow(0 40px 60px rgba(0,0,0,0.25)) drop-shadow(0 8px 14px rgba(0,0,0,0.18))",

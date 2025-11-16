@@ -202,31 +202,35 @@ export default function Orb({
 
     const mesh = new Mesh(gl, { geometry, program });
 
+    let targetHover = 0;
+    let lastTime: number | null = null;
+    let currentRot = 0;
+    const rotationSpeed = 0.3;
+    let isMounted = true;
+
     function resize() {
-      if (!container) return;
+      if (!isMounted || !container) return;
       const dpr = window.devicePixelRatio || 1;
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      const width = container.clientWidth || 1;
+      const height = container.clientHeight || 1;
       renderer.setSize(width * dpr, height * dpr);
       gl.canvas.style.width = width + 'px';
       gl.canvas.style.height = height + 'px';
-      program.uniforms.iResolution.value.set(gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height);
+      const canvasWidth = gl.canvas.width || 1;
+      const canvasHeight = gl.canvas.height || 1;
+      program.uniforms.iResolution.value.set(canvasWidth, canvasHeight, canvasWidth / canvasHeight);
     }
     window.addEventListener('resize', resize);
     resize();
 
-    let targetHover = 0;
-    let lastTime = 0;
-    let currentRot = 0;
-    const rotationSpeed = 0.3;
-
     const handleMouseMove = (e: MouseEvent) => {
+      if (!isMounted || !container) return;
       const rect = container.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      const width = rect.width;
-      const height = rect.height;
-      const size = Math.min(width, height);
+      const width = rect.width || 1;
+      const height = rect.height || 1;
+      const size = Math.min(width, height) || 1;
       const centerX = width / 2;
       const centerY = height / 2;
       const uvX = ((x - centerX) / size) * 2.0;
@@ -240,6 +244,7 @@ export default function Orb({
     };
 
     const handleMouseLeave = () => {
+      if (!isMounted) return;
       targetHover = 0;
     };
 
@@ -248,8 +253,9 @@ export default function Orb({
 
     let rafId: number;
     const update = (t: number) => {
+      if (!isMounted) return;
       rafId = requestAnimationFrame(update);
-      const dt = (t - lastTime) * 0.001;
+      const dt = lastTime !== null ? (t - lastTime) * 0.001 : 0.016; // Use 16ms if first frame
       lastTime = t;
       program.uniforms.iTime.value = t * 0.001;
       program.uniforms.hue.value = hue;
@@ -268,12 +274,31 @@ export default function Orb({
     rafId = requestAnimationFrame(update);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      isMounted = false;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
       window.removeEventListener('resize', resize);
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      container.removeChild(gl.canvas);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (container) {
+        container.removeEventListener('mousemove', handleMouseMove);
+        container.removeEventListener('mouseleave', handleMouseLeave);
+        // Safely remove canvas if it exists and is still attached
+        if (gl.canvas && gl.canvas.parentNode === container) {
+          try {
+            container.removeChild(gl.canvas);
+          } catch (e) {
+            // Canvas already removed or container detached
+            console.debug('Canvas cleanup:', e);
+          }
+        }
+      }
+      // Safely lose WebGL context
+      try {
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+      } catch (e) {
+        // Context already lost
+        console.debug('WebGL context cleanup:', e);
+      }
     };
   }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
 

@@ -87,12 +87,22 @@ export default function ProductCarousel({
       m.kind === "image" ? (
         <Image
           key={m.src}
-          src={m.src}
+          src={m.src || "/placeholder.png"}
           alt={m.alt || "Product image"}
           fill
+          quality={90}
           priority={priority}
-          sizes="(max-width: 1024px) 100vw, 800px"
+          loading={priority ? "eager" : "lazy"}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 800px"
           className="h-full w-full object-contain md:object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src !== "/placeholder.png") {
+              target.src = "/placeholder.png";
+            }
+          }}
         />
       ) : (
         <video
