@@ -81,7 +81,7 @@ export default function PosterPage() {
       images: [
         "/Poster/Posters/pos5.webp",
         "/Poster/Posters/pos6.webp",
-        "/Poster/Posters/pos7.webp",
+        "/Poster/Posters/pos5.webp",
       ],
     },
     {
@@ -92,8 +92,8 @@ export default function PosterPage() {
       oldPrice: 429,
       images: [
         "/Poster/Posters/pos6.webp",
-        "/Poster/Posters/pos7.webp",
-        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos5.webp",
+        "/Poster/Posters/pos5.webp",
       ],
     },
     {
@@ -103,8 +103,8 @@ export default function PosterPage() {
       price: 289,
       oldPrice: 479,
       images: [
-        "/Poster/Posters/pos7.webp",
-        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos5.webp",
+        "/Poster/Posters/pos5.webp",
         "/Poster/Posters/pos1.webp",
       ],
     },
@@ -115,7 +115,7 @@ export default function PosterPage() {
       price: 319,
       oldPrice: 529,
       images: [
-        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos5.webp",
         "/Poster/Posters/pos1.webp",
         "/Poster/Posters/pos2.webp",
       ],
