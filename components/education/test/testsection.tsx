@@ -114,12 +114,16 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
               {avatarSrcs.map((src, i) => (
                 <div key={i} className="-ml-2 h-9 w-9 rounded-full ring-2 ring-white overflow-hidden">
                   <Image
-                    src={src}
+                    src={src || transparentPng}
                     alt={`Student ${i + 1}`}
                     width={36}
                     height={36}
+                    quality={85}
                     className="object-cover"
-                    unoptimized
+                    priority={false}
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL={transparentPng}
                     onError={() => {
                       setAvatarSrcs((prev) => {
                         const copy = [...prev];
@@ -141,12 +145,16 @@ const TestSection: React.FC<Props> = ({ onSubmitEmail }) => {
         {/* --- Right Image --- */}
         <div className="relative w-full h-[300px] sm:h-[400px] md:h-[450px] animate-float">
           <Image
-            src={heroSrc}
+            src={heroSrc || transparentPng}
             alt="Astrology AI Learning"
             fill
+            quality={90}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 50vw"
             className="object-contain drop-shadow-xl"
             priority
-            unoptimized
+            loading="eager"
+            placeholder="blur"
+            blurDataURL={transparentPng}
             onError={() => setHeroSrc(transparentPng)}
           />
         </div>

@@ -13,14 +13,14 @@ export default function PosterPage() {
   }, []);
 
   const myItems = [
-    { id: "a", title: "Cosmic Mandala Collection", link: "/store/poster/Product?id=1", imageUrl: "/Poster/Posters/pos1.webp" },
-    { id: "b", title: "Vedic Astrology Charts", link: "/store/poster/Product?id=2", imageUrl: "/Poster/Posters/pos2.webp" },
-    { id: "c", title: "Planetary Alignment", link: "/store/poster/Product?id=3", imageUrl: "/Poster/Posters/pos3.webp" },
-    { id: "d", title: "Sacred Geometry", link: "/store/poster/Product?id=4", imageUrl: "/Poster/Posters/pos4.webp" },
-    { id: "e", title: "Zodiac Constellations", link: "/store/poster/Product?id=5", imageUrl: "/Poster/Posters/pos5.webp" },
-    { id: "f", title: "Spiritual Symbols", link: "/store/poster/Product?id=6", imageUrl: "/Poster/Posters/pos6.webp" },
-    { id: "g", title: "Mantra Art Collection", link: "/store/poster/Product?id=7", imageUrl: "/Poster/Posters/pos7.webp" },
-    { id: "h", title: "Chakra Energy Maps", link: "/store/poster/Product?id=8", imageUrl: "/Poster/Posters/pos8.webp" },
+    { id: "a", title: "Cosmic Mandala Collection", link: "/store/poster/Product?id=1", imageUrl: "/Poster/Bento/1.webp" },
+    { id: "b", title: "Vedic Astrology Charts", link: "/store/poster/Product?id=2", imageUrl: "/Poster/Bento/2.webp" },
+    { id: "c", title: "Planetary Alignment", link: "/store/poster/Product?id=3", imageUrl: "/Poster/Bento/3.webp" },
+    { id: "d", title: "Sacred Geometry", link: "/store/poster/Product?id=4", imageUrl: "/Poster/Bento/4.webp" },
+    { id: "e", title: "Zodiac Constellations", link: "/store/poster/Product?id=5", imageUrl: "/Poster/Bento/5.webp" },
+    { id: "f", title: "Spiritual Symbols", link: "/store/poster/Product?id=6", imageUrl: "/Poster/Bento/6.webp" },
+    { id: "g", title: "Mantra Art Collection", link: "/store/poster/Product?id=7", imageUrl: "/Poster/Bento/7.webp" },
+    { id: "h", title: "Chakra Energy Maps", link: "/store/poster/Product?id=8", imageUrl: "/Poster/Bento/8.webp" },
   ];
 
   const Collection_Poster = [
@@ -81,7 +81,7 @@ export default function PosterPage() {
       images: [
         "/Poster/Posters/pos5.webp",
         "/Poster/Posters/pos6.webp",
-        "/Poster/Posters/pos7.webp",
+        "/Poster/Posters/pos5.webp",
       ],
     },
     {
@@ -92,8 +92,8 @@ export default function PosterPage() {
       oldPrice: 429,
       images: [
         "/Poster/Posters/pos6.webp",
-        "/Poster/Posters/pos7.webp",
-        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos5.webp",
+        "/Poster/Posters/pos5.webp",
       ],
     },
     {
@@ -103,8 +103,8 @@ export default function PosterPage() {
       price: 289,
       oldPrice: 479,
       images: [
-        "/Poster/Posters/pos7.webp",
-        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos5.webp",
+        "/Poster/Posters/pos5.webp",
         "/Poster/Posters/pos1.webp",
       ],
     },
@@ -115,7 +115,7 @@ export default function PosterPage() {
       price: 319,
       oldPrice: 529,
       images: [
-        "/Poster/Posters/pos8.webp",
+        "/Poster/Posters/pos5.webp",
         "/Poster/Posters/pos1.webp",
         "/Poster/Posters/pos2.webp",
       ],
@@ -173,7 +173,7 @@ export default function PosterPage() {
     <>
       <PosterHero posters={["/Poster/Posters/pos1.webp", "/Poster/Posters/pos2.webp", "/Poster/Posters/pos3.webp", "/Poster/Posters/pos4.webp", "/Poster/Posters/pos5.webp","/Poster/Posters/pos6.webp"]} marqueeText="Posters" />
       
-      <div className="py-12 bg-white">
+      <div className="py-12">
         <div className="max-w-7xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-900">Collection Posters</h1>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">

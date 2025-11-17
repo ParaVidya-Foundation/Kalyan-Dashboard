@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface Poster {
   id: number;
@@ -19,13 +20,12 @@ interface PosterGridProps {
 
 export default function PosterGrid({ posters }: PosterGridProps) {
   return (
-    <section className="w-full py-20 bg-[#f9f9f9]">
+    <section className="w-full py-24">
       <div
         className="
-          max-w-7xl mx-auto 
-          grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
-          lg:grid-cols-4 xl:grid-cols-5 
-          gap-10 px-6
+          max-w-[1800px] mx-auto
+          grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3
+          gap-14 px-6
         "
       >
         {posters.map((poster) => (
@@ -40,7 +40,6 @@ function PosterCard({ poster }: { poster: Poster }) {
   const [hover, setHover] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
 
-  /* Smooth image cycling on hover */
   useEffect(() => {
     if (!hover) return;
     const interval = setInterval(() => {
@@ -50,91 +49,112 @@ function PosterCard({ poster }: { poster: Poster }) {
   }, [hover, poster.images.length]);
 
   return (
-    <Link
-      href={`/store/poster/Product?id=${poster.id}`}
-      className="
-        group relative bg-white rounded-xl cursor-pointer block
-        overflow-hidden
-        shadow-[0_4px_18px_rgba(0,0,0,0.06)]
-        hover:shadow-[0_10px_32px_rgba(0,0,0,0.12)]
-        transition-all duration-500 ease-out will-change-transform
-      "
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => {
-        setHover(false);
-        setImgIndex(0);
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      {/* Image Block */}
-      <div className="relative w-full h-[360px] overflow-hidden">
-        <Image
-          src={poster.images[imgIndex]}
-          alt={poster.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 320px"
-          className="
-            object-cover 
-            transition-transform duration-[900ms] 
-            group-hover:scale-[1.07]
-          "
-        />
-
-        {/* Sale Badge (Minimal + Classy) */}
-        {poster.oldPrice && (
-          <span
-            className="
-              absolute top-3 left-3 
-              px-3 py-1 rounded-full 
-              bg-black/85 text-white text-[11px] font-medium
-              tracking-wide 
-              backdrop-blur-sm
-              opacity-90 group-hover:opacity-100 
-              transition-all duration-300
-            "
-          >
-            SALE
-          </span>
-        )}
-      </div>
-
-      {/* Text Block */}
-      <div className="p-4 text-center">
-        <h3
-          className="
-            text-gray-900 text-sm font-semibold 
-            tracking-wide mb-1 leading-tight
-          "
-        >
-          {poster.title}
-        </h3>
-
-        <p className="text-gray-500 text-[11px] uppercase mb-3 tracking-widest">
-          {poster.category}
-        </p>
-
-        {/* Price Section */}
-        <div className="flex items-center justify-center gap-2">
-          {poster.oldPrice && (
-            <span className="text-gray-400 line-through text-sm">
-              ₹{poster.oldPrice}
-            </span>
-          )}
-
-          <span className="text-gray-900 font-semibold text-base">
-            From ₹{poster.price}
-          </span>
-        </div>
-      </div>
-
-      {/* Hover float effect */}
-      <div
+      <Link
+        href={`/store/poster/Product?id=${poster.id}`}
         className="
-          absolute inset-0 
-          rounded-xl pointer-events-none
-          transition-all duration-500
-          group-hover:-translate-y-[4px] 
+          group relative block w-full
+          overflow-hidden rounded-xl
+          bg-gradient-to-br from-white/10 to-white/5
+          backdrop-blur-md
+          border border-white/20
+          hover:border-white/30
+          transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
         "
-      />
-    </Link>
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => {
+          setHover(false);
+          setImgIndex(0);
+        }}
+      >
+        {/* Maintain 2550x3300 ratio */}
+        <div
+          className="relative w-full rounded-xl overflow-hidden"
+          style={{ aspectRatio: "2550 / 3300" }}
+        >
+          {/* Poster Image */}
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              scale: hover ? 1.06 : 1,
+              y: hover ? -6 : 0,
+            }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <Image
+              src={poster.images[imgIndex] || poster.images[0] || "/Poster/Posters/pos1.webp"}
+              alt={poster.title}
+              fill
+              quality={90}
+              priority={false}
+              loading="lazy"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 450px"
+              className="object-cover object-center"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (target.src !== poster.images[0] && poster.images[0]) {
+                  target.src = poster.images[0];
+                }
+              }}
+            />
+          </motion.div>
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-black/75 via-black/30 to-transparent transition-all duration-500" />
+
+          {/* Glass Info Block */}
+          <motion.div
+            className="
+              absolute bottom-8 left-1/2 -translate-x-1/2
+              w-[90%] sm:w-[85%]
+              rounded-2xl px-8 py-6
+              bg-white/15 backdrop-blur-md border border-white/20
+              text-white text-center
+              transition-all duration-500 group-hover:bg-white/25
+              font-sans
+            "
+            animate={{ y: hover ? -10 : 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <h3 className="text-2xl font-semibold tracking-wide leading-snug mb-2 drop-shadow-md">
+              {poster.title}
+            </h3>
+
+            <p className="text-[14px] uppercase tracking-[0.15em] text-white/80 mb-3 font-light">
+              {poster.category}
+            </p>
+
+            <div className="flex items-center justify-center gap-3">
+              {poster.oldPrice && (
+                <span className="text-white/60 line-through text-base">
+                  ₹{poster.oldPrice}
+                </span>
+              )}
+              <span className="text-yellow-400 font-semibold text-xl">
+                ₹{poster.price}
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Ambient Glow */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            animate={{
+              background: hover
+                ? "radial-gradient(circle at 50% 85%, rgba(255,230,150,0.15), transparent 70%)"
+                : "transparent",
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+        </div>
+      </Link>
+    </motion.div>
   );
 }

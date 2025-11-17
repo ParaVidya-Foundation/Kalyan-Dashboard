@@ -1,4 +1,4 @@
-import Image from "next/image"
+import OptimizedImage from "@/components/common/OptimizedImage"
 
 export interface Product {
 	id: string
@@ -11,7 +11,17 @@ export default function ProductCard({ product }: { product: Product }) {
 	return (
 		<div className="rounded-xl border bg-white p-4 shadow-sm">
 			<div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
-				<Image src={product.image} alt={product.title} fill className="object-cover" />
+				<OptimizedImage
+					src={product.image}
+					alt={product.title}
+					fill
+					quality={90}
+					sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+					objectFit="cover"
+					priority={false}
+					loading="lazy"
+					className="rounded-lg"
+				/>
 			</div>
 			<h3 className="mt-3 text-sm font-medium text-gray-900">{product.title}</h3>
 			<p className="text-sm text-gray-600">₹ {product.price.toFixed(2)}</p>

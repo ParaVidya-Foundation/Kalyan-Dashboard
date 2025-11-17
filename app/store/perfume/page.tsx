@@ -8,28 +8,27 @@ import Image from "next/image";
 
 export default function PerfumePage() {
   return (
-    // Set header/hero heights once here
     <div
-      className="relative w-full overflow-hidden"
+      className="relative w-full overflow-visible"
       style={
         {
-          // adjust as needed
           ["--header-h" as any]: "30px",
           ["--hero-h" as any]: "110vh",
         } as React.CSSProperties
       }
     >
-      {/* Site-wide animated gradient (unchanged, bottom-most layer) */}
+      {/* ====================== GLOBAL BACKGROUND ====================== */}
       <div className="absolute inset-0 -z-10">
         <MovingGradient />
       </div>
 
-      {/* HERO — sits directly under header, full viewport height, no overlap */}
+      {/* =========================== HERO ============================= */}
       <section
         className="relative z-0 w-full pointer-events-none"
         style={{ marginTop: "var(--header-h)" }}
       >
-        <div className="relative h-[var(--hero-h)] w-full">
+        {/* HERO IMAGE */}
+        <div className="relative h-[var(--hero-h)] w-full overflow-hidden">
           <Image
             src="/Perfume/PERFUME-PLATFORM.png"
             alt="Perfume Hero"
@@ -39,46 +38,48 @@ export default function PerfumePage() {
             className="object-cover object-center"
           />
         </div>
-      </section>
 
-      {/* Cloud-bordered wrapper around MakingPerfume only */}
-      <section className="relative w-full overflow-hidden">
-        {/* Top Cloud Border */}
-        <div className="absolute inset-x-0 top-0 z-[5] h-[180px] w-full pointer-events-none">
-          <div className="relative h-full w-full">
+        {/* ====================== TOP BORDER (FIXED) ====================== */}
+        <div className="absolute left-0 right-0 bottom-[-75px] z-[20] pointer-events-none">
+          <div className="relative w-full h-[230px]">
             <Image
-              src="/Perfume/cloud-border.png"
-              alt="Top Cloud Border"
+              src="/Perfume/Paper-Border.png"
+              alt="Paper Border Over Hero"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-top"
+              className="object-fill w-full h-full"
             />
           </div>
         </div>
+      </section>
 
-        {/* Main Content (above borders) */}
+      {/* ================= CLOUD + MAKING PERFUME =================== */}
+
+      <section className="relative w-full overflow-visible mt-[-10px] pb-[100px]">
+
+        {/* CONTENT BLOCK */}
         <div className="relative z-[10]">
           <MakingPerfume />
         </div>
 
-        {/* Bottom Cloud Border */}
-        <div className="absolute inset-x-0 bottom-0 z-[5] h-[180px] w-full pointer-events-none rotate-180">
-          <div className="relative h-full w-full">
+        {/* ====================== BOTTOM BORDER ====================== */}
+        <div className="absolute inset-x-0 bottom-[-90px] z-[5] pointer-events-none rotate-180">
+          <div className="relative w-full h-[230px]">
             <Image
-              src="/Perfume/cloud-border.png"
-              alt="Bottom Cloud Border"
+              src="/Perfume/Paper-Border.png"
+              alt="Bottom Paper Border"
               fill
               sizes="100vw"
-              className="object-cover object-bottom"
-              loading="lazy"
+              className="object-fill w-full h-full"
             />
           </div>
         </div>
       </section>
 
-      {/* Rest of the content (already below hero, no extra padding needed) */}
-      <main className="relative z-10 flex flex-col items-center justify-center space-y-20 py-20">
+      {/* ======================= REST CONTENT ======================= */}
+
+      <main className="relative z-20 flex flex-col items-center justify-center space-y-20 py-20">
         <PerfumePlanet />
         <PerfumeGrid />
       </main>

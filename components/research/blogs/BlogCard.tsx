@@ -57,13 +57,22 @@ export const BlogCard: React.FC<BlogCardProps> = ({
             transition={{ duration: 0.5 }}
           >
             <Image
-              src={image}
-              alt={imageAlt}
+              src={image || "/placeholder.png"}
+              alt={imageAlt || title}
               fill
+              quality={90}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover rounded-t-2xl"
               loading="lazy"
-              quality={90}
+              priority={false}
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (target.src !== "/placeholder.png") {
+                  target.src = "/placeholder.png";
+                }
+              }}
             />
           </motion.div>
         </Link>

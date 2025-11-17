@@ -56,10 +56,17 @@ export default function Trailback() {
             src="/Poster/Posters/postertext.png"
             alt="Poster"
             fill
-            quality={100}
+            quality={90}
             priority
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+            loading="eager"
+            sizes="(max-width: 640px) 100vw, (max-width: 1200px) 80vw, 70vw"
             className="object-cover"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = "none";
+            }}
           />
         </div>
       </div>

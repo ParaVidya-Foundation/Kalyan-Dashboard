@@ -22,13 +22,44 @@ export default function NotFound() {
         aria-hidden
       />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.08] mix-blend-screen">
-        <Image src="/gridbg.png" alt="background grid" fill sizes="100vw" className="object-cover" />
+        <Image
+          src="/gridbg.png"
+          alt="background grid"
+          fill
+          quality={85}
+          sizes="100vw"
+          priority={false}
+          loading="lazy"
+          className="object-cover"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYjBkMTIiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+          }}
+        />
       </div>
 
       <section aria-label="Page not found" className="relative mx-auto flex max-w-7xl flex-col items-center px-6 py-20 sm:py-28 md:py-32">
         {/* Logo */}
         <Link href="/" className="mb-10 inline-flex items-center gap-3 opacity-90 hover:opacity-100">
-          <Image src="/Logo/Logo.svg" alt="Kalyan Logo" width={40} height={40} />
+          <Image
+            src="/Logo/Logo.svg"
+            alt="Kalyan Logo"
+            width={40}
+            height={40}
+            quality={90}
+            priority
+            loading="eager"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              if (target.src !== "/Logo/Logo.png") {
+                target.src = "/Logo/Logo.png";
+              }
+            }}
+          />
           <span className="hidden sm:block text-base font-semibold tracking-wide text-white/90">Kalyan</span>
         </Link>
 

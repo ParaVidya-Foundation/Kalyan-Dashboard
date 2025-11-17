@@ -52,12 +52,22 @@ export default function Confused({
       {/* Background image (cover) */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src={imageSrc}
+          src={imageSrc || "/placeholder.png"}
           alt={title}
           fill
-          sizes="(max-width: 1024px) 100vw, 1600px"
+          quality={85}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1600px"
           priority={false}
+          loading="lazy"
           className="object-cover object-right"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src !== "/placeholder.png") {
+              target.src = "/placeholder.png";
+            }
+          }}
         />
       </div>
 

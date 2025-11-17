@@ -91,8 +91,18 @@ export function Footer() {
                     alt="Kalyan Logo"
                     width={32}
                     height={32}
-                    className="object-contain"
+                    quality={90}
                     priority
+                    loading="eager"
+                    className="object-contain"
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (target.src !== "/Logo/Logo.png") {
+                        target.src = "/Logo/Logo.png";
+                      }
+                    }}
                   />
                 </div>
               
