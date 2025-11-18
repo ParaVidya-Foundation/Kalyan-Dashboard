@@ -11,7 +11,8 @@ export interface AIBlogCardProps {
   title: string;
   image: string;
   imageAlt: string;
-  href: string;
+  href?: string;
+  excerpt?: React.ReactNode;
   category?: string;
   date?: string | Date;
 }
@@ -23,6 +24,7 @@ export default function AIBlogCard({
   href,
   category = "Insights",
   date = new Date(),
+  excerpt,
 }: AIBlogCardProps) {
   const formattedDate =
     typeof date === "string" ? date : format(new Date(date), "d MMM yyyy");
@@ -43,7 +45,7 @@ export default function AIBlogCard({
     >
         {/* Image Section */}
         <Link
-          href={href}
+          href={href || "/research/blogs/BlogPage"}
           className="block relative w-full aspect-square overflow-hidden rounded-3xl"
           aria-label={`Read ${title}`}
         >
@@ -79,7 +81,7 @@ export default function AIBlogCard({
 
           <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 leading-tight tracking-tight group-hover:text-gray-700 transition-colors">
             <Link
-              href={href}
+              href={href || "/research/blogs/BlogPage"}
               className="hover:underline underline-offset-[6px] decoration-gray-300"
             >
               {title}
@@ -96,6 +98,12 @@ export default function AIBlogCard({
           >
             {formattedDate}
           </time>
+
+          {excerpt && (
+            <p className="mt-4 text-sm text-gray-600 leading-relaxed">
+              {excerpt}
+            </p>
+          )}
         </div>
 
         {/* Soft rotating glow behind */}

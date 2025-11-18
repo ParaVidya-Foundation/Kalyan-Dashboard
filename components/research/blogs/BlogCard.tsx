@@ -12,10 +12,10 @@ export interface BlogCardProps {
   image: string;
   imageAlt: string;
   date: Date | string;
-  slug: string;
   excerpt?: string;
   author?: string;
   category?: string;
+  href?: string;
 }
 
 export const BlogCard: React.FC<BlogCardProps> = ({
@@ -24,14 +24,14 @@ export const BlogCard: React.FC<BlogCardProps> = ({
   image,
   imageAlt,
   date,
-  slug,
   excerpt,
   author,
   category,
+  href,
 }) => {
   const formattedDate =
     typeof date === "string" ? date : format(new Date(date), "d MMM yyyy");
-  const blogUrl = `/research/blogs/${slug}`;
+  const blogUrl = href || `/research/blogs/${id || "BlogPage"}`;
 
   return (
     <motion.article
