@@ -36,7 +36,7 @@ export default function MakingPerfume() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-visible py-28 md:py-36"
+      className="relative bg-pink-300/40 backdrop-blur-xl w-full overflow-visible py-28 md:py-36"
     >
       {/* ========================= CONTENT ========================= */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 grid gap-14 md:gap-20">

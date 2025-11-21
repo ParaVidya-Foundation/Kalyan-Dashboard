@@ -149,9 +149,11 @@ export function HoverEffect({
 function AnimatedCard({ item, active }: { item: Item; active: boolean }) {
   const { title, description, href, Icon } = item;
 
+  const safeHref = href && typeof href === "string" && href.trim().length > 0 ? href.trim() : "#";
+
   return (
     <Link
-      href={href}
+      href={safeHref}
       aria-label={`${title}: ${description}`}
       className="group relative block p-2 h-full"
     >

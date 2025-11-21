@@ -1,6 +1,7 @@
 "use client";
 
 import AccessoriesBestSeller from "@/components/store/Accessories/BestSeller";
+import CarouselBuy from "@/components/store/Accessories/CarouselBuy";
 import AccessoriesIdols from "@/components/store/Accessories/Idols";
 import AccessoriesPoojaKit from "@/components/store/Accessories/PoojaKit";
 import AccessoriesRashi from "@/components/store/Accessories/Rashi";
@@ -45,6 +46,15 @@ export default function AccessoriesPage() {
           { id: 7, title: "Black Tourmaline Bracelet (Kumbh Rashi) Aquarius", image: gemsImages[6], price: 1111, oldPrice: 1999, href: "/store/accessories/Product?id=7" },
           { id: 8, title: "Raw Pyrite Bracelet | For Wealth, Confidence & Protection", image: gemsImages[7], price: 690, oldPrice: 1499, href: "/store/accessories/Product?id=8" },
         ]} 
+      />
+      <CarouselBuy
+        slides={[
+          { image: gemsImages[0], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=1" },
+          { image: gemsImages[1], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=2" },
+          { image: gemsImages[2], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=3" },
+          { image: gemsImages[3], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=4" },
+          { image: gemsImages[4], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=5" },
+        ]}
       />
       <AccessoriesIdols 
         items={[

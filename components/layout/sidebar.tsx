@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   Search,
   Home,
@@ -227,50 +228,65 @@ export default function Sidebar({ className }: { className?: string }) {
         </button>
       )}
 
-      <aside
+      <motion.aside
+        initial={false}
+        animate={{
+          width: collapsed && !isMobile ? 80 : 288,
+        }}
+        transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
         className={clsx(
-          "fixed top-0 left-0 z-40 flex flex-col h-screen transition-all duration-300",
-          collapsed && !isMobile ? "w-20" : "w-72",
-          "bg-white border-r border-gray-200 dark:bg-neutral-900 dark:border-neutral-800 shadow-sm",
+          "fixed top-0 left-0 z-40 flex flex-col h-screen",
+          "bg-white/95 backdrop-blur-xl border-r border-gray-100/80",
+          "shadow-[0_0_24px_rgba(255,244,194,0.08)]",
           isMobile && !mobileOpen && "-translate-x-full",
           className
         )}
       >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 dark:border-neutral-800">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100/60">
         <div className={clsx("flex items-center", collapsed && "justify-center w-full")}>
           {!collapsed ? (
             <Link href="/" className="flex items-center gap-2">
-              <div className="h-9 w-9 bg-gradient-to-br from-orange-500 to-red-600 rounded-md flex items-center justify-center text-white font-semibold">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="h-9 w-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center text-white font-semibold shadow-[0_4px_12px_rgba(255,244,194,0.4)]"
+              >
                 K
-              </div>
-              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              </motion.div>
+              <span className="text-lg font-semibold text-gray-900 tracking-tight">
                 Kalyan
               </span>
             </Link>
           ) : (
-            <div className="h-9 w-9 bg-gradient-to-br from-orange-500 to-red-600 rounded-md flex items-center justify-center text-white font-semibold">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="h-9 w-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center text-white font-semibold shadow-[0_4px_12px_rgba(255,244,194,0.4)]"
+            >
               K
-            </div>
+            </motion.div>
           )}
         </div>
         {!isMobile && (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={toggleSidebar}
-            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+            className="p-1.5 rounded-lg hover:bg-gray-100/80 transition-colors"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? (
-              <ChevronRight className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <ChevronRight className="h-5 w-5 text-gray-600" />
             ) : (
-              <ChevronLeft className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <ChevronLeft className="h-5 w-5 text-gray-600" />
             )}
-          </button>
+          </motion.button>
         )}
       </div>
 
       {/* Search */}
-      <div className="px-4 py-3 border-b border-gray-100 dark:border-neutral-800">
+      <div className="px-4 py-3 border-b border-gray-100/60">
         <form onSubmit={handleSearchSubmit} className="relative">
           {!collapsed && (
             <input
@@ -278,13 +294,13 @@ export default function Sidebar({ className }: { className?: string }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search..."
-              className="w-full rounded-md border border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-orange-300 focus:outline-none"
+              className="w-full rounded-lg border border-gray-200/60 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-300/50 focus:outline-none transition-all"
             />
           )}
           <Search
             onClick={() => !collapsed && handleSearchSubmit()}
             className={clsx(
-              "absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500",
+              "absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400",
               collapsed && "left-1/2 -translate-x-1/2"
             )}
             size={18}
@@ -311,21 +327,26 @@ export default function Sidebar({ className }: { className?: string }) {
                   const targetHref = linkItem.href || item.href || "#";
                   const isActive = pathname === targetHref;
                   return (
-                    <Link
+                    <motion.div
                       key={`${item.name}-${linkItem.name || targetHref}`}
-                      href={targetHref}
-                      className={clsx(
-                        "flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-all",
-                        isActive
-                          ? "bg-orange-100 text-orange-700 font-medium"
-                          : "text-gray-700 hover:bg-gray-50 dark:hover:bg-neutral-800",
-                        collapsed && "justify-center"
-                      )}
-                      aria-current={isActive ? "page" : undefined}
+                      whileHover={{ x: 2 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      {Icon && <Icon className="h-4 w-4" />}
-                      {!collapsed && (linkItem.name || item.name)}
-                    </Link>
+                      <Link
+                        href={targetHref}
+                        className={clsx(
+                          "flex items-center gap-3 px-2 py-2 rounded-lg text-sm transition-all",
+                          isActive
+                            ? "bg-yellow-50/80 text-gray-900 font-medium shadow-[0_2px_8px_rgba(255,244,194,0.3)] border border-yellow-200/40"
+                            : "text-gray-700 hover:bg-gray-50/80",
+                          collapsed && "justify-center"
+                        )}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {Icon && <Icon className="h-4 w-4" />}
+                        {!collapsed && (linkItem.name || item.name)}
+                      </Link>
+                    </motion.div>
                   );
                 });
               })}
@@ -335,17 +356,18 @@ export default function Sidebar({ className }: { className?: string }) {
       </nav>
 
       {/* Footer */}
-      <div className="p-3 border-t border-gray-100 dark:border-neutral-800 space-y-2">
-
-        <button
+      <div className="p-3 border-t border-gray-100/60 space-y-2">
+        <motion.button
+          whileHover={{ x: 2 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => router.push("/login")}
-          className="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800 transition w-full text-sm text-gray-700 dark:text-gray-200"
+          className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-gray-100/80 transition-colors w-full text-sm text-gray-700"
         >
           <LogOut className="h-4 w-4" />
           {!collapsed && "Logout"}
-        </button>
+        </motion.button>
       </div>
-    </aside>
+    </motion.aside>
     </>
   );
 }

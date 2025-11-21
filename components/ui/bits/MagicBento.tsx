@@ -237,7 +237,7 @@ export default function BentoGrid({
           {/* 1 */}
           {first && (
             <Link
-              href={first.link}
+              href={first.link || "#"}
               aria-label={first.title}
               className="relative col-span-2 md:col-span-4 lg:col-span-6 row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -265,7 +265,7 @@ export default function BentoGrid({
           {/* 2 */}
           {second && (
             <Link
-              href={second.link}
+              href={second.link || "#"}
               aria-label={second.title}
               className="relative col-span-2 md:col-span-2 lg:col-span-3 row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -293,7 +293,7 @@ export default function BentoGrid({
           {/* 3 */}
           {third && (
             <Link
-              href={third.link}
+              href={third.link || "#"}
               aria-label={third.title}
               className="relative col-span-2 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -321,7 +321,7 @@ export default function BentoGrid({
           {/* 4 */}
           {fourth && (
             <Link
-              href={fourth.link}
+              href={fourth.link || "#"}
               aria-label={fourth.title}
               className="relative col-span-2 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -349,7 +349,7 @@ export default function BentoGrid({
           {/* 5 */}
           {fifth && (
             <Link
-              href={fifth.link}
+              href={fifth.link || "#"}
               aria-label={fifth.title}
               className="relative col-span-2 md:col-span-6 lg:col-span-6 row-span-1 lg:row-span-2 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -377,7 +377,7 @@ export default function BentoGrid({
           {/* 6 */}
           {sixth && (
             <Link
-              href={sixth.link}
+              href={sixth.link || "#"}
               aria-label={sixth.title}
               className="relative col-span-1 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -405,7 +405,7 @@ export default function BentoGrid({
           {/* 7 */}
           {seventh && (
             <Link
-              href={seventh.link}
+              href={seventh.link || "#"}
               aria-label={seventh.title}
               className="relative col-span-1 md:col-span-3 lg:col-span-3 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
@@ -433,7 +433,7 @@ export default function BentoGrid({
           {/* 8 */}
           {eighth && (
             <Link
-              href={eighth.link}
+              href={eighth.link || "#"}
               aria-label={eighth.title}
               className="relative col-span-2 md:col-span-6 lg:col-span-6 row-span-1 rounded-3xl lg:rounded-[2rem] overflow-hidden shadow-md"
             >
