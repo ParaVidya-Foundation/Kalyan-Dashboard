@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
 import {
   Facebook,
   Twitter,
@@ -49,22 +50,122 @@ const itemVariants = {
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const footerRef = useRef<HTMLElement | null>(null);
+
+  // Cursor tracking with GPU-accelerated transforms
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth spring animations for cursor following
+  const springConfig = { damping: 50, stiffness: 100 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
+
+  // Offset the gradient so it centers nicely under cursor; tune as needed
+  const gradientX = useTransform(cursorX, (x) => x - 400);
+  const gradientY = useTransform(cursorY, (y) => y - 400);
+
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+
+    // unify mouse / pointer events
+    const handleMove = (e: MouseEvent | PointerEvent) => {
+      const rect = footer.getBoundingClientRect();
+
+      // support PointerEvent and MouseEvent
+      const clientX = "clientX" in e ? e.clientX : (e as any).pageX;
+      const clientY = "clientY" in e ? e.clientY : (e as any).pageY;
+
+      // compute coordinates relative to footer
+      mouseX.set(clientX - rect.left);
+      mouseY.set(clientY - rect.top);
+    };
+
+    const handleLeave = () => {
+      // gently move gradient off-center when pointer leaves
+      // using springs keeps this smooth and GPU-friendly
+      mouseX.set(-200);
+      mouseY.set(-200);
+    };
+
+    // Use pointermove to cover touch and pen devices; fall back to mousemove for older browsers
+    footer.addEventListener("pointermove", handleMove, { passive: true });
+    footer.addEventListener("mousemove", handleMove, { passive: true });
+    footer.addEventListener("pointerleave", handleLeave, { passive: true });
+    footer.addEventListener("mouseleave", handleLeave, { passive: true });
+
+    return () => {
+      footer.removeEventListener("pointermove", handleMove as EventListener);
+      footer.removeEventListener("mousemove", handleMove as EventListener);
+      footer.removeEventListener("pointerleave", handleLeave as EventListener);
+      footer.removeEventListener("mouseleave", handleLeave as EventListener);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <footer className={`${GeistSans.className} relative bg-white border-t border-gray-100 overflow-hidden`}>
-      {/* Techy ambient background */}
+    <footer
+      ref={footerRef}
+      className={`${GeistSans.className} relative bg-white border-t border-gray-100 overflow-hidden`}
+    >
+      {/* Ambient background (pointer-events-none to keep it additive) */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-yellow-50/40 via-transparent to-white" />
-        {/* soft orbs */}
+
+        {/* Moving animated background gradient - GPU-accelerated with transform */}
+        <motion.div
+          className="absolute inset-0 overflow-hidden"
+          style={{ willChange: "transform", transform: "translate3d(0,0,0)" }}
+        >
+          <motion.div
+            className="absolute inset-0 opacity-30"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255,244,194,0.4) 0%, rgba(255,244,194,0.1) 25%, rgba(255,244,194,0.3) 50%, rgba(255,244,194,0.1) 75%, rgba(255,244,194,0.4) 100%)",
+              backgroundSize: "200% 200%",
+              width: "200%",
+              height: "200%",
+              willChange: "transform",
+            }}
+            animate={{
+              x: ["0%", "50%", "0%"],
+              y: ["0%", "50%", "0%"],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+        </motion.div>
+
+        {/* Cursor-following radial gradient - GPU-accelerated with transform */}
+        <motion.div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            // radial gradient sized generously; position is controlled via x/y transforms
+            background:
+              "radial-gradient(circle 800px at center, rgba(255,244,194,0.15) 0%, transparent 70%)",
+            willChange: "transform",
+            x: gradientX,
+            y: gradientY,
+            transform: "translate3d(0,0,0)",
+          }}
+        />
+
+        {/* soft orbs for depth (subtle, GPU animations) */}
         <motion.div
           className="absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-yellow-300/20 blur-3xl"
           animate={{ x: [0, 20, -10, 0], opacity: [0.4, 0.7, 0.5, 0.4] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          style={{ willChange: "transform, opacity", transform: "translate3d(0,0,0)" }}
         />
         <motion.div
           className="absolute -top-32 right-0 h-64 w-64 rounded-full bg-yellow-500/15 blur-3xl"
           animate={{ x: [0, -15, 10, 0], opacity: [0.3, 0.6, 0.4, 0.3] }}
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          style={{ willChange: "transform, opacity", transform: "translate3d(0,0,0)" }}
         />
       </div>
 
@@ -105,7 +206,6 @@ export function Footer() {
                     }}
                   />
                 </div>
-              
               </motion.div>
               <span className="text-2xl font-semibold tracking-tight text-gray-900 group-hover:text-[#FFF000] transition-colors duration-300">
                 Kalyan

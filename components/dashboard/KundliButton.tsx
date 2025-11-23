@@ -3,122 +3,61 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { safeHref, cn } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
 
-export interface KundliButtonProps {
-  name: string;
-  href?: string;
-  Icon?: LucideIcon | React.ComponentType<{ className?: string }>;
-  ariaLabel?: string;
-  animated?: boolean;
-  className?: string;
-}
+/* Safe href utility */
+const safeHref = (href?: string): string => {
+  if (href && typeof href === "string" && href.trim().length > 0) {
+    return href.trim();
+  }
+  return "#";
+};
 
-/**
- * KundliButton - A square card button with icon and text.
- * Features yellow theme, hover lift animation, and safe href handling.
- * 
- * @example
- * <KundliButton 
- *   name="D1 Chart" 
- *   href="/charts/d1" 
- *   Icon={Compass} 
- * />
- */
 export default function KundliButton({
   name,
   href,
   Icon,
-  ariaLabel,
-  animated = true,
-  className = "",
-}: KundliButtonProps) {
-  // Guaranteed safe href - always a string, never undefined
-  const normalizedHref = React.useMemo(() => safeHref(href), [href]);
+}: {
+  name: string;
+  href?: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}) {
+  const validHref = safeHref(href);
 
-  // Fallback icon component (neutral placeholder)
-  const FallbackIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg 
-      viewBox="0 0 24 24" 
-      width="32" 
-      height="32" 
-      fill="none" 
-      aria-hidden="true"
-      className={className}
-    >
-      <rect 
-        x="3" 
-        y="3" 
-        width="18" 
-        height="18" 
-        rx="3" 
-        stroke="currentColor" 
-        strokeWidth="1.2" 
-      />
-      <path 
-        d="M7 12h10" 
-        stroke="currentColor" 
-        strokeWidth="1.4" 
-        strokeLinecap="round" 
-      />
-    </svg>
-  );
-
-  // Card content (static, no animation)
-  const cardContent = (
-    <div
-      className={cn(
-        "group cursor-pointer aspect-square rounded-xl",
-        "bg-white/80 backdrop-blur-sm border border-yellow-200/40",
-        "shadow-[0_4px_24px_rgba(255,244,194,0.15)]",
-        "hover:shadow-[0_8px_32px_rgba(255,244,194,0.25)]",
-        "flex flex-col items-center justify-center gap-4 p-6",
-        "transition-all duration-300",
-        className
-      )}
-      role="button"
-      aria-label={ariaLabel ?? name}
-    >
-      {/* Icon container */}
-      <div className="w-8 h-8 text-yellow-500 group-hover:text-yellow-600 transition-colors flex items-center justify-center">
-        {Icon ? (
-          <Icon className="w-8 h-8" />
-        ) : (
-          <FallbackIcon className="w-8 h-8" />
-        )}
-      </div>
-
-      {/* Text label */}
-      <span
-        className="text-sm text-gray-900 tracking-wide font-[family:'Geist_Mono',monospace] text-center"
-      >
-        {name}
-      </span>
-    </div>
-  );
-
-  // Animated wrapper (motion.div inside Link, never animate Link itself)
-  const animatedContent = animated ? (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.25, ease: [0.19, 1, 0.22, 1] }}
-    >
-      {cardContent}
-    </motion.div>
-  ) : (
-    cardContent
-  );
-
-  // Link wrapper - href is guaranteed to be a string
   return (
-    <Link 
-      href={normalizedHref} 
-      className="block"
-      aria-label={ariaLabel ?? `${name} link`}
-    >
-      {animatedContent}
+    <Link href={validHref} className="block w-full h-full" aria-label={name}>
+      <motion.div
+        whileHover={{ scale: 1.05, y: -3 }}
+        whileTap={{ scale: 0.96 }}
+        transition={{ duration: 0.22, ease: [0.19, 1, 0.22, 1] }}
+        className="
+          group relative aspect-square rounded-2xl
+          w-full h-full cursor-pointer
+
+          /* Glass morphism */
+          bg-white/70 backdrop-blur-md
+          border border-yellow-200/50
+          shadow-[0_2px_10px_rgba(255,244,194,0.18)]
+          hover:shadow-[0_6px_24px_rgba(255,244,194,0.30)]
+          hover:bg-white/80
+          transition-all duration-300
+
+          flex flex-col items-center justify-center
+          gap-2 p-3
+        "
+      >
+        <Icon className="w-[20px] h-[20px] text-yellow-600 group-hover:text-yellow-700 transition-colors duration-300" />
+
+        <span
+          className="
+            text-[15px] font-semibold text-gray-900
+            tracking-wide text-center leading-tight
+            group-hover:text-black
+            transition-all duration-300
+          "
+        >
+          {name}
+        </span>
+      </motion.div>
     </Link>
   );
 }

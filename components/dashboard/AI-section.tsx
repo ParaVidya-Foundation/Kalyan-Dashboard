@@ -1,17 +1,10 @@
 "use client";
 
-import KundliButton from "./KundliButton";
 import { motion } from "framer-motion";
-import {
-  Brain,
-  HeartHandshake,
-  Orbit,
-  Sparkles,
-  MessageSquare,
-  FileText,
-} from "lucide-react";
+import { Brain, HeartHandshake, Orbit, Sparkles, MessageSquare, FileText } from "lucide-react";
+import KundliButton from "./KundliButton";
 
-export function AISection() {
+export default function AISection() {
   const aiServices = [
     { name: "AI Kundli Analysis", href: "/ai/kundli", icon: Brain },
     { name: "AI Matchmaking", href: "/ai/matchmaking", icon: HeartHandshake },
@@ -30,22 +23,19 @@ export function AISection() {
         transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
         className="
           grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-          gap-4 sm:gap-6 max-w-6xl w-full
+          gap-4 sm:gap-6
+          max-w-6xl w-full
         "
       >
         {aiServices.map((service, i) => (
           <motion.div
-            key={i}
+            key={service.name}
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
           >
-            <KundliButton
-              name={service.name}
-              href={service.href || "#"}
-              Icon={service.icon}
-            />
+            <KundliButton name={service.name} href={service.href} Icon={service.icon} />
           </motion.div>
         ))}
       </motion.div>

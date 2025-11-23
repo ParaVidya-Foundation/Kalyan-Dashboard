@@ -94,14 +94,16 @@ export default function OptimizedImage({
     );
   }
 
-  // Determine sizes if not provided
+  // Determine sizes if not provided - optimized for performance
   const computedSizes =
     sizes ||
     (fill
       ? "(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
-      : width
-      ? `(max-width: ${Number(width) * 2}px) 100vw, ${width}px`
-      : "100vw");
+      : width && typeof width === 'number'
+      ? `(max-width: ${width * 2}px) 100vw, ${width}px`
+      : width && typeof width === 'string'
+      ? `(max-width: 640px) 100vw, ${width}`
+      : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw");
 
   // Determine loading strategy
   const loadingStrategy = loading || (priority ? "eager" : "lazy");

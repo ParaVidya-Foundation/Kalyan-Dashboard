@@ -6,11 +6,11 @@ import { useKundliStore } from "@/lib/store";
 
 // ✅ Static, safe imports (no dynamic/lazy Promise issues)
 import { KundliProfile } from "@/components/dashboard/info";
-import { AISection } from "@/components/dashboard/AI-section";
-import { DashaSection } from "@/components/dashboard/Dasha-section";
+import AISection from "@/components/dashboard/AI-section";
+import DashaSection from "@/components/dashboard/Dasha-section";
 import { ChartSection } from "@/components/dashboard/MainChartSection";
 import { DivisionalChartSection } from "@/components/dashboard/DivisionalChartSection";
-import { AdvancedChartSection } from "@/components/dashboard/AdvancedChartSection";
+import AdvancedChartSection from "@/components/dashboard/AdvancedChartSection";
 
 type SectionWrapperProps = {
   title: string;

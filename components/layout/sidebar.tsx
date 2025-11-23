@@ -235,7 +235,7 @@ export default function Sidebar({ className }: { className?: string }) {
         }}
         transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
         className={clsx(
-          "fixed top-0 left-0 z-40 flex flex-col h-screen",
+          "sticky top-0 left-0 z-40 flex flex-col h-screen",
           "bg-white/95 backdrop-blur-xl border-r border-gray-100/80",
           "shadow-[0_0_24px_rgba(255,244,194,0.08)]",
           isMobile && !mobileOpen && "-translate-x-full",

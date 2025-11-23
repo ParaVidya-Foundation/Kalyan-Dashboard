@@ -1,21 +1,32 @@
-"use client"
+"use client";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import MatchMaking, { PartnerFormData } from "@/components/forms/match-making-form"
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import MatchMaking, { PartnerFormData } from "@/components/forms/match-making-form";
+import MovingGradient from "@/components/store/Perfume/MovingGradient";
 
-export default function MatchMakingPage() {  // ✅ default export
+export default function MatchMakingPage() {
+  /** Handle partner submission */
   const handlePartnerSubmit = (data: PartnerFormData, partner: string) => {
-    console.log(`${partner} Data:`, data)
-  }
+    console.log(`${partner} Data:`, data);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-50 via-white to-blue-50 p-6">
-      <h1 className="text-3xl font-bold mb-8">Match Making</h1>
+    <div className="relative min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden">
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center w-full max-w-5xl">
+      {/* === BACKGROUND MOVING GRADIENT (BEST PRACTICE) === */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        <MovingGradient />
+      </div>
+
+      {/* === PAGE TITLE === */}
+      <h1 className="text-3xl font-bold mb-8 z-10">Match Making</h1>
+
+      {/* === MATCH MAKING GRID === */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center w-full max-w-5xl z-10">
+        
         {/* Partner 1 */}
         <MatchMaking
           title="Partner 1"
@@ -40,9 +51,10 @@ export default function MatchMakingPage() {  // ✅ default export
         />
       </div>
 
-      <Button className="mt-8 px-8 py-3 bg-pink-600 hover:bg-pink-700 rounded-xl shadow-md text-white text-lg">
+      {/* === CTA BUTTON === */}
+      <Button className="mt-8 px-8 py-3 bg-pink-600 hover:bg-pink-700 rounded-xl shadow-md text-white text-lg z-10">
         Generate Match Report
       </Button>
     </div>
-  )
+  );
 }

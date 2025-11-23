@@ -1,20 +1,19 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { KundliChart } from "@/components/charts/kundli-chart";
 import { useKundliStore } from "@/lib/store";
 import { GlowCard } from "@/components/ui/glow-card";
-import { safeHref } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { Compass, Home, Share2, Sparkles, Sun } from "lucide-react";
+import KundliButton from "./KundliButton";
 
 type ChartKey = "birthChart" | "navamsa" | "dashamsa";
 
 interface ChartTool {
   name: string;
-  href: string; // Required - never undefined
+  href: string;
   Icon: LucideIcon;
 }
 
@@ -25,7 +24,7 @@ interface ChartItem {
 
 /**
  * ChartSection - Main dashboard section displaying Kundli charts and chart tools.
- * Features animated grid layouts with safe href handling and zero console warnings.
+ * Features animated grid layouts with premium button components.
  */
 export function ChartSection() {
   const { currentKundli } = useKundliStore();
@@ -37,7 +36,7 @@ export function ChartSection() {
     { key: "dashamsa", title: "Dashamsa Chart" },
   ];
 
-  // Chart tools - href is REQUIRED (never undefined)
+  // Chart tools
   const chartTools: ChartTool[] = [
     { name: "D1 - Lagna Chart", href: "/charts/d1", Icon: Compass },
     { name: "Planetary Positions", href: "/charts/planets", Icon: Sun },
@@ -87,46 +86,21 @@ export function ChartSection() {
           transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         >
-          {chartTools.map((tool, i) => {
-            // Normalize href - guaranteed to be a string
-            const normalizedHref = React.useMemo(
-              () => safeHref(tool.href),
-              [tool.href]
-            );
-
-            const { Icon, name } = tool;
-
-            return (
-              <Link 
-                key={name} 
-                href={normalizedHref} 
-                className="block"
-                aria-label={`${name} tool`}
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.36, delay: i * 0.06 }}
-                  whileHover={{ y: -4, scale: 1.02 }}
-                  className="
-                    group cursor-pointer aspect-square rounded-xl 
-                    bg-white/80 backdrop-blur-sm border border-yellow-200/40
-                    shadow-[0_4px_24px_rgba(255,244,194,0.15)]
-                    hover:shadow-[0_8px_32px_rgba(255,244,194,0.25)]
-                    flex flex-col items-center justify-center gap-4 p-6
-                    transition-all duration-300
-                  "
-                >
-                  <Icon className="w-8 h-8 text-yellow-600 group-hover:text-yellow-700 transition-colors" />
-
-                  <span className="text-sm text-gray-900 tracking-wide font-[family:'Geist_Mono',monospace] text-center">
-                    {name}
-                  </span>
-                </motion.div>
-              </Link>
-            );
-          })}
+          {chartTools.map((tool, i) => (
+            <motion.div
+              key={tool.name}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+            >
+              <KundliButton
+                name={tool.name}
+                href={tool.href}
+                Icon={tool.Icon}
+              />
+            </motion.div>
+          ))}
         </motion.div>
       </section>
     </div>

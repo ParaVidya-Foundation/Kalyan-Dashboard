@@ -1,17 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Layers, CircleDot, Orbit, Sparkles, CalendarDays } from "lucide-react";
+import KundliButton from "./KundliButton";
 
-import {
-  Layers,
-  CircleDot,
-  Orbit,
-  Sparkles,
-  CalendarDays,
-} from "lucide-react";
-import DashaButton from "./DashaButton";
-
-export function DashaSection() {
+export default function DashaSection() {
   const dashaServices = [
     { name: "All Dasha Overview", href: "/dasha", icon: Layers },
     { name: "Vimshottari Dasha", href: "/dasha/vimshottari", icon: CircleDot },
@@ -29,7 +22,8 @@ export function DashaSection() {
         transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
         className="
           grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-          gap-4 sm:gap-6 max-w-6xl w-full
+          gap-4 sm:gap-6
+          max-w-6xl w-full
         "
       >
         {dashaServices.map((service, i) => (
@@ -40,15 +34,10 @@ export function DashaSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
           >
-            <DashaButton
-              name={service.name}
-              href={service.href || "#"}
-              Icon={service.icon}
-            />
+            <KundliButton name={service.name} href={service.href} Icon={service.icon} />
           </motion.div>
         ))}
       </motion.div>
     </section>
   );
-};
-
+}
