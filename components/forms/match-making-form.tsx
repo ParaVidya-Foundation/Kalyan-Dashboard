@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,22 +34,33 @@ export default function MatchMaking({
   title,
   defaultGender,
   onSubmit,
+  onChange,
 }: {
   title: string;
   defaultGender: "male" | "female";
   onSubmit: (data: PartnerFormData) => void;
+  onChange?: (values: Partial<PartnerFormData>) => void;
 }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<PartnerFormData>({
     resolver: zodResolver(partnerSchema),
     defaultValues: { gender: defaultGender },
   });
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!onChange) return;
+    const subscription = watch((value: Partial<PartnerFormData>) => {
+      onChange(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, onChange]);
 
   const handlePlaceChange = (value: string) => {
     setValue("placeOfBirth", value);
