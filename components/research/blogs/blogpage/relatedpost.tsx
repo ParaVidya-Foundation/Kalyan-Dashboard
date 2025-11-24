@@ -9,10 +9,9 @@ import type { BlogCardProps } from "../BlogCard";
 
 interface RelatedPostsProps {
   posts: BlogCardProps[];
-  currentPostSlug: string;
 }
 
-export default function RelatedPosts({ posts, currentPostSlug }: RelatedPostsProps) {
+export default function RelatedPosts({ posts }: RelatedPostsProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollRight = () => {
@@ -55,7 +54,7 @@ export default function RelatedPosts({ posts, currentPostSlug }: RelatedPostsPro
               className="flex-shrink-0 w-72 sm:w-80"
             >
               <Link
-                href={`/research/blogs/${post.slug}`}
+                href={post.href || `/research/blogs/${post.id || "BlogPage"}`}
                 className="block group"
                 aria-label={`Read related post: ${post.title}`}
               >

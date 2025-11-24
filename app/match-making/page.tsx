@@ -1,29 +1,57 @@
-"use client"
+"use client";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import MatchMaking, { PartnerFormData } from "@/components/forms/match-making-form"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import MatchMaking, { PartnerFormData } from "@/components/forms/match-making-form";
+import MovingGradient from "@/components/store/Perfume/MovingGradient";
 
-export default function MatchMakingPage() {  // ✅ default export
+export default function MatchMakingPage() {
+  const router = useRouter();
+  const [partnerOne, setPartnerOne] = useState<Partial<PartnerFormData>>({});
+  const [partnerTwo, setPartnerTwo] = useState<Partial<PartnerFormData>>({});
+
   const handlePartnerSubmit = (data: PartnerFormData, partner: string) => {
-    console.log(`${partner} Data:`, data)
-  }
+    if (partner === "Partner 1") {
+      setPartnerOne(data);
+    } else {
+      setPartnerTwo(data);
+    }
+  };
+
+  const handleGenerateReport = () => {
+    if (!partnerOne?.name || !partnerTwo?.name) {
+      alert("Please fill out both partner profiles to generate the match report.");
+      return;
+    }
+
+    const query = new URLSearchParams({
+      partner1: partnerOne.name,
+      partner2: partnerTwo.name,
+    }).toString();
+
+    router.push(`/match-making/MatchMakingReport?${query}`);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-50 via-white to-blue-50 p-6">
-      <h1 className="text-3xl font-bold mb-8">Match Making</h1>
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <MovingGradient />
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center w-full max-w-5xl">
-        {/* Partner 1 */}
+      <h1 className="z-10 mb-8 text-3xl font-bold">Match Making</h1>
+
+      <div className="z-10 grid w-full max-w-5xl grid-cols-1 items-center gap-6 md:grid-cols-3">
         <MatchMaking
           title="Partner 1"
           defaultGender="male"
           onSubmit={(data) => handlePartnerSubmit(data, "Partner 1")}
+          onChange={(values) => setPartnerOne(values)}
         />
 
-        {/* Animated Heart */}
         <motion.div
           className="flex justify-center text-5xl"
           animate={{ scale: [1, 1.2, 1] }}
@@ -32,17 +60,20 @@ export default function MatchMakingPage() {  // ✅ default export
           ❤️
         </motion.div>
 
-        {/* Partner 2 */}
         <MatchMaking
           title="Partner 2"
           defaultGender="female"
           onSubmit={(data) => handlePartnerSubmit(data, "Partner 2")}
+          onChange={(values) => setPartnerTwo(values)}
         />
       </div>
 
-      <Button className="mt-8 px-8 py-3 bg-pink-600 hover:bg-pink-700 rounded-xl shadow-md text-white text-lg">
+      <Button
+        onClick={handleGenerateReport}
+        className="z-10 mt-8 rounded-xl bg-pink-600 px-8 py-3 text-lg text-white shadow-md hover:bg-pink-700"
+      >
         Generate Match Report
       </Button>
     </div>
-  )
+  );
 }

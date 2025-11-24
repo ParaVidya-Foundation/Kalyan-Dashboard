@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, Variants } from "framer-motion";
+import {
+  motion,
+  Variants,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { useEffect, useRef } from "react";
 import {
   Facebook,
   Twitter,
@@ -49,40 +56,121 @@ const itemVariants = {
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const footerRef = useRef<HTMLElement | null>(null);
+
+  // Cursor tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // radial gradient size (large to fill space without popping)
+  const RADIUS = 600;
+
+  // Smooth spring for cursor following
+  const cursorX = useSpring(mouseX, { damping: 25, stiffness: 200 });
+  const cursorY = useSpring(mouseY, { damping: 25, stiffness: 200 });
+
+  // Gradient center follows pointer precisely
+  const gradientX = useTransform(cursorX, (v) => v - RADIUS);
+  const gradientY = useTransform(cursorY, (v) => v - RADIUS);
+
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+
+    const handleMove = (e: MouseEvent | PointerEvent) => {
+      const rect = footer.getBoundingClientRect();
+      mouseX.set(e.clientX - rect.left);
+      mouseY.set(e.clientY - rect.top);
+    };
+
+    const handleLeave = () => {
+      mouseX.set(-2000);
+      mouseY.set(-2000);
+    };
+
+    footer.addEventListener("pointermove", handleMove, { passive: true });
+    footer.addEventListener("mousemove", handleMove, { passive: true });
+    footer.addEventListener("pointerleave", handleLeave, { passive: true });
+    footer.addEventListener("mouseleave", handleLeave, { passive: true });
+
+    return () => {
+      footer.removeEventListener("pointermove", handleMove as any);
+      footer.removeEventListener("mousemove", handleMove as any);
+      footer.removeEventListener("pointerleave", handleLeave as any);
+      footer.removeEventListener("mouseleave", handleLeave as any);
+    };
+  }, []);
 
   return (
-    <footer className={`${GeistSans.className} relative bg-white border-t border-gray-100 overflow-hidden`}>
-      {/* Techy ambient background */}
+    <footer
+      ref={footerRef}
+      className={`${GeistSans.className} relative bg-white border-t border-gray-100 overflow-hidden`}
+    >
+      {/* --- Ambient background layer --- */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-yellow-50/40 via-transparent to-white" />
-        {/* soft orbs */}
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-50/30 via-transparent to-white" />
+
+        {/* Smooth GPU-animated background */}
         <motion.div
-          className="absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-yellow-300/20 blur-3xl"
-          animate={{ x: [0, 20, -10, 0], opacity: [0.4, 0.7, 0.5, 0.4] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 opacity-10"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(255,244,194,0.20) 0%, rgba(255,244,194,0.05) 25%, rgba(255,244,194,0.13) 50%, rgba(255,244,194,0.05) 75%, rgba(255,244,194,0.20) 100%)",
+            backgroundSize: "400% 400%",
+            willChange: "background-position",
+          }}
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+
+        {/* --- Cursor-following radial glow (fixed) --- */}
+        <motion.div
+          className="pointer-events-none absolute"
+          style={{
+            width: RADIUS * 2,
+            height: RADIUS * 2,
+            background:
+              "radial-gradient(circle 600px at center, rgba(255,244,194,0.10) 0%, transparent 70%)",
+            x: gradientX,
+            y: gradientY,
+            willChange: "transform",
+          }}
+        />
+
+        {/* Depth Orbs */}
+        <motion.div
+          className="absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl"
+          animate={{ x: [0, 20, -10, 0], opacity: [0.2, 0.4, 0.3, 0.2] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute -top-32 right-0 h-64 w-64 rounded-full bg-yellow-500/15 blur-3xl"
-          animate={{ x: [0, -15, 10, 0], opacity: [0.3, 0.6, 0.4, 0.3] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-32 right-0 h-64 w-64 rounded-full bg-amber-500/8 blur-3xl"
+          animate={{ x: [0, -15, 10, 0], opacity: [0.15, 0.35, 0.25, 0.15] }}
+          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
+      {/* --- Content --- */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <motion.div
-          variants={containerVariants as unknown as Variants}
+          variants={containerVariants as any} 
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-120px" }}
+          viewport={{ once: true, margin: "-140px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-10"
         >
-          {/* Brand + Social */}
-          <motion.div variants={itemVariants as unknown as Variants} className="lg:col-span-2">
+          {/* Brand */}
+          <motion.div variants={itemVariants as any} className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
               <motion.div
                 whileHover={{ scale: 1.05, rotate: 4 }}
                 whileTap={{ scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 380, damping: 18 }}
                 className="relative"
               >
                 <div className="relative h-11 w-11 rounded-2xl flex items-center justify-center overflow-hidden">
@@ -91,21 +179,10 @@ export function Footer() {
                     alt="Kalyan Logo"
                     width={32}
                     height={32}
-                    quality={90}
                     priority
-                    loading="eager"
                     className="object-contain"
-                    placeholder="blur"
-                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      if (target.src !== "/Logo/Logo.png") {
-                        target.src = "/Logo/Logo.png";
-                      }
-                    }}
                   />
                 </div>
-              
               </motion.div>
               <span className="text-2xl font-semibold tracking-tight text-gray-900 group-hover:text-[#FFF000] transition-colors duration-300">
                 Kalyan
@@ -114,8 +191,8 @@ export function Footer() {
 
             <p className="text-gray-600 text-sm leading-relaxed max-w-md mb-6">
               AI-enabled Vedic astrology & research platform. Generate precise Kundlis, explore
-              spiritual analytics, and discover insights at the intersection of{" "}
-              <span className="font-medium text-[#FFF000]">ancient wisdom</span> and{" "}
+              spiritual analytics, and discover insights blending{" "}
+              <span className="font-medium text-[#FFF000]">ancient wisdom</span> with{" "}
               <span className="font-medium text-[#FFF000]">modern intelligence</span>.
             </p>
 
@@ -130,21 +207,19 @@ export function Footer() {
                 <motion.a
                   key={social.label}
                   href={social.href}
-                  aria-label={social.label}
                   whileHover={{ scale: 1.12, y: -2 }}
                   whileTap={{ scale: 0.92 }}
-                  className="group relative p-2.5 rounded-xl bg-gray-50/80 backdrop-blur-sm border border-gray-100 hover:bg-[#FFF000] hover:border-[#FFF000] transition-all duration-300"
+                  className="group relative p-2.5 rounded-xl bg-gray-50/80 backdrop-blur-sm
+                    border border-gray-100 hover:bg-[#FFF000] hover:border-[#FFF000] transition-all duration-300"
                 >
-                  <social.icon className="h-4 w-4 text-gray-600 group-hover:text-[#FFF000] transition-colors duration-300" />
-                  <span className="sr-only">{social.label}</span>
-                  <div className="pointer-events-none absolute inset-0 rounded-xl bg-[#FFF000]/15 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300" />
+                  <social.icon className="h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
                 </motion.a>
               ))}
             </div>
           </motion.div>
 
           {/* Quick Links */}
-          <motion.div variants={itemVariants as unknown as Variants}>
+          <motion.div variants={itemVariants as any}>
             <h3 className="text-xs font-semibold text-gray-900 mb-4 tracking-[0.18em] uppercase">
               Quick Links
             </h3>
@@ -159,27 +234,26 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group flex items-center gap-2 text-sm text-gray-600 hover:text-[#FFF000] transition-all duration-300"
+                    className="group flex items-center gap-2 text-sm text-gray-600 hover:text-[#FFF000]"
                   >
-                    <link.icon className="h-4 w-4 text-gray-400 group-hover:text-yellow-600 transition-colors duration-300" />
-                    <span className="relative">
-                      {link.label}
-                      <span className="absolute bottom-0 left-0 h-px w-0 bg-[#FFF000] group-hover:w-full transition-all duration-300" />
-                    </span>
+                    <link.icon className="h-4 w-4 text-gray-400 group-hover:text-yellow-600" />
+                    <span className="relative">{link.label}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Product / Learning map */}
-          <motion.div variants={itemVariants as unknown as Variants}>
+          {/* Ecosystem */}
+          <motion.div variants={itemVariants as any}>
             <h3 className="text-xs font-semibold text-gray-900 mb-4 tracking-[0.18em] uppercase">
               Ecosystem
             </h3>
+
             <ul className="space-y-3 text-sm text-gray-600">
+              {/* Research */}
               <li>
-                <span className="text-[11px] font-medium text-gray-400 uppercase tracking-[0.16em]">
+                <span className="text-[11px] font-medium text-gray-400 uppercase">
                   Research
                 </span>
                 <ul className="mt-2 space-y-1.5">
@@ -189,10 +263,7 @@ export function Footer() {
                     { href: "/research/aiblogs", label: "AI Blogs" },
                   ].map((s) => (
                     <li key={s.href}>
-                      <Link
-                        href={s.href}
-                        className="pl-2 text-xs text-gray-500 hover:text-[#FFF000] transition-colors duration-300"
-                      >
+                      <Link href={s.href} className="pl-2 text-xs text-gray-500 hover:text-[#FFF000]">
                         {s.label}
                       </Link>
                     </li>
@@ -200,8 +271,9 @@ export function Footer() {
                 </ul>
               </li>
 
+              {/* Store */}
               <li className="pt-2">
-                <span className="text-[11px] font-medium text-gray-400 uppercase tracking-[0.16em]">
+                <span className="text-[11px] font-medium text-gray-400 uppercase">
                   Store
                 </span>
                 <ul className="mt-2 space-y-1.5">
@@ -213,10 +285,7 @@ export function Footer() {
                     { href: "/store/bracelet", label: "Bracelets" },
                   ].map((s) => (
                     <li key={s.href}>
-                      <Link
-                        href={s.href}
-                        className="pl-2 text-xs text-gray-500 hover:text-[#FFF000] transition-colors duration-300"
-                      >
+                      <Link href={s.href} className="pl-2 text-xs text-gray-500 hover:text-[#FFF000]">
                         {s.label}
                       </Link>
                     </li>
@@ -224,8 +293,9 @@ export function Footer() {
                 </ul>
               </li>
 
+              {/* Learning */}
               <li className="pt-2">
-                <span className="text-[11px] font-medium text-gray-400 uppercase tracking-[0.16em]">
+                <span className="text-[11px] font-medium text-gray-400 uppercase">
                   Learning
                 </span>
                 <ul className="mt-2 space-y-1.5">
@@ -234,10 +304,7 @@ export function Footer() {
                     { href: "/education/test", label: "Astro Test" },
                   ].map((s) => (
                     <li key={s.href}>
-                      <Link
-                        href={s.href}
-                        className="pl-2 text-xs text-gray-500 hover:text-[#FFF000] transition-colors duration-300"
-                      >
+                      <Link href={s.href} className="pl-2 text-xs text-gray-500 hover:text-[#FFF000]">
                         {s.label}
                       </Link>
                     </li>
@@ -247,11 +314,12 @@ export function Footer() {
             </ul>
           </motion.div>
 
-          {/* Contact + Newsletter */}
-          <motion.div variants={itemVariants as unknown as Variants} className="lg:col-span-1">
+          {/* Contact */}
+          <motion.div variants={itemVariants as any} className="lg:col-span-1">
             <h3 className="text-xs font-semibold text-gray-900 mb-4 tracking-[0.18em] uppercase">
               Contact
             </h3>
+
             <ul className="space-y-2.5 mb-5 text-sm text-gray-600">
               {[
                 { icon: Mail, text: "support@kalyan.com", href: "mailto:support@kalyan.com" },
@@ -261,44 +329,46 @@ export function Footer() {
                 <li key={i}>
                   <a
                     href={c.href}
-                    className="group flex items-start gap-3 hover:text-[#FFF000] transition-colors duration-300"
+                    className="group flex items-start gap-3 hover:text-[#FFF000]"
                   >
-                    <c.icon className="h-4 w-4 mt-0.5 text-gray-400 group-hover:text-[#FFF000] transition-colors duration-300 flex-shrink-0" />
-                    <span className="leading-relaxed">{c.text}</span>
+                    <c.icon className="h-4 w-4 mt-0.5 text-gray-400 group-hover:text-[#FFF000]" />
+                    <span>{c.text}</span>
                   </a>
                 </li>
               ))}
             </ul>
 
+            {/* Newsletter */}
             <div className="mt-4">
               <h4 className="text-xs font-semibold text-gray-900 mb-2 tracking-[0.16em] uppercase">
                 Astro • AI Newsletter
               </h4>
               <p className="text-xs text-gray-500 mb-3">
-                Monthly drops on cosmic trends, research updates, and product releases. No spam.
+                Monthly drops on cosmic trends, research updates, and product releases.
               </p>
+
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
+                onSubmit={(e) => e.preventDefault()}
                 className="space-y-2"
               >
-                <div className="relative">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your email"
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-200 bg-gray-50/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400 transition-all duration-300 placeholder:text-gray-400"
-                  />
-                </div>
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-200
+                    bg-gray-50/80 backdrop-blur-sm focus:ring-2 focus:ring-yellow-400/60
+                    placeholder:text-gray-400"
+                />
+
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.02, y: -1 }}
-                  whileTap={{ scale: 0.97, y: 0 }}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-900 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 rounded-xl shadow-[0_10px_30px_rgba(234,179,8,0.35)] hover:shadow-[0_14px_38px_rgba(202,138,4,0.5)] transition-all duration-300"
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5
+                    text-sm font-medium text-gray-900 bg-gradient-to-r from-yellow-300
+                    via-yellow-400 to-yellow-500 rounded-xl shadow"
                 >
-                  <span>Subscribe</span>
-                  <Send className="h-4 w-4" />
+                  Subscribe <Send className="h-4 w-4" />
                 </motion.button>
               </form>
             </div>
@@ -307,7 +377,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <motion.div
-          variants={itemVariants as unknown as Variants}
+          variants={itemVariants as any}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
@@ -317,17 +387,12 @@ export function Footer() {
             <p className="text-xs text-gray-500">
               © {currentYear} Kalyan. Crafted at the intersection of code & cosmos.
             </p>
+
             <div className="flex items-center gap-6">
-              <Link
-                href="/privacy"
-                className="text-xs text-gray-500 hover:text-yellow-700 transition-colors duration-300"
-              >
+              <Link href="/privacy" className="text-xs text-gray-500 hover:text-yellow-700">
                 Privacy Policy
               </Link>
-              <Link
-                href="/terms"
-                className="text-xs text-gray-500 hover:text-yellow-700 transition-colors duration-300"
-              >
+              <Link href="/terms" className="text-xs text-gray-500 hover:text-yellow-700">
                 Terms of Service
               </Link>
             </div>
@@ -335,8 +400,8 @@ export function Footer() {
         </motion.div>
       </div>
 
-      {/* thin glowing bottom line */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-300 to-transparent opacity-70" />
+      {/* Thin glowing bottom bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent" />
     </footer>
   );
 }

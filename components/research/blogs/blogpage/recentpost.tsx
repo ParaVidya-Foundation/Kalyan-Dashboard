@@ -34,7 +34,7 @@ export default function RecentPosts({ posts }: RecentPostsProps) {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
                 <Link
-                  href={`/research/blogs/${post.slug}`}
+                  href={post.href || `/research/blogs/${post.id || "BlogPage"}`}
                   className="flex gap-4 w-full hover:opacity-80 transition-opacity group"
                   aria-label={`Read ${post.title}`}
                 >

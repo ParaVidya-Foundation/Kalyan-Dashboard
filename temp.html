@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!-- cspell:ignore Architecting Ketu -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Kalyan · AI Research Digest</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f9fafb;
+        --surface: #ffffff;
+        --primary: #111827;
+        --secondary: #4b5563;
+        --accent: #fbbf24;
+        --border: #e5e7eb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--primary);
+        line-height: 1.6;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+      }
+      .container {
+        width: min(1200px, 95vw);
+        margin: 0 auto;
+        padding: 1.5rem 0;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      .logo {
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      .pill-nav {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .pill-nav a {
+        padding: 0.5rem 1.2rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .pill-nav a:hover,
+      .pill-nav a.active {
+        border-color: transparent;
+        background: var(--primary);
+        color: #fff;
+      }
+      main {
+        padding: 3rem 0 4rem;
+      }
+      .hero {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .hero h1 {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        margin-bottom: 0.75rem;
+      }
+      .hero p {
+        max-width: 640px;
+        margin: 0.5rem auto 0;
+        color: var(--secondary);
+      }
+      .cta-group {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 25px 60px rgba(15, 23, 42, 0.08);
+      }
+      .eyebrow {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        font-weight: 600;
+        color: var(--secondary);
+        text-transform: uppercase;
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 1.15rem;
+        line-height: 1.3;
+      }
+      .card p {
+        margin: 0;
+        color: var(--secondary);
+      }
+      .meta {
+        font-size: 0.85rem;
+        color: #6b7280;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.65rem 1.3rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .btn-outline {
+        border-color: var(--border);
+        color: var(--primary);
+      }
+      .btn-outline:hover {
+        border-color: var(--primary);
+      }
+      .btn-accent {
+        background: var(--accent);
+        color: #1f2937;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin: 3rem 0;
+      }
+      .stat {
+        padding: 1.2rem;
+        border-radius: 1rem;
+        background: #111827;
+        color: white;
+      }
+      .stat .eyebrow {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .stat h2 {
+        margin: 0;
+        font-size: 2.25rem;
+      }
+      .stat p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2rem 0;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--secondary);
+      }
+      .footer-container {
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="nav">
+          <span class="logo">KALYAN</span>
+          <nav class="pill-nav">
+            <a href="/">Home</a>
+            <a href="/match-making">Match Making</a>
+            <a href="/research" class="active">Research</a>
+            <a href="/store">Store</a>
+            <a href="/education">Education</a>
+          </nav>
+          <a class="btn btn-outline" href="/contact">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <p class="eyebrow">AI Blogs</p>
+          <h1>Insights at the intersection of code & cosmos</h1>
+          <p>
+            Explore practical guides, experiments, and founder notes from the
+            Kalyan research lab. Curated for product leaders, astrologers, and
+            curious technologists alike.
+          </p>
+          <div class="cta-group">
+            <a class="btn btn-accent" href="/research/blogs">
+              Read the latest issue
+            </a>
+            <a class="btn btn-outline" href="/research/aiblogs/rss">
+              Subscribe to updates
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="container">
+        <div class="stats">
+          <div class="stat">
+            <div class="eyebrow">Articles</div>
+            <h2>120+</h2>
+            <p>Long-form playbooks on AI-enabled Vedic astrology.</p>
+          </div>
+          <div class="stat">
+            <div class="eyebrow">Experiments</div>
+            <h2>48</h2>
+            <p>Studio explorations across scent, data viz, and rituals.</p>
+          </div>
+          <div class="stat">
+            <div class="eyebrow">Readers</div>
+            <h2>32K</h2>
+            <p>Practitioners and builders around the globe.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="container">
+        <div class="grid">
+          <article class="card">
+            <div class="eyebrow">Educational</div>
+            <h3>From Idea to Launch: Architecting AI-backed rituals</h3>
+            <p>
+              A practical blueprint for validating, prototyping, and shipping
+              astro-tech products in under eight weeks.
+            </p>
+            <span class="meta">Published · 17 Nov 2025</span>
+            <a class="btn btn-outline" href="/research/blogs/how-to-use-ai-astrology">
+              Read article →
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="eyebrow">Insights</div>
+            <h3>AI-powered marketing for mindful commerce</h3>
+            <p>
+              Personalization tactics that combine astrological archetypes with
+              creative automation to lift retention by 23%.
+            </p>
+            <span class="meta">Published · 08 Nov 2025</span>
+            <a class="btn btn-outline" href="/research/blogs/best-way-to-use-ai-in-palmistry">
+              Read article →
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="eyebrow">Studio Log</div>
+            <h3>Designing immersive vastu simulations</h3>
+            <p>
+              Behind-the-scenes notes from our spatial computing lab—mixing
+              foam, fragrance, and photogrammetry.
+            </p>
+            <span class="meta">Published · 29 Oct 2025</span>
+            <a class="btn btn-outline" href="/research/blogs/drawing-vastu-maps">
+              Read article →
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="eyebrow">Projects</div>
+            <h3>Ketu in the 12th House: Data narratives</h3>
+            <p>
+              Visual storytelling with astro-anthropology datasets to help
+              clients reframe karmic patterns with empathy.
+            </p>
+            <span class="meta">Published · 20 Oct 2025</span>
+            <a class="btn btn-outline" href="/research/blogs/ketu-in-12th-house">
+              Read article →
+            </a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-container">
+        © 2025 Kalyan. Crafted at the intersection of code & cosmos.
+      </div>
+    </footer>
+  </body>
+</html>
+

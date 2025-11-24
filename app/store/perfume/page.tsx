@@ -59,12 +59,12 @@ export default function PerfumePage() {
       <section className="relative w-full overflow-visible mt-[-10px] pb-[100px]">
 
         {/* CONTENT BLOCK */}
-        <div className="relative z-[10]">
+        <div className="relative z-[-10]">
           <MakingPerfume />
         </div>
 
         {/* ====================== BOTTOM BORDER ====================== */}
-        <div className="absolute inset-x-0 bottom-[-90px] z-[5] pointer-events-none rotate-180">
+        <div className="absolute inset-x-0 bottom-[-50px] z-[5] pointer-events-none rotate-180">
           <div className="relative w-full h-[230px]">
             <Image
               src="/Perfume/Paper-Border.png"

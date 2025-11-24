@@ -27,7 +27,7 @@ export function Breadcrumb() {
           {index === breadcrumbItems.length - 1 ? (
             <span className="text-gray-900 font-medium">{item.name}</span>
           ) : (
-            <Link href={item.href} className="hover:text-orange-600 transition-colors">
+            <Link href={item.href || "#"} className="hover:text-orange-600 transition-colors">
               <div className="flex items-center">
                 {"icon" in item && (item as any).icon ? (() => { const Icon = (item as any).icon; return <Icon className="h-4 w-4 mr-1" /> })() : null}
                 {item.name}

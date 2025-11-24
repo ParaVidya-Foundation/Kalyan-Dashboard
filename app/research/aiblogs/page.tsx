@@ -12,7 +12,7 @@ const demoPosts: AIBlogCardProps[] = [
     title: "From Idea to Launch",
     image: "/placeholder.jpg",
     imageAlt: "AI-powered creativity",
-    href: "/research/blogs/how-to-use-ai-astrology",
+    href: "/research/aiblogs/AIBlogPage",
     category: "Educational",
   },
   {
@@ -20,7 +20,7 @@ const demoPosts: AIBlogCardProps[] = [
     title: "AI-Powered Marketing",
     image: "/placeholder.jpg",
     imageAlt: "AI-generated marketing visuals",
-    href: "/research/blogs/best-way-to-use-ai-in-palmistry",
+    href: "/research/aiblogs/AIBlogPage",
     category: "Insights",
   },
   {
@@ -28,7 +28,7 @@ const demoPosts: AIBlogCardProps[] = [
     title: "Studio Experiments",
     image: "/placeholder.jpg",
     imageAlt: "Modern AI studio setup",
-    href: "/research/blogs/drawing-vastu-maps",
+    href: "/research/aiblogs/AIBlogPage",
     category: "Studio",
   },
   {
@@ -36,7 +36,7 @@ const demoPosts: AIBlogCardProps[] = [
     title: "Projects in the Wild",
     image: "/placeholder.jpg",
     imageAlt: "Outdoor creative workspace",
-    href: "/research/blogs/ketu-in-12th-house",
+    href: "/research/aiblogs/AIBlogPage",
     category: "Projects",
   },
 ];
