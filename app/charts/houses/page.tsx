@@ -1,4 +1,11 @@
-// server component - static content
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "House Report - 12 Houses Analysis | Kalyan Dashboard",
+  description: "Complete analysis of all 12 houses in your birth chart. Understand house lords, significations, and their influence on different aspects of life including career, relationships, wealth, and spirituality.",
+  keywords: "12 houses, birth chart houses, house analysis, lagna, dhana, karma, bhagya, vedic astrology",
+};
+
 export default function HouseReportPage() {
   const houses = [
     { number: 1, name: "Lagna (Ascendant)", lord: "Mars", significance: "Self, personality, physical appearance" },

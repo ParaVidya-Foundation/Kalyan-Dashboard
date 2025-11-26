@@ -8,7 +8,7 @@ import Orb from "../ui/bits/orb";
 export default function AIChatBot({
   onSend,
 }: {
-  onSend: (text: string) => void;
+  onSend?: (text: string) => void;
 }) {
   const [messages, setMessages] = useState<
     { role: "user" | "ai"; text: string }[]
@@ -19,6 +19,9 @@ export default function AIChatBot({
     if (!started) setStarted(true);
 
     setMessages((prev) => [...prev, { role: "user", text }]);
+
+    // Call optional onSend callback if provided
+    onSend?.(text);
 
     setTimeout(() => {
       setMessages((prev) => [
@@ -136,10 +139,7 @@ export default function AIChatBot({
       {/* CHATBOX */}
       <div className="p-4 border-t border-gray-100 bg-white">
         <AIChatBox
-          onSend={(text) => {
-            onSend(text);
-            handleSend(text);
-          }}
+          onSend={handleSend}
         />
       </div>
     </div>

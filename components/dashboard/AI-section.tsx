@@ -5,9 +5,7 @@ import { Brain, HeartHandshake, Orbit, Sparkles, MessageSquare, FileText } from 
 import KundliButton from "./KundliButton";
 
 export default function AISection() {
-  const aiServices = [
-    { name: "AI Kundli Analysis", href: "/ai/kundli", icon: Brain },
-    { name: "AI Matchmaking", href: "/ai/matchmaking", icon: HeartHandshake },
+  const aiServices = [ 
     { name: "AI Dasha Predictions", href: "/ai/dasha", icon: Orbit },
     { name: "AI Remedies & Solutions", href: "/ai/remedies", icon: Sparkles },
     { name: "AI Chatbot", href: "/ai/chat", icon: MessageSquare },

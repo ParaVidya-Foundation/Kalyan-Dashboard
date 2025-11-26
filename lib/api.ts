@@ -29,6 +29,7 @@ export interface KundliData {
     strength: "high" | "medium" | "low"
   }[]
   generatedAt: string
+  lagna?: string
 }
 
 class KundliAPI {

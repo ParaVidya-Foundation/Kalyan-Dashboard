@@ -1,4 +1,11 @@
-// server component - static content
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Planetary Positions - Birth Chart Planets | Kalyan Dashboard",
+  description: "View detailed planetary positions in your birth chart. See sign, degree, and house placements for all planets including Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, and Ketu.",
+  keywords: "planetary positions, planets in signs, birth chart planets, vedic astrology, horoscope planets",
+};
+
 export default function PlanetaryPositionsPage() {
   const planets = [
     { name: "Sun", sign: "Aries", degree: "15° 30'", house: 1 },
