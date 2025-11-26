@@ -1,4 +1,11 @@
-// server component - static content
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Aspects & Conjunctions - Planetary Relationships | Kalyan Dashboard",
+  description: "Analyze planetary aspects and conjunctions in your birth chart. Understand how planets influence each other through aspects and conjunctions, affecting various life areas.",
+  keywords: "planetary aspects, conjunctions, planetary relationships, vedic astrology, birth chart aspects",
+};
+
 export default function AspectsConjunctionsPage() {
   const aspects = [
     { from: "Sun", to: "Moon", type: "Conjunction", effect: "Strong personality, leadership qualities" },

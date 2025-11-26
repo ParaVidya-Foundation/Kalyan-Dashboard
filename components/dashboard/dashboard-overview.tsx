@@ -11,6 +11,7 @@ import DashaSection from "@/components/dashboard/Dasha-section";
 import { ChartSection } from "@/components/dashboard/MainChartSection";
 import { DivisionalChartSection } from "@/components/dashboard/DivisionalChartSection";
 import AdvancedChartSection from "@/components/dashboard/AdvancedChartSection";
+import { CalculationSection } from "./CalculationSection";
 
 type SectionWrapperProps = {
   title: string;
@@ -42,12 +43,14 @@ export function DashboardOverview() {
     >
       {/* PROFILE */}
       <section className="px-6 py-8 sm:px-8 sm:py-10">
-        <KundliProfile
-          name={currentKundli.name ?? "Unknown"}
-          dateOfBirth={currentKundli.dateOfBirth ?? "N/A"}
-          timeOfBirth={currentKundli.personalInfo?.timeOfBirth ?? "N/A"}
-          placeOfBirth={currentKundli.placeOfBirth ?? "N/A"}
-        />
+      <KundliProfile
+        name={currentKundli.name ?? "Unknown"}
+        dateOfBirth={currentKundli.dateOfBirth ?? "N/A"}
+        timeOfBirth={currentKundli.personalInfo?.timeOfBirth ?? "N/A"}
+        placeOfBirth={currentKundli.placeOfBirth ?? "N/A"}
+        lagna={currentKundli.lagna}
+      />
+
       </section>
 
       <Divider />
@@ -79,6 +82,10 @@ export function DashboardOverview() {
       {/* AI TOOLS */}
       <SectionWrapper title="AI-Powered Tools">
         <AISection />
+      </SectionWrapper>
+
+      <SectionWrapper title="Calculations">
+        <CalculationSection />
       </SectionWrapper>
     </motion.div>
   );

@@ -32,7 +32,7 @@ export default function BlogLayout({ post }: BlogLayoutProps) {
       : format(new Date(post.date), "d MMM yyyy");
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 lg:py-20">
+    <div className="max-w-7xl mx-auto px-6">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-600 mb-8" aria-label="Breadcrumb">
         <ol className="flex items-center space-x-2 flex-wrap">

@@ -1,4 +1,11 @@
-// server component - static content
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yogas & Doshas - Planetary Combinations | Kalyan Dashboard",
+  description: "Explore planetary yogas (beneficial combinations) and doshas (afflictions) in your birth chart. Understand how planetary combinations affect your life patterns in Vedic astrology.",
+  keywords: "yogas, doshas, planetary combinations, raj yoga, shani dosha, vedic astrology",
+};
+
 export default function YogasDoshasPage() {
   const yogas = [
     { name: "Raj Yoga", type: "Beneficial", description: "Formed by connection of lords of Kendra and Trikona houses" },
