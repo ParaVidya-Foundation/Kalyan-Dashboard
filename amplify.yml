@@ -6,9 +6,6 @@ frontend:
         # Enable corepack for pnpm support
         - corepack enable
         - corepack prepare pnpm@latest --activate
-        # Verify installations
-        - echo "Node version: $(node --version)"
-        - echo "pnpm version: $(pnpm --version)"
         # Install dependencies with frozen lockfile for reproducible builds
         - pnpm install --frozen-lockfile --prefer-offline
     build:
