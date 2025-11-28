@@ -8,7 +8,8 @@ import "./globals.css"
 
 import { Footer } from "@/components/layout/footer"
 import Header from "@/components/layout/header"
-// SEO components removed for build stability; can be re-added later
+import DefaultSEO from "@/components/seo/default-seo"
+import StructuredData from "@/components/seo/structured-data"
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -106,6 +107,7 @@ export const metadata: Metadata = {
 }
 
 // Force dynamic rendering for the whole app to avoid SSG issues with client-only components
+export const dynamic = 'force-dynamic';
 
 export default function RootLayout({
   children,
@@ -121,8 +123,8 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
       </head>
       <body className="min-h-screen bg-gray-50 flex flex-col">
-        {/* <DefaultSEO /> */}
-        {/* <StructuredData /> */}
+        <DefaultSEO />
+        <StructuredData />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

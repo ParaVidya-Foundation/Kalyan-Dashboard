@@ -1,5 +1,8 @@
 import { Metadata } from "next";
 
+// Force dynamic rendering to prevent SSR issues with client-only components
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Planetary Positions - Birth Chart Planets | Kalyan Dashboard",
   description: "View detailed planetary positions in your birth chart. See sign, degree, and house placements for all planets including Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, and Ketu.",

@@ -1,5 +1,8 @@
 import { Metadata } from "next";
 
+// Force dynamic rendering to prevent SSR issues with client-only components
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "House Report - 12 Houses Analysis | Kalyan Dashboard",
   description: "Complete analysis of all 12 houses in your birth chart. Understand house lords, significations, and their influence on different aspects of life including career, relationships, wealth, and spirituality.",

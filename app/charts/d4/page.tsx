@@ -1,4 +1,7 @@
 import { Metadata } from "next";
+
+// Force dynamic rendering to prevent SSR issues with client-only components
+export const dynamic = "force-dynamic";
 import { DivisionalChartHeader } from "@/components/charts/divisional-chart-header";
 import { ChartSwitcher } from "@/components/charts/ChartSwitcher";
 import { ChartSection } from "@/components/charts/chart-section";

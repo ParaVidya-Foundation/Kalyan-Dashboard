@@ -6,6 +6,9 @@ import AIBlogSidebar from "@/components/research/aiblogs/AIBlogSidebar";
 import type { AIBlogCardProps } from "@/components/research/aiblogs/AIBlogCard";
 import { WavyBackground } from "@/components/ui/bits/wavy-background";
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic';
+
 const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-1",

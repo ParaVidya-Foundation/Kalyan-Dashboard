@@ -1,5 +1,8 @@
 "use client"
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic';
+
 export default function YoginiDashaPage() {
   const yoginiDasha = [
     { name: "Mangala", duration: 1, years: 1 },
