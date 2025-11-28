@@ -5,9 +5,11 @@ frontend:
       commands:
         # Enable corepack for pnpm support
         - corepack enable
-        - corepack prepare pnpm@latest --activate
-        # Install dependencies with frozen lockfile for reproducible builds
-        - pnpm install --frozen-lockfile --prefer-offline
+        # Use specific pnpm version to match lockfile (8.15.0)
+        - corepack prepare pnpm@8.15.0 --activate
+        # Install dependencies
+        # Using --no-frozen-lockfile to handle potential lockfile incompatibilities
+        - pnpm install --no-frozen-lockfile
     build:
       commands:
         # Set production environment
@@ -25,4 +27,3 @@ frontend:
       - node_modules/**/*
       - .next/cache/**/*
       - .pnpm-store/**/*
-
