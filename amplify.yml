@@ -1,0 +1,31 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Enable corepack for pnpm support
+        - corepack enable
+        - corepack prepare pnpm@latest --activate
+        # Verify installations
+        - echo "Node version: $(node --version)"
+        - echo "pnpm version: $(pnpm --version)"
+        # Install dependencies with frozen lockfile for reproducible builds
+        - pnpm install --frozen-lockfile --prefer-offline
+    build:
+      commands:
+        # Set production environment
+        - export NODE_ENV=production
+        # Build the Next.js application
+        - pnpm run build
+        # Verify build output
+        - ls -la .next
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
+      - .pnpm-store/**/*
+
