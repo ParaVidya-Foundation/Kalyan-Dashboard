@@ -1,5 +1,8 @@
 import { Metadata } from "next";
 
+// Force dynamic rendering to prevent SSR issues with client-only components
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Aspects & Conjunctions - Planetary Relationships | Kalyan Dashboard",
   description: "Analyze planetary aspects and conjunctions in your birth chart. Understand how planets influence each other through aspects and conjunctions, affecting various life areas.",

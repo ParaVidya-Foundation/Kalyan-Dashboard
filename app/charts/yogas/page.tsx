@@ -1,5 +1,8 @@
 import { Metadata } from "next";
 
+// Force dynamic rendering to prevent SSR issues with client-only components
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Yogas & Doshas - Planetary Combinations | Kalyan Dashboard",
   description: "Explore planetary yogas (beneficial combinations) and doshas (afflictions) in your birth chart. Understand how planetary combinations affect your life patterns in Vedic astrology.",

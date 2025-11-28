@@ -3,6 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic';
+
 import AIBlogLayout, {
   type AIBlogPostData,
 } from "@/components/research/aiblogs/AIBlogPage/aibloglayout";
