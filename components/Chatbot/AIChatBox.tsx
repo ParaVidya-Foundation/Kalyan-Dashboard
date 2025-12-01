@@ -36,8 +36,10 @@ const AIChatBox: React.FC<AIChatBoxProps> = ({
         await Promise.resolve(maybePromise);
         setValue("");
       } catch (err) {
-        // in a real app you might toast this
-        console.error("ChatBox onSend error:", err);
+        // Error handling - in production, show toast notification
+        if (process.env.NODE_ENV === "development") {
+          console.error("ChatBox onSend error:", err);
+        }
       } finally {
         setLocalSending(false);
       }
@@ -69,7 +71,7 @@ const AIChatBox: React.FC<AIChatBoxProps> = ({
         type="submit"
         disabled={sending}
         className={`inline-flex h-11 w-11 items-center justify-center rounded-xl 
-        bg-gradient-to-r from-fuchsia-500 to-rose-400 text-white shadow-md
+        bg-linear-to-r from-fuchsia-500 to-rose-400 text-white shadow-md
         transition-transform transition-shadow duration-200
         hover:scale-[1.03] active:scale-95 hover:shadow-lg
         disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100`}

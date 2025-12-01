@@ -10,7 +10,9 @@ interface EduHeroSectionProps {
 
 const EduHeroSection: React.FC<EduHeroSectionProps> = ({ onSearchChange }) => {
   const handleSearchSubmit = (value: string) => {
-    console.log("Search value:", value);
+    if (process.env.NODE_ENV === "development") {
+      console.log("Search value:", value);
+    }
     if (onSearchChange) {
       onSearchChange(value);
     }
@@ -65,7 +67,7 @@ const EduHeroSection: React.FC<EduHeroSectionProps> = ({ onSearchChange }) => {
           Live Q & A Session with
         </h1>
         <h2 className="mt-1 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl">
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Top Astrology Books
           </span>
         </h2>

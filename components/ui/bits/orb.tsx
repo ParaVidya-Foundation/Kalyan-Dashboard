@@ -302,7 +302,7 @@ export default function Orb({
         console.debug('WebGL context cleanup:', e);
       }
     };
-  }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
+  }, [frag, forceHoverState, hue, hoverIntensity, rotateOnHover, vert]);
 
   return <div ref={ctnDom} className="w-full h-full" />;
 }

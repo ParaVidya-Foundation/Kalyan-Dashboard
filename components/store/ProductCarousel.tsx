@@ -29,12 +29,9 @@ export default function ProductCarousel({
   const [muted, setMuted] = useState(true);
   const fsRef = useRef<HTMLDivElement>(null);
 
-  // safety: no items
-  if (!items || items.length === 0) {
-    return null;
-  }
-
-  const current = items[index];
+  const hasItems = Array.isArray(items) && items.length > 0;
+  const clampedIndex = hasItems ? Math.min(index, items.length - 1) : 0;
+  const current = hasItems ? items[clampedIndex] : null;
 
   // Fullscreen open
   const openFs = async () => {
@@ -131,11 +128,17 @@ export default function ProductCarousel({
         "
         style={{ aspectRatio: String(aspect) }}
       >
-        {renderMedia(current, true)}
+        {current ? (
+          renderMedia(current, true)
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-sm text-gray-500">
+            No media available
+          </div>
+        )}
 
         {/* Controls (fullscreen + mute) */}
         <div className="absolute right-3 top-3 z-10 flex gap-2">
-          {current.kind === "video" && (
+          {current && current.kind === "video" && (
             <button
               onClick={() => setMuted((m) => !m)}
               className="rounded-md bg-white/90 p-2 shadow hover:bg-white transition-colors"

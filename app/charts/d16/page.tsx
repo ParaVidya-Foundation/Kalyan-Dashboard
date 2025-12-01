@@ -93,19 +93,19 @@ export default function D16ChartPage() {
 
         <ChartSection title="Sample Analysis" delay={0.5}>
           <div className="space-y-5">
-            <div className="bg-gradient-to-r from-yellow-50/80 to-yellow-50/40 border-l-4 border-yellow-400 p-5 sm:p-6 rounded-r-xl shadow-sm">
+            <div className="bg-linear-to-r from-yellow-50/80 to-yellow-50/40 border-l-4 border-yellow-400 p-5 sm:p-6 rounded-r-xl shadow-sm">
               <p className="font-semibold text-gray-900 mb-2 text-lg">Strong Jupiter in 9th House</p>
               <p className="text-gray-700 text-[15px] leading-relaxed">
                 Indicates natural spiritual inclination, connection with gurus, and deep interest in dharma. Strong philosophical and spiritual pursuits. Guidance from spiritual teachers throughout life.
               </p>
             </div>
-            <div className="bg-gradient-to-r from-yellow-50/80 to-yellow-50/40 border-l-4 border-yellow-400 p-5 sm:p-6 rounded-r-xl shadow-sm">
+            <div className="bg-linear-to-r from-yellow-50/80 to-yellow-50/40 border-l-4 border-yellow-400 p-5 sm:p-6 rounded-r-xl shadow-sm">
               <p className="font-semibold text-gray-900 mb-2 text-lg">Moon-Ketu Combination</p>
               <p className="text-gray-700 text-[15px] leading-relaxed">
                 Suggests strong meditation abilities, inner peace, and detachment from material world. Natural inclination toward spiritual practices and contemplation. Progress toward spiritual liberation.
               </p>
             </div>
-            <div className="bg-gradient-to-r from-yellow-50/80 to-yellow-50/40 border-l-4 border-yellow-400 p-5 sm:p-6 rounded-r-xl shadow-sm">
+            <div className="bg-linear-to-r from-yellow-50/80 to-yellow-50/40 border-l-4 border-yellow-400 p-5 sm:p-6 rounded-r-xl shadow-sm">
               <p className="font-semibold text-gray-900 mb-2 text-lg">12th House with Benefics</p>
               <p className="text-gray-700 text-[15px] leading-relaxed">
                 Indicates strong spiritual practices, meditation, and connection with higher consciousness. Path toward moksha and liberation. Natural ability for spiritual disciplines and inner transformation.

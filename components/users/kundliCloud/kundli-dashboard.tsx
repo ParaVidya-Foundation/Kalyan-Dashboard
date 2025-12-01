@@ -216,7 +216,10 @@ export function KundliDashboard() {
               <AstroProfileCard
                 {...k}
                 onView={(id) => {
-                  console.log("View", id);
+                  // Navigate to view kundli details
+                  if (process.env.NODE_ENV === "development") {
+                    console.log("View", id);
+                  }
                 }}
                 onEdit={(id) => {
                   const payload = data.find((d) => d.id === id)!;

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /* ---------- Scrollbar: width ---------- */
 body::-webkit-scrollbar {
@@ -291,6 +290,20 @@ body{
   display: none; /* Chrome, Safari and Opera */
 }
 
+/* Footer ambient animated background */
+.footer-ambient-bg {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 244, 194, 0.2) 0%,
+    rgba(255, 244, 194, 0.05) 25%,
+    rgba(255, 244, 194, 0.13) 50%,
+    rgba(255, 244, 194, 0.05) 75%,
+    rgba(255, 244, 194, 0.2) 100%
+  );
+  background-size: 400% 400%;
+  will-change: background-position;
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up,
@@ -310,13 +323,19 @@ body{
     padding: 0;
     background: white !important;
   }
-  .print\\:hidden {
+  .no-print {
     display: none !important;
   }
-  .print\\:shadow-none {
+  .print-page {
     box-shadow: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
-  .print\\:border-0 {
-    border: 0 !important;
+  .print-padding {
+    padding: 1.5rem !important;
+  }
+  .print-landscape {
+    width: 100% !important;
+    transform-origin: center;
   }
 }

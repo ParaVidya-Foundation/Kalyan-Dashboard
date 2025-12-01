@@ -19,7 +19,12 @@ export default function TestPage() {
       
     </section>
     <div className="flex justify-center relative w-full">
-          <TestSection onSubmitEmail={() => console.log("Email submitted")} />
+          <TestSection onSubmitEmail={() => {
+            // Handle email submission
+            if (process.env.NODE_ENV === "development") {
+              console.log("Email submitted");
+            }
+          }} />
         </div>
         </>
   );

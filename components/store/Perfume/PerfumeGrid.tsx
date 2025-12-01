@@ -34,9 +34,18 @@ export default function PerfumeGrid() {
     })),
   };
 
-  const handleAddToCart = (id: number) => console.log("add-to-cart", id);
-  const handleToggleWishlist = (id: number, wishlisted: boolean) =>
-    console.log("wishlist", id, wishlisted);
+  const handleAddToCart = (id: number) => {
+    // Add to cart functionality
+    if (process.env.NODE_ENV === "development") {
+      console.log("add-to-cart", id);
+    }
+  };
+  const handleToggleWishlist = (id: number, wishlisted: boolean) => {
+    // Toggle wishlist functionality
+    if (process.env.NODE_ENV === "development") {
+      console.log("wishlist", id, wishlisted);
+    }
+  };
 
   return (
     <section className="w-full">

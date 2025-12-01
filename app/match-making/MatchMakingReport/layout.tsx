@@ -11,7 +11,10 @@ export default function MatchMakingLayout({
 }) {
 
   const handleSend = (message: string) => {
-    console.log(message);
+    // Handle chat message send
+    if (process.env.NODE_ENV === "development") {
+      console.log(message);
+    }
   };
 
   return (

@@ -22,7 +22,9 @@ export default function PaperViewPage() {
 
   const handleDownload = () => {
     // In a real app, this would generate a PDF
-    console.log("Downloading PDF...")
+    if (process.env.NODE_ENV === "development") {
+      console.log("Downloading PDF...");
+    }
   }
 
   if (!currentKundli) {
@@ -42,7 +44,7 @@ export default function PaperViewPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Print Controls - Hidden in print */}
-      <div className="bg-white border-b border-gray-200 p-4 print:hidden">
+      <div className="bg-white border-b border-gray-200 p-4 no-print">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
             <div>
@@ -120,12 +122,12 @@ export default function PaperViewPage() {
         className={`${(() => {
           const width = paperSize === "a4" ? "max-w-[210mm]" : paperSize === "a3" ? "max-w-[297mm]" : "max-w-[216mm]"
           const height = paperSize === "a4" ? "min-h-[297mm]" : paperSize === "a3" ? "min-h-[420mm]" : "min-h-[279mm]"
-          const land = orientation === "landscape" ? "print:landscape" : ""
-          return `bg-white mx-auto shadow-lg print:shadow-none print:mx-0 ${width} ${height} ${land}`
+          const land = orientation === "landscape" ? "print-landscape" : ""
+          return `bg-white mx-auto shadow-lg print-page ${width} ${height} ${land}`
         })()}`}
       >
         {/* Header */}
-        <div className="p-8 border-b-2 border-orange-200 print:p-6">
+        <div className="p-8 border-b-2 border-orange-200 print-padding">
           <div className="text-center space-y-2">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
@@ -141,7 +143,7 @@ export default function PaperViewPage() {
         </div>
 
         {/* Personal Information */}
-        <div className="p-8 print:p-6">
+        <div className="p-8 print-padding">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div className="space-y-4">
               <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Personal Details</h2>

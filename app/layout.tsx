@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/footer"
 import Header from "@/components/layout/header"
 import DefaultSEO from "@/components/seo/default-seo"
 import StructuredData from "@/components/seo/structured-data"
+import { Providers } from "@/components/providers"
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -32,10 +33,7 @@ const poppins = Poppins({
 })
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
-  ],
+  themeColor: "#ffffff",
 }
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kalyan.example"
@@ -123,11 +121,13 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
       </head>
       <body className="min-h-screen bg-gray-50 flex flex-col">
-        <DefaultSEO />
-        <StructuredData />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Providers>
+          <DefaultSEO />
+          <StructuredData />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   )
