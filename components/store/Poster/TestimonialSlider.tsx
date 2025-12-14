@@ -85,7 +85,7 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
           justify-content: center;
           align-items: center;
           flex-direction: column;
-          background: linear-gradient(180deg, #fefefe, #f8f8f8);
+ 
           padding: 100px 0;
           isolation: isolate;
         }

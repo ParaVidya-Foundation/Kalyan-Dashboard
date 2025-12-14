@@ -25,7 +25,23 @@ const gemsImages = [
 export default function AccessoriesPage() {
 
   return (
+  <>
+<div className="w-full flex justify-center">
+  <Image
+    src="/Accessories/Acc_main.png"
+    alt="Accessories"
+    width={2000}         // big enough to remain HD
+    height={700}         // EXACT height you want
+    priority
+    className="max-h-[700px] w-auto object-cover"
+  />
+</div>
+
+     
+    
     <div className="space-y-12 py-8">
+             
+   
       <AccessoriesBestSeller 
         items={[
           { id: 1, title: "Original Karungali Malai 108-Beads Ebony Wood with Govt. Certified", image: gemsImages[0], price: 791, oldPrice: 2090, showFrom: true, href: "/store/accessories/Product?id=1" },
@@ -59,17 +75,17 @@ export default function AccessoriesPage() {
           { id: 16, title: "Saraswati Idol with Veena", image: gemsImages[3], price: 2100, oldPrice: 3200, href: "/store/accessories/Product?id=16" },
         ]} 
       />
-       <div className="relative w-full h-[700px]">
-      <Image
-        src="/Accessories/Acc_idols.png"
-        alt="Accessories"
-        fill
-        priority
-        className="object-contain object-center"
-        sizes="100vw"
-      />
-    </div>
-     
+
+    <div className="w-full flex justify-center">
+  <Image
+    src="/Accessories/Acc_idols.png"
+    alt="Accessories"
+    width={2000}         // big enough to remain HD
+    height={700}         // EXACT height you want
+    priority
+    className="max-h-[700px] w-auto object-cover"
+  />
+</div>
       <AccessoriesPoojaKit 
         items={[
           { id: 17, title: "Complete Pooja Kit with Brass Items", image: gemsImages[4], price: 899, oldPrice: 1500, href: "/store/accessories/Product?id=17" },
@@ -82,6 +98,18 @@ export default function AccessoriesPage() {
           { id: 24, title: "Premium Brass Pooja Items", image: gemsImages[11], price: 1600, oldPrice: 2600, href: "/store/accessories/Product?id=24" },
         ]} 
       />
+
+    <div className="w-full flex justify-center">
+  <Image
+    src="/Accessories/acc_zodiac.png"
+    alt="Accessories"
+    width={2000}         // big enough to remain HD
+    height={700}         // EXACT height you want
+    priority
+    className="max-h-[700px] w-auto object-cover"
+  />
+</div>
+
       <AccessoriesRashi 
         items={[
           { id: 25, title: "Aries Rashi Accessories Set", image: gemsImages[0], price: 2500, oldPrice: 4000, href: "/store/accessories/Product?id=25" },
@@ -94,7 +122,9 @@ export default function AccessoriesPage() {
           { id: 32, title: "Scorpio Rashi Accessories", image: gemsImages[7], price: 2300, oldPrice: 3700, href: "/store/accessories/Product?id=32" },
         ]} 
       />
+
     </div>
+    </>
   );
 }
 

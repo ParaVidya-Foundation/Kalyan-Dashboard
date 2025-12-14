@@ -6,6 +6,7 @@ import PosterHero from "@/components/store/Poster/posterhero";
 import PosterGrid from "@/components/store/Poster/postercard";
 import Trailback from "@/components/store/Poster/Trailback";
 import BentoGrid from "@/components/ui/bits/MagicBento";
+import Image from "next/image";
 
 export default function PosterPage() {
   useEffect(() => {
@@ -183,6 +184,17 @@ export default function PosterPage() {
         </div>
       </div>
 
+    <div className="w-full flex justify-center">
+  <Image
+    src="/Poster/Bento/Banner.png"
+    alt="Accessories"
+    width={2000}         // big enough to remain HD
+    height={700}         // EXACT height you want
+    priority
+    className="max-h-[700px] w-auto object-cover"
+  />
+</div>
+     
       <div className="w-full flex justify-center">
         <TestimonialSlider
           videos={[
