@@ -45,7 +45,8 @@ export const BlogCard: React.FC<BlogCardProps> = ({
       itemType="https://schema.org/BlogPosting"
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-video overflow-hidden">
+      <div className="relative w-full aspect-square overflow-hidden">
+
         <Link
           href={blogUrl}
           className="block w-full h-full focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 rounded-t-2xl"
