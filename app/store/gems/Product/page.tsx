@@ -86,8 +86,18 @@ export default function ProductPage() {
             { label: "US 6", value: "US6" },
             { label: "US 7", value: "US7" },
           ]}
-          onAddToCart={(p) => console.log("Add to cart", p)}
-          onBuyNow={(p) => console.log("Buy now", p)}
+          onAddToCart={(p) => {
+            // Add to cart functionality
+            if (process.env.NODE_ENV === "development") {
+              console.log("Add to cart", p);
+            }
+          }}
+          onBuyNow={(p) => {
+            // Buy now functionality
+            if (process.env.NODE_ENV === "development") {
+              console.log("Buy now", p);
+            }
+          }}
         />
       </div>
 

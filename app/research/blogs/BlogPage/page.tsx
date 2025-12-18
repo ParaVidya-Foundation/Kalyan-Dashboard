@@ -10,32 +10,32 @@ import type { BlogCardProps } from "@/components/research/blogs/BlogCard";
 /* -------------------- Demo Blog Data -------------------- */
 const featuredPost: BlogArticle = {
   id: "ai-astrology",
-  title: "How to Use AI in Astrology",
-  image: "/images/blog/ai-astrology.jpg",
-  imageAlt: "AI enhancing astrological predictions",
+  title: "Stree Dosh",
+  image: "/Blogs/blogimg/StreeDosh.webp",
+  imageAlt: "Stree Dosh",
   date: "2025-08-03",
-  author: "Astro Expert",
-  category: "AI Astrology",
-  excerpt: "Explore how modern machine learning amplifies traditional astrological wisdom.",
+  author: "Soham Vashist",
+  category: "Stree Dosh",
+  excerpt: "Explore how Stree Dosh can be used to improve the accuracy of predictions.",
   content: {
     featuredGraphic: {
-      title: "AI-Powered Insights",
-      image: "/images/blog/ai-astrology-featured.jpg",
-      alt: "Neural networks interpreting cosmic patterns",
+      title: "Stree Dosh",
+      image: "/Blogs/blogimg/StreeDosh.webp",
+      alt: "Stree Dosh",
     },
     sections: [
       {
         heading: "Blending Tradition With Innovation",
         paragraphs: [
-          "Artificial intelligence can sift through decades of astrological data to uncover subtle patterns.",
-          "Pair these insights with expert intuition to deliver deeply personalized readings."
+          "Stree Dosh is a dosh that can be used to improve the accuracy of predictions.",
+          "Stree Dosh can be used to improve the accuracy of predictions."
         ],
       },
       {
         heading: "Building Smarter Forecasting Tools",
         paragraphs: [
-          "Modern platforms plug into APIs + ephemeris datasets to generate richer insights.",
-          "These tools assist astrologers, not replace them — like a cosmic co-pilot."
+          "Stree Dosh can be used to improve the accuracy of predictions.",
+          "Stree Dosh can be used to improve the accuracy of predictions."
         ],
       },
     ],
@@ -45,25 +45,25 @@ const featuredPost: BlogArticle = {
 const recentPosts: BlogCardProps[] = [
   {
     id: "1",
-    title: "Best Way to Use AI in Palmistry",
-    image: "/images/blog/ai-palmistry.jpg",
-    imageAlt: "AI palm reading",
+    title: "Pitra Dosh",
+    image: "/Blogs/blogimg/PitraDosh.webp",
+    imageAlt: "Pitra Dosh",
     date: new Date("2025-08-02"),
     href: "/research/blogs/BlogPage",
   },
   {
     id: "2",
-    title: "Drawing Vastu Maps with Modern Tools",
-    image: "/images/blog/vastu-maps.jpg",
-    imageAlt: "Digital Vastu",
+    title: "Mangal Badh",
+    image: "/Blogs/blogimg/MangalBadh.webp",
+    imageAlt: "Mangal Badh",
     date: new Date("2025-08-01"),
     href: "/research/blogs/BlogPage",
   },
   {
     id: "3",
-    title: "AI Horoscope Matching Essentials",
-    image: "/images/blog/ai-horoscope.jpg",
-    imageAlt: "AI matching charts",
+    title: "Stree Dosh",
+    image: "/Blogs/blogimg/StreeDosh.webp",
+    imageAlt: "Stree Dosh",
     date: new Date("2025-07-28"),
     href: "/research/blogs/BlogPage",
   },

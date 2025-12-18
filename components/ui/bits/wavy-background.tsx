@@ -30,24 +30,27 @@ export const WavyBackground = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationIdRef = useRef<number | null>(null);
   
-  const getSpeed = () => {
+  const speedIncrement = useMemo(() => {
     switch (speed) {
-      case "slow":
-        return 0.001;
       case "fast":
         return 0.002;
+      case "slow":
       default:
         return 0.001;
     }
-  };
+  }, [speed]);
 
-  const waveColors = colors ?? [
-    "#38bdf8",
-    "#818cf8",
-    "#c084fc",
-    "#e879f9",
-    "#22d3ee",
-  ];
+  const waveColors = useMemo(
+    () =>
+      colors ?? [
+        "#38bdf8",
+        "#818cf8",
+        "#c084fc",
+        "#e879f9",
+        "#22d3ee",
+      ],
+    [colors],
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,7 +74,7 @@ export const WavyBackground = ({
     };
 
     const drawWave = (n: number) => {
-      nt += getSpeed();
+      nt += speedIncrement;
       for (let i = 0; i < n; i++) {
         ctx.beginPath();
         ctx.lineWidth = waveWidth || 50;
@@ -148,7 +151,7 @@ export const WavyBackground = ({
         prefersReducedMotion.removeListener(handlePrefChange);
       }
     };
-  }, [blur, waveWidth, backgroundFill, waveOpacity, speed, colors, noise]);
+  }, [backgroundFill, blur, noise, speedIncrement, waveColors, waveOpacity, waveWidth]);
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {

@@ -135,7 +135,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(kundli, { status: 200 })
   } catch (error) {
-    console.error("Error generating kundli:", error)
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error generating kundli:", error)
+    }
     return NextResponse.json(
       { error: "Failed to generate kundli" },
       { status: 500 }

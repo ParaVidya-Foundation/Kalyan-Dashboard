@@ -8,25 +8,14 @@ import Image from "next/image";
 
 export default function PerfumePage() {
   return (
-    <div
-      className="relative w-full overflow-visible"
-      style={
-        {
-          ["--header-h" as any]: "30px",
-          ["--hero-h" as any]: "110vh",
-        } as React.CSSProperties
-      }
-    >
+    <div className="relative w-full overflow-visible [--header-h:30px] [--hero-h:110vh]">
       {/* ====================== GLOBAL BACKGROUND ====================== */}
       <div className="absolute inset-0 -z-10">
         <MovingGradient />
       </div>
 
       {/* =========================== HERO ============================= */}
-      <section
-        className="relative z-0 w-full pointer-events-none"
-        style={{ marginTop: "var(--header-h)" }}
-      >
+      <section className="relative z-0 w-full pointer-events-none mt-[var(--header-h)]">
         {/* HERO IMAGE */}
         <div className="relative h-[var(--hero-h)] w-full overflow-hidden">
           <Image
@@ -40,7 +29,7 @@ export default function PerfumePage() {
         </div>
 
         {/* ====================== TOP BORDER (FIXED) ====================== */}
-        <div className="absolute left-0 right-0 bottom-[-75px] z-[20] pointer-events-none">
+        <div className="absolute left-0 right-0 bottom-[-75px] z-20 pointer-events-none">
           <div className="relative w-full h-[230px]">
             <Image
               src="/Perfume/Paper-Border.png"
@@ -59,12 +48,12 @@ export default function PerfumePage() {
       <section className="relative w-full overflow-visible mt-[-10px] pb-[100px]">
 
         {/* CONTENT BLOCK */}
-        <div className="relative z-[-10]">
+        <div className="relative -z-10">
           <MakingPerfume />
         </div>
 
         {/* ====================== BOTTOM BORDER ====================== */}
-        <div className="absolute inset-x-0 bottom-[-50px] z-[5] pointer-events-none rotate-180">
+        <div className="absolute inset-x-0 bottom-[-50px] z-5 pointer-events-none rotate-180">
           <div className="relative w-full h-[230px]">
             <Image
               src="/Perfume/Paper-Border.png"
@@ -83,6 +72,21 @@ export default function PerfumePage() {
         <PerfumePlanet />
         <PerfumeGrid />
       </main>
+
+
+<div className="w-full flex justify-center">
+  <Image
+    src="/check.gif"
+    alt="Accessories"
+    width={2000}         // big enough to remain HD
+    height={800}         // EXACT height you want
+    priority
+    unoptimized  
+    className="max-h-[800px] w-auto object-cover"
+  />
+</div>
+
+
     </div>
   );
 }

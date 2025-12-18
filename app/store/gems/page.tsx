@@ -8,29 +8,17 @@ import Image from "next/image";
 export default function GemsPage() {
   return (
     <div>
-<div className="relative w-full min-h-[700px] md:h-[860px] lg:h-[900px] xl:h-[940px] overflow-hidden">
+<div className="w-full h-full overflow-hidden bg-[#FFFAE6] flex justify-center items-center">
   <Image
     src="/Gems/Gems-Banner.jpg"
     alt="Gems Banner"
-    fill
+    width={1920}           // UHD resolution for sharp scaling
+    height={1080}          // EXACT height you want
     priority
     quality={100}
-    sizes="100vw"
-    className="absolute inset-0 w-full h-full object-cover object-center"
-    loading="eager"
-    style={{
-      backgroundColor: "#FFFAE6",
-      objectFit: "cover",
-      objectPosition: "center",
-    }}
+    className="w-full h-full object-contain object-center"
     placeholder="blur"
     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
-    onError={(e) => {
-      const target = e.target as HTMLImageElement;
-      if (target.src !== "/Gems/Gems-Banner.jpg") {
-        target.src = "/Gems/Gems-Banner.jpg";
-      }
-    }}
   />
 </div>
 

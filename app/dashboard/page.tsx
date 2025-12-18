@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { DashboardOverview } from "@/components/dashboard/dashboard-overview"
-import { DetailedChartView } from "@/components/charts/detailed-chart-view"
 import { useKundliStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { Breadcrumbs } from "@/components/layout/breadcrumbs"
@@ -46,17 +45,7 @@ export default function DashboardPage() {
     )
   }
 
-  if (selectedChart) {
-    return (
-      <div className="min-h-screen">
-        <DetailedChartView
-          chartData={selectedChart.data}
-          title={selectedChart.title}
-          onBack={() => setSelectedChart(null)}
-        />
-      </div>
-    )
-  }
+
 
   return (
     <div className="max-w-7xl mx-auto">

@@ -5,6 +5,7 @@ import AIBlogGrid from "@/components/research/aiblogs/AIBlogGrid";
 import AIBlogSidebar from "@/components/research/aiblogs/AIBlogSidebar";
 import type { AIBlogCardProps } from "@/components/research/aiblogs/AIBlogCard";
 import { WavyBackground } from "@/components/ui/bits/wavy-background";
+import Image from "next/image";
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic';
@@ -12,35 +13,35 @@ export const dynamic = 'force-dynamic';
 const demoPosts: AIBlogCardProps[] = [
   {
     id: "ai-1",
-    title: "From Idea to Launch",
-    image: "/placeholder.jpg",
-    imageAlt: "AI-powered creativity",
+    title: "AI in Astrology",
+    image: "/Blogs/AIBlogs/AIAstro.jpg",
+    imageAlt: "AI in Astrology",
     href: "/research/aiblogs/AIBlogPage",
     category: "Educational",
   },
   {
     id: "ai-2",
-    title: "AI-Powered Marketing",
-    image: "/placeholder.jpg",
-    imageAlt: "AI-generated marketing visuals",
+    title: "Detecting Palm Lines with OpenCV",
+    image: "/Blogs/AIBlogs/Palm.jpg",
+    imageAlt: "Detecting Palm Lines with OpenCV",
     href: "/research/aiblogs/AIBlogPage",
     category: "Insights",
   },
   {
     id: "ai-3",
-    title: "Studio Experiments",
-    image: "/placeholder.jpg",
-    imageAlt: "Modern AI studio setup",
+    title: "Drawing Vastu Maps with AI",
+    image: "/Blogs/AIBlogs/Vastu.jpg",
+    imageAlt: "Drawing Vastu Maps with AI",
     href: "/research/aiblogs/AIBlogPage",
     category: "Studio",
   },
   {
     id: "ai-4",
-    title: "Projects in the Wild",
-    image: "/placeholder.jpg",
-    imageAlt: "Outdoor creative workspace",
+    title: "Machine Learning in Astrology",
+    image: "/Blogs/AIBlogs/MLP.jpg",
+    imageAlt: "Machine Learning in Palmistry",
     href: "/research/aiblogs/AIBlogPage",
-    category: "Projects",
+    category: "Educational",
   },
 ];
 
@@ -79,6 +80,7 @@ export default function AiBlogs() {
         </WavyBackground>
       </div>
 
+     
       {/* Main Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">

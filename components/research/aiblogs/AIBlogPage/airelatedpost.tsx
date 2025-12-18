@@ -26,7 +26,7 @@ export default function AIBlogRelatedPosts({
   if (!posts.length) return null;
 
   return (
-    <section className="px-6 sm:px-12 lg:px-20 py-24 bg-white relative">
+    <section className="px-6 sm:px-12 lg:px-20 py-24 relative">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: 14 }}
@@ -54,10 +54,11 @@ export default function AIBlogRelatedPosts({
             >
               <Link
                 href={post.href || `/research/blogs/${post.id || "BlogPage"}`}
-                className="block rounded-2xl bg-white/60 backdrop-blur-xl border border-black/5 shadow-[0_0_60px_-20px_rgba(0,0,0,0.15)] transition-all duration-500 hover:shadow-[0_0_60px_-10px_rgba(0,0,0,0.22)] hover:-translate-y-1"
+                className="block rounded-2xl backdrop-blur-xl border border-black/5 shadow-[0_0_60px_-20px_rgba(0,0,0,0.15)] transition-all duration-500 hover:shadow-[0_0_60px_-10px_rgba(0,0,0,0.22)] hover:-translate-y-1"
               >
                 {/* IMAGE */}
-                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100">
+                <div className="relative aspect-square overflow-hidden rounded-2xl">
+
                   <Image
                     src={post.image}
                     alt={post.imageAlt}

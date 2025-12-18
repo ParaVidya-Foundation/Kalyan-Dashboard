@@ -73,7 +73,7 @@ export default function BlogLayout({ post }: BlogLayoutProps) {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2 }}
-        className="relative mt-12 w-full aspect-video lg:aspect-[21/9] rounded-2xl overflow-hidden shadow-xl"
+        className="relative mt-12 w-full aspect-square lg:aspect-square rounded-2xl overflow-hidden shadow-xl"
       >
         <Image
           src={post.content.featuredGraphic.image}
@@ -82,12 +82,7 @@ export default function BlogLayout({ post }: BlogLayoutProps) {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        <div className="absolute bottom-8 left-8 text-white">
-          <h2 className="text-3xl lg:text-5xl font-bold drop-shadow-lg">
-            {post.content.featuredGraphic.title}
-          </h2>
-        </div>
+        
       </motion.div>
 
         {/* Article Content */}

@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  motion,
-  Variants,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 import {
   Facebook,
@@ -94,12 +88,12 @@ export function Footer() {
     footer.addEventListener("mouseleave", handleLeave, { passive: true });
 
     return () => {
-      footer.removeEventListener("pointermove", handleMove as any);
-      footer.removeEventListener("mousemove", handleMove as any);
-      footer.removeEventListener("pointerleave", handleLeave as any);
-      footer.removeEventListener("mouseleave", handleLeave as any);
+      footer.removeEventListener("pointermove", handleMove);
+      footer.removeEventListener("mousemove", handleMove);
+      footer.removeEventListener("pointerleave", handleLeave);
+      footer.removeEventListener("mouseleave", handleLeave);
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
     <footer
@@ -112,13 +106,7 @@ export function Footer() {
 
         {/* Smooth GPU-animated background */}
         <motion.div
-          className="absolute inset-0 opacity-10"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(255,244,194,0.20) 0%, rgba(255,244,194,0.05) 25%, rgba(255,244,194,0.13) 50%, rgba(255,244,194,0.05) 75%, rgba(255,244,194,0.20) 100%)",
-            backgroundSize: "400% 400%",
-            willChange: "background-position",
-          }}
+          className="absolute inset-0 opacity-10 footer-ambient-bg"
           animate={{
             backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
           }}
@@ -365,7 +353,7 @@ export function Footer() {
                   whileHover={{ scale: 1.02, y: -1 }}
                   whileTap={{ scale: 0.97 }}
                   className="w-full flex items-center justify-center gap-2 px-4 py-2.5
-                    text-sm font-medium text-gray-900 bg-gradient-to-r from-yellow-300
+                    text-sm font-medium text-gray-900 bg-linear-to-r from-yellow-300
                     via-yellow-400 to-yellow-500 rounded-xl shadow"
                 >
                   Subscribe <Send className="h-4 w-4" />

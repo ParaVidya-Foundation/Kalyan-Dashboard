@@ -1,0 +1,29 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Enable corepack for pnpm support
+        - corepack enable
+        # Use specific pnpm version to match lockfile (8.15.0)
+        - corepack prepare pnpm@8.15.0 --activate
+        # Install dependencies
+        # Using --no-frozen-lockfile to handle potential lockfile incompatibilities
+        - pnpm install --no-frozen-lockfile
+    build:
+      commands:
+        # Set production environment
+        - export NODE_ENV=production
+        # Build the Next.js application
+        - pnpm run build
+        # Verify build output
+        - ls -la .next
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
+      - .pnpm-store/**/*

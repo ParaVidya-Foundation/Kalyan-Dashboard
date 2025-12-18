@@ -75,8 +75,18 @@ export default function PosterProductPage() {
               { label: "Laminated", value: "Laminated" },
               { label: "Non-Laminated", value: "Non-Laminated" },
             ]}
-            onAddToCart={(p) => console.log("Add to cart", p)}
-            onBuyNow={(p) => console.log("Buy now", p)}
+            onAddToCart={(p) => {
+              // Add to cart functionality
+              if (process.env.NODE_ENV === "development") {
+                console.log("Add to cart", p);
+              }
+            }}
+            onBuyNow={(p) => {
+              // Buy now functionality
+              if (process.env.NODE_ENV === "development") {
+                console.log("Buy now", p);
+              }
+            }}
           />
         </div>
       </section>

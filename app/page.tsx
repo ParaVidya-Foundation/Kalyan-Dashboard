@@ -7,7 +7,7 @@ export default function HomePage() {
       <MovingGradient />
       <div className="w-full max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Professional Kundli Generator</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Kundli Generator</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Generate accurate and detailed Vedic astrology charts with professional-grade calculations and insights.
           </p>

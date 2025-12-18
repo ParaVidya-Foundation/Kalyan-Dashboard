@@ -65,7 +65,9 @@ export function KundliForm({ title = "Generate Your Kundli", isFirstTime = false
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Failed to generate Kundli"
       setError(errorMessage)
-      console.error("Error generating kundli:", error)
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error generating kundli:", error)
+      }
     } finally {
       setLoading(false)
     }

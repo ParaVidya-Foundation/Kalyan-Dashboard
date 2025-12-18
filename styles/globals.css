@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -119,5 +118,31 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Print utilities replacement for Tailwind v4 (no `print:` variant support) */
+@media print {
+  .border-0 {
+    border: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-page {
+    box-shadow: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .print-padding {
+    padding: 1.5rem !important; /* approx Tailwind p-6 */
+  }
+
+  .print-landscape {
+    width: 100% !important;
+    transform-origin: center;
   }
 }
