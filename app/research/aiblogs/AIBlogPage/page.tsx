@@ -20,18 +20,18 @@ import type { AIBlogCardProps } from "@/components/research/aiblogs/AIBlogCard";
 --------------------------- */
 const featuredPost: AIBlogPostData = {
   id: "future-of-vedic-wisdom",
-  title: "The Future of Vedic Wisdom in a Digital Age",
+  title: "AI in Astrology",
   image:
-    "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=2400&q=90",
-  imageAlt: "Cosmic visualization of ancient wisdom meeting modern technology",
+    "/Blogs/AIBlogs/AIAstro.jpg",
+  imageAlt: "AI in Astrology",
   date: "2025-11-18",
-  author: "Acharya Vikramaditya",
+  author: "Soham Vashist",
   readingTime: "8 min read",
   excerpt:
-    "How sacred geometry, silence, and AI can create the next era of spiritual technology.",
+    "How AI can be used in Astrology to improve the accuracy of predictions.",
   content: {
     heroImage:
-      "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=2400&q=90",
+      "/Blogs/AIBlogs/AIAstro.jpg",
     heroImageAlt: "Celestial digital art representing Vedic knowledge",
     sections: [
       {
@@ -65,33 +65,43 @@ const featuredPost: AIBlogPostData = {
 const recentPosts: AIBlogCardProps[] = [
   {
     id: "1",
-    title: "Best Way to Use AI in Palmistry",
+    title: "Detecting Palm Lines with OpenCV",
     image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
-    imageAlt: "AI analyzing palm lines",
+      "/Blogs/AIBlogs/Palm.jpg",
+    imageAlt: "Detecting Palm Lines with OpenCV",
     date: "2025-11-10",
-    category: "Palmistry",
-    href: "/research/blogs/ai-palmistry",
+    category: "Insights",
+    href: "/research/aiblogs/AIBlogPage",
   },
   {
     id: "2",
-    title: "Vastu Maps in Augmented Reality",
+    title: "Drawing Vastu Maps with AI",
     image:
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
-    imageAlt: "Digital Vastu overlay",
+      "/Blogs/AIBlogs/Vastu.jpg",
+    imageAlt: "Drawing Vastu Maps with AI",
     date: "2025-11-05",
-    category: "Vastu",
-    href: "/research/blogs/vastu-maps",
+    category: "Studio",
+    href: "/research/aiblogs/AIBlogPage",
   },
   {
     id: "3",
-    title: "AI-Powered Horoscope Matching",
+    title: "AI in Astrology",
     image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
-    imageAlt: "Compatibility algorithm",
+      "/Blogs/AIBlogs/AIAstro.jpg",
+    imageAlt: "AI in Astrology",
     date: "2025-10-28",
-    category: "AI Astrology",
-    href: "/research/blogs/ai-horoscope-matching",
+    category: "Educational",
+    href: "/research/blogs/ai-astrology",
+  },
+  {
+    id: "4",
+    title: "Machine Learning in Astrology",
+    image:
+      "/Blogs/AIBlogs/MLP.jpg",
+    imageAlt: "Machine Learning in Astrology",
+    date: "2025-10-28",
+    category: "Educational",
+    href: "/research/blogs/machine-learning-in-astrology",
   },
 ];
 
@@ -100,31 +110,44 @@ const recentPosts: AIBlogCardProps[] = [
 --------------------------- */
 const moreArticles: AIBlogCardProps[] = [
   {
+    id: "1",
+    title: "Detecting Palm Lines with OpenCV",
+    image:
+      "/Blogs/AIBlogs/Palm.jpg",
+    imageAlt: "Detecting Palm Lines with OpenCV",
+    date: "2025-11-10",
+    category: "Insights",
+    href: "/research/aiblogs/AIBlogPage",
+  },
+  {
+    id: "2",
+    title: "Drawing Vastu Maps with AI",
+    image:
+      "/Blogs/AIBlogs/Vastu.jpg",
+    imageAlt: "Drawing Vastu Maps with AI",
+    date: "2025-11-05",
+    category: "Studio",
+    href: "/research/aiblogs/AIBlogPage",
+  },
+  {
+    id: "3",
+    title: "AI in Astrology",
+    image:
+      "/Blogs/AIBlogs/AIAstro.jpg",
+    imageAlt: "AI in Astrology",
+    date: "2025-10-28",
+    category: "Educational",
+    href: "/research/blogs/ai-astrology",
+  },
+  {
     id: "4",
-    title: "Designing Rituals for Mixed Reality",
+    title: "Machine Learning in Astrology",
     image:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1200&q=80",
-    imageAlt: "AR ritual space",
-    category: "Spatial Design",
-    href: "/research/blogs/designing-rituals",
-  },
-  {
-    id: "5",
-    title: "The Quiet Power of Sonic Ayurveda",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80",
-    imageAlt: "Sound healing visualization",
-    category: "Wellness",
-    href: "/research/blogs/sonic-ayurveda",
-  },
-  {
-    id: "6",
-    title: "Astral Maps for the Modern Nomad",
-    image:
-      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80",
-    imageAlt: "Astrocartography map",
-    category: "Travel",
-    href: "/research/blogs/astral-maps",
+      "/Blogs/AIBlogs/MLP.jpg",
+    imageAlt: "Machine Learning in Astrology",
+    date: "2025-10-28",
+    category: "Educational",
+    href: "/research/blogs/machine-learning-in-astrology",
   },
 ];
 

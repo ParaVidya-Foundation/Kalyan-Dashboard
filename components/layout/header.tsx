@@ -68,7 +68,6 @@ const NAV: NavItem[] = [
       { name: "Poster", href: "/store/poster", icon: ImageIcon },
       { name: "Gems", href: "/store/gems", icon: Gem },
       { name: "Accessories", href: "/store/accessories", icon: Package },
-      { name: "Bracelet", href: "/store/bracelet", icon: CircleDot },
     ],
   },
   {
