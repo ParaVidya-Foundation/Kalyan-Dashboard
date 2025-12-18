@@ -80,16 +80,6 @@ export default function AiBlogs() {
         </WavyBackground>
       </div>
 
-      <div className="w-full flex justify-center">
-  <Image
-    src="/Blogs/AIBlogs/Banner.webp"
-    alt="Accessories"
-    width={2000}         // big enough to remain HD
-    height={700}         // EXACT height you want
-    priority
-    className="max-h-[700px] w-auto object-cover"
-  />
-</div>
      
       {/* Main Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 py-20">
