@@ -5,6 +5,8 @@ import PerfumeGrid from "@/components/store/Perfume/PerfumeGrid";
 import MovingGradient from "@/components/store/Perfume/MovingGradient";
 import MakingPerfume from "@/components/store/Perfume/MakingPerfume";
 import Image from "next/image";
+import PerfumeZodiac from "@/components/store/Perfume/PerfumeZodiac";
+import PerfumeZodiacGrid from "@/components/store/Perfume/PerfumeZodiacGrid";
 
 export default function PerfumePage() {
   return (
@@ -72,7 +74,11 @@ export default function PerfumePage() {
         <PerfumePlanet />
         <PerfumeGrid />
       </main>
-
+      
+      <main className="relative z-20 flex flex-col items-center justify-center space-y-20 py-20">
+        <PerfumeZodiac />
+        <PerfumeZodiacGrid />
+      </main>
 
 <div className="w-full flex justify-center">
   <Image

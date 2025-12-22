@@ -56,11 +56,11 @@ export default function AccessoriesPage() {
       />
       <CarouselBuy
         slides={[
-          { image: gemsImages[0], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=1" },
-          { image: gemsImages[1], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=2" },
-          { image: gemsImages[2], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=3" },
-          { image: gemsImages[3], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=4" },
-          { image: gemsImages[4], buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=5" },
+          { image: "/Accessories/astroBanner.webp", buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=1" },
+          { image: "/Accessories/poojaBanner.webp", buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=2" },
+          { image: "/Accessories/KitBanner.webp", buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=3" },
+          { image: "/Accessories/malabanner.webp", buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=4" },
+          { image: "/Accessories/idolBanner.webp", buttonText: "Buy Now", buttonLink: "/store/accessories/Product?id=5" },
         ]}
       />
       <AccessoriesIdols 

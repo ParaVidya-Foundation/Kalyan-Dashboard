@@ -3,17 +3,81 @@ import { PerfumeCard, type Perfume } from "./PerfumeCard";
 
 /** Your 8 products */
 const perfumes: Perfume[] = [
-  { id: 1, name: "Sun",        price: 15.0, images: ["/Perfume/Planets/sun.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 2, name: "Moon",        price: 22.0, images: ["/Perfume/Planets/moon.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 3, name: "Rahu",        price: 20.0, images: ["/Perfume/Planets/rahu.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 4, name: "Mars",price: 16.0, images: ["/Perfume/Planets/mars.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 5, name: "Mercury",      price: 19.0, images: ["/Perfume/Planets/mercury.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 6, name: "Jupiter",       price: 25.0, images: ["/Perfume/Planets/jupiter.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 7, name: "Venus",   price: 18.0, images: ["/Perfume/Planets/venus.webp", "/Perfume/Bottles/saturn.png"] },
-  { id: 8, name: "Saturn",        price: 21.0, images: ["/Perfume/Planets/saturn.webp", "/Perfume/Bottles/saturn.png"] },
+  {
+    id: 1,
+    name: "Aries",
+    price: 15.0,
+    images: ["/Perfume/Zodiac/aries1.webp", "/Perfume/Zodiac/aries.webp"],
+  },
+  {
+    id: 2,
+    name: "Taurus",
+    price: 18.0,
+    images: ["/Perfume/Zodiac/taurus1.webp", "/Perfume/Zodiac/taurus.webp"],
+  },
+  {
+    id: 3,
+    name: "Gemini",
+    price: 17.0,
+    images: ["/Perfume/Zodiac/gemini1.webp", "/Perfume/Zodiac/gemini.webp"],
+  },
+  {
+    id: 4,
+    name: "Cancer",
+    price: 19.0,
+    images: ["/Perfume/Zodiac/cancer1.webp", "/Perfume/Zodiac/cancer.webp"],
+  },
+  {
+    id: 5,
+    name: "Leo",
+    price: 20.0,
+    images: ["/Perfume/Zodiac/leo1.webp", "/Perfume/Zodiac/leo.webp"],
+  },
+  {
+    id: 6,
+    name: "Virgo",
+    price: 18.0,
+    images: ["/Perfume/Zodiac/virgo1.webp", "/Perfume/Zodiac/virgo.webp"],
+  },
+  {
+    id: 7,
+    name: "Libra",
+    price: 19.0,
+    images: ["/Perfume/Zodiac/libra1.webp", "/Perfume/Zodiac/libra.webp"],
+  },
+  {
+    id: 8,
+    name: "Scorpio",
+    price: 21.0,
+    images: ["/Perfume/Zodiac/scorpio1.webp", "/Perfume/Zodiac/scorpio.webp"],
+  },
+  {
+    id: 9,
+    name: "Sagittarius",
+    price: 20.0,
+    images: ["/Perfume/Zodiac/sagittarius1.webp", "/Perfume/Zodiac/sagittarius.webp"],
+  },
+  {
+    id: 10,
+    name: "Capricorn",
+    price: 22.0,
+    images: ["/Perfume/Zodiac/capricorn1.webp", "/Perfume/Zodiac/capricorn.webp"],
+  },
+  {
+    id: 11,
+    name: "Aquarius",
+    price: 21.0,
+    images: ["/Perfume/Zodiac/aquarius1.webp", "/Perfume/Zodiac/aquarius.webp"],
+  },
+  {
+    id: 12,
+    name: "Pisces",
+    price: 19.0,
+    images: ["/Perfume/Zodiac/pisces1.webp", "/Perfume/Zodiac/pisces.webp"],
+  },
 ];
 
-const PerfumeGrid = React.memo(function PerfumeGrid() {
+const PerfumeZodiacGrid = React.memo(function PerfumeZodiacGrid() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -85,4 +149,4 @@ const PerfumeGrid = React.memo(function PerfumeGrid() {
   );
 });
 
-export default PerfumeGrid;
+export default PerfumeZodiacGrid;
