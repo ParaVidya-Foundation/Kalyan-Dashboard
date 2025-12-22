@@ -30,7 +30,7 @@ const CARDS: Card[] = [
     title: "Vedic Astrology",
     desc:
       "Timeless natal charts, yogas and planetary remedies rooted in Parāśara tradition.",
-    href: "/services/vedic-astrology",
+    href: "/education/test/Roadmap/",
     Icon: Sun,
   },
   {
@@ -38,7 +38,7 @@ const CARDS: Card[] = [
     title: "Vastu",
     desc:
       "Space alignment & practical guidelines to harmonize energy in home and workspaces.",
-    href: "/services/vastu",
+    href: "/education/test/Roadmap/",
     Icon: Home,
   },
   {
@@ -46,7 +46,7 @@ const CARDS: Card[] = [
     title: "Lal Kitab",
     desc:
       "Practical remedies and house-based solutions from Lal Kitab's unique system.",
-    href: "/services/lal-kitab",
+    href: "/education/test/Roadmap/",
     Icon: BookOpen,
   },
   {
@@ -54,7 +54,7 @@ const CARDS: Card[] = [
     title: "Numerology",
     desc:
       "Name & number analysis to uncover personal cycles and life path signals.",
-    href: "/services/numerology",
+    href: "/education/test/Roadmap/",
     Icon: Hash,
   },
   {
@@ -62,7 +62,7 @@ const CARDS: Card[] = [
     title: "Palmistry",
     desc:
       "Hand reading that reveals strengths, timing, and character through lines & mounts.",
-    href: "/services/palmistry",
+    href: "/education/test/Roadmap/",
     Icon: Hand,
   },
   {
@@ -70,7 +70,7 @@ const CARDS: Card[] = [
     title: "Tarot",
     desc:
       "Insightful card spreads for clarity on decisions, timing and inner guidance.",
-    href: "/services/tarot",
+    href: "/education/test/Roadmap/",
     Icon: Shuffle,
   },
 ];
