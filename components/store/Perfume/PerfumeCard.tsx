@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
@@ -33,6 +33,7 @@ export const PerfumeCard = React.memo(function PerfumeCard({
   onToggleWishlist,
 }: PerfumeCardProps) {
   const [wishlisted, setWishlisted] = useState(false);
+  const formattedPrice = useMemo(() => formatCurrency(item.price), [item.price]);
 
   return (
     <Link
@@ -54,7 +55,7 @@ export const PerfumeCard = React.memo(function PerfumeCard({
         "
       >
         {/* gradient glass overlay */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/30 via-white/10 to-transparent rounded-none" />
+        <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-white/30 via-white/10 to-transparent rounded-none" />
 
         {/* wishlist heart */}
         <button
@@ -75,14 +76,18 @@ export const PerfumeCard = React.memo(function PerfumeCard({
         </button>
 
         {/* product image */}
-        <div className="relative w-full max-w-[280px] aspect-[4/3] z-10">
+        <div className="relative w-full max-w-[280px] aspect-4/3 z-10">
           <Image
             src={item.images[0] || item.images[1] || "/Perfume/1.png"}
             alt={`${item.name} bottle`}
             fill
             quality={90}
             sizes="(max-width: 640px) 90vw, (max-width: 1024px) 40vw, 280px"
-            className="object-contain transition-opacity duration-300 ease-out group-hover:opacity-0"
+            className="object-contain transition-opacity duration-300 ease-out group-hover:opacity-0 will-change-transform"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "translateZ(0)",
+            }}
             priority={priority}
             loading={priority ? "eager" : "lazy"}
             placeholder="blur"
@@ -103,7 +108,11 @@ export const PerfumeCard = React.memo(function PerfumeCard({
               fill
               quality={90}
               sizes="(max-width: 640px) 90vw, (max-width: 1024px) 40vw, 280px"
-              className="object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+              className="object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 will-change-transform"
+              style={{
+                backfaceVisibility: "hidden",
+                transform: "translateZ(0)",
+              }}
               loading="lazy"
               placeholder="blur"
               blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4="
@@ -130,7 +139,7 @@ export const PerfumeCard = React.memo(function PerfumeCard({
             className="h-10 border border-gray-300 text-[13px] font-medium bg-white/60 backdrop-blur-sm"
             disabled
           >
-            {formatCurrency(item.price)}
+            {formattedPrice}
           </button>
           <button
             type="button"
