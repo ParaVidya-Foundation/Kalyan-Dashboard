@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -15,21 +15,38 @@ type Planet = {
   desc: string;
 };
 
-const DUMMY_PLANET = "/Perfume/Card/saturn.png";
-const DUMMY_PERFUME = "/Perfume/Bottles/saturn.png";
 
 const PLANETS: Planet[] = [
-  { id: "sun", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Sun — Golden warmth in every note." },
-  { id: "moon", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Moon — Calm whispers in silver light." },
-  { id: "mars", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Mars — Flame of courage, scent of victory." },
-  { id: "mercury", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Mercury — Quick thoughts, cool citrus." },
-  { id: "jupiter", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Jupiter — Grandeur laced in calm sandalwood." },
-  { id: "venus", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Venus — Love reborn in rose and velvet." },
-  { id: "saturn", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Saturn — The scent of timeless strength." },
-  { id: "rahu", planetImg: DUMMY_PLANET, perfumeImg: DUMMY_PERFUME, desc: "Rahu — Shadow’s fire, smoky mystery." },
+  { id: "sun", planetImg: "/Perfume/Planets/surya_card.webp", perfumeImg: "/Perfume/Planets/sun.webp", desc: "Sun — Golden warmth in every note." },
+  { id: "moon", planetImg: "/Perfume/Planets/moon_card.webp", perfumeImg: "/Perfume/Planets/moon.webp", desc: "Moon — Calm whispers in silver light." },
+  { id: "mars", planetImg: "/Perfume/Planets/mangal_card.webp", perfumeImg: "/Perfume/Planets/mars.webp", desc: "Mars — Flame of courage, scent of victory." },
+  { id: "mercury", planetImg: "/Perfume/Planets/budh_card.webp", perfumeImg: "/Perfume/Planets/mercury.webp", desc: "Mercury — Quick thoughts, cool citrus." },
+  { id: "jupiter", planetImg: "/Perfume/Planets/guru_card.webp", perfumeImg: "/Perfume/Planets/jupiter.webp", desc: "Jupiter — Grandeur laced in calm sandalwood." },
+  { id: "venus", planetImg: "/Perfume/Planets/shukra_card.webp", perfumeImg: "/Perfume/Planets/venus.webp", desc: "Venus — Love reborn in rose and velvet." },
+  { id: "saturn", planetImg: "/Perfume/Planets/shani_card.webp", perfumeImg: "/Perfume/Planets/saturn.webp", desc: "Saturn — The scent of timeless strength." },
+  { id: "rahu", planetImg: "/Perfume/Planets/rahu_card.webp", perfumeImg: "/Perfume/Planets/rahu.webp", desc: "Rahu — Shadow’s fire, smoky mystery." },
 ];
 
-export default function PerfumePlanet() {
+const buttonMotion = {
+  initial: { scale: 1 },
+  whileHover: { scale: 1.06 },
+  whileTap: { scale: 0.96 },
+};
+
+const cardMotion = {
+  initial: { opacity: 0, y: 40, scale: 0.96 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -40, scale: 0.96 },
+  transition: { duration: 0.8, ease: [0.25, 1, 0.3, 1] },
+};
+
+const descMotion = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay: 0.15, ease: "easeOut" },
+};
+
+const PerfumePlanet = React.memo(function PerfumePlanet() {
   const [selected, setSelected] = useState<string>(PLANETS[0].id);
   const planet = useMemo(
     () => PLANETS.find((p) => p.id === selected)!,
@@ -52,6 +69,8 @@ export default function PerfumePlanet() {
   // Use simple static transform instead of scroll-based parallax
   const y = 0; // Disabled parallax to prevent errors
 
+  const handleSelect = useCallback((id: string) => setSelected(id), []);
+
   return (
     <section ref={sectionRef} className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden font-poppins">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-12 px-6 md:px-10 py-16 items-center">
@@ -63,10 +82,9 @@ export default function PerfumePlanet() {
               return (
                 <motion.button
                   key={p.id}
-                  onClick={() => setSelected(p.id)}
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                  onClick={() => handleSelect(p.id)}
+                  {...buttonMotion}
+                  transition={{ type: "spring", stiffness: 180, damping: 16 }}
                   className={clsx(
                     // bigger tiles; keep your aspect and rounded style
                     "relative aspect-[2/3] w-[120px] sm:w-[140px] md:w-[160px] rounded-xl overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] focus:outline-none",
@@ -80,8 +98,13 @@ export default function PerfumePlanet() {
                     alt={`${p.id} planet`}
                     fill
                     sizes="(max-width:640px) 33vw, (max-width:1024px) 22vw, 160px"
-                    className="object-cover rounded-xl"
+                    className="object-cover rounded-xl will-change-transform"
+                    style={{
+                      backfaceVisibility: "hidden",
+                      transform: "translateZ(0)",
+                    }}
                     priority={active}
+                    loading={active ? "eager" : "lazy"}
                   />
                 </motion.button>
               );
@@ -94,10 +117,12 @@ export default function PerfumePlanet() {
           <AnimatePresence mode="wait">
             <motion.div
               key={planet.id}
-              initial={{ opacity: 0, y: 40, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -40, scale: 0.96 }}
-              transition={{ duration: 0.8, ease: [0.25, 1, 0.3, 1] }}
+              {...cardMotion}
+              style={{
+                willChange: "transform, opacity",
+                backfaceVisibility: "hidden",
+                transform: "translateZ(0)",
+              }}
               className="relative w-[95%] md:w-[90%] h-[56vh] sm:h-[60vh] rounded-3xl overflow-hidden flex items-center justify-center bg-white/40 backdrop-blur-2xl border border-white/30 shadow-[0_10px_40px_rgba(0,0,0,0.06)]"
             >
               {/* Bottle display */}
@@ -107,8 +132,13 @@ export default function PerfumePlanet() {
                   alt={`${planet.id} perfume`}
                   fill
                   sizes="(max-width:640px) 80vw, 420px"
-                  className="object-contain"
+                  className="object-contain will-change-transform"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    transform: "translateZ(0)",
+                  }}
                   priority
+                  loading="eager"
                 />
               </div>
 
@@ -128,9 +158,7 @@ export default function PerfumePlanet() {
           <div className="mt-8 text-center">
             <motion.p
               key={planet.desc}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+              {...descMotion}
               className="font-playfair text-sm sm:text-base text-gray-700 italic tracking-tight"
             >
               {planet.desc}
@@ -140,4 +168,6 @@ export default function PerfumePlanet() {
       </div>
     </section>
   );
-}
+});
+
+export default PerfumePlanet;
